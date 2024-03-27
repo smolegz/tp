@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+repeat :User enters number;
+  :process number;
+repeat while (Number is valid?) is (no)
+
+@enduml
