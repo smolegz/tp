@@ -20,19 +20,28 @@ public class RemoveCommandParser {
      * @throws ParseException if the user input does not conform the expected format
      */
     public RemoveCommand parse(String args) throws ParseException {
+
+        String[] identifiers = argsToArray(args);
+
+        if (isIndexArg(identifiers)) {
+            return new RemoveCommand(ParserUtil.parseIndex(identifiers[0]));
+        } else {
+            return new RemoveCommand(new NameContainsKeywordsPredicate(Arrays.asList(identifiers)));
+        }
+    }
+
+    // helper, to follow single layer abstraction
+    public String[] argsToArray(String args) throws ParseException {
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveCommand.MESSAGE_USAGE));
         }
+        return trimmedArgs.split("\\s+");
+    }
 
-        String[] identifiers = trimmedArgs.split("\\s+");
-
-        if (identifiers.length == 1 && isInteger(identifiers[0])) {
-            return new RemoveCommand(ParserUtil.parseIndex(identifiers[0]));
-        } else {
-            return new RemoveCommand(new NameContainsKeywordsPredicate(Arrays.asList(identifiers)));
-        }
+    public boolean isIndexArg(String[] args) {
+        return args.length == 1 && isInteger(args[0]);
     }
 
     /**

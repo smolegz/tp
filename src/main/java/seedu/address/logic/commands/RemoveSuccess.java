@@ -5,9 +5,8 @@ import seedu.address.logic.Messages;
 import seedu.address.model.person.Person;
 import seedu.address.model.Model;
 
-import java.util.logging.Logger;
-
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 /**
  * Performs the actual deletion of contact after user has been prompted for confirmation.
@@ -17,6 +16,8 @@ public class RemoveSuccess extends RemoveConfirmation {
     public static final String COMMAND_WORD = "yes";
 
     public static final String MESSAGE_REMOVE_PERSON_SUCCESS = "Successfully Removed Contact: %1$s";
+
+
 
     private final int DEFAULT_INDEX = 0;
 
@@ -31,6 +32,7 @@ public class RemoveSuccess extends RemoveConfirmation {
         }
         Person personToRemove = model.getFilteredPersonList().get(DEFAULT_INDEX);
         model.deletePerson(personToRemove);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(successMessage(personToRemove));
     }
 
