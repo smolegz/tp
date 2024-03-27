@@ -24,8 +24,9 @@ public class CommandBox extends UiPart<Region> {
     private static final Logger logger = LogsCenter.getLogger(CommandBox.class);
 
     private final CommandExecutor commandExecutor;
-
+    private static String previousCommand;
     private InputHistory inputHistory;
+
 
     @FXML
     private TextField commandTextField;
@@ -39,6 +40,10 @@ public class CommandBox extends UiPart<Region> {
         this.inputHistory = new InputHistory();
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+    }
+
+    public static String getPreviousCommand() {
+        return previousCommand;
     }
 
     /**
@@ -59,6 +64,7 @@ public class CommandBox extends UiPart<Region> {
         } finally {
             inputHistory.addToInputHistory(commandText);
             commandTextField.setText("");
+            previousCommand = inputHistory.getPreviousCommand();
         }
     }
 
@@ -84,6 +90,7 @@ public class CommandBox extends UiPart<Region> {
             setTextField();
         }
     }
+
 
     /**
      * Sets the text field with the command, moves caret to the end of text.
@@ -131,6 +138,7 @@ public class CommandBox extends UiPart<Region> {
     /**
      * Encapsulates the input history of typed commands.
      */
+
     public class InputHistory {
         private ArrayList<String> inputList;
         private int currentIndex;
@@ -182,6 +190,9 @@ public class CommandBox extends UiPart<Region> {
             return this.inputList.get(currentIndex);
         }
 
+        public String getPreviousCommand() {
+            return inputList.get(inputList.size()-2);
+        }
     }
 
 }
