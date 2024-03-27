@@ -29,7 +29,11 @@ public class RemoveCommand extends Command {
             + "Please specify the index of the contact to remove.\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_REMOVE_PERSON_SUCCESS = "Removed Contact: %1$s";
+
+    private static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
+
+    // EXPERIMENTAL STAGE - TRACKING OF PREVIOUS COMMAND YET TO BE DECIDED & IMPLEMENTED
+    private static final boolean IS_REMOVE_COMMAND = true;
 
     private final NameContainsKeywordsPredicate predicate;
 
@@ -75,9 +79,12 @@ public class RemoveCommand extends Command {
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
+            // get target person's full name (update: wouldn't work since NameContains... can reorder keywords - not unique)
+            // updateFilteredPersonList with only the target person
             Person personToRemove = lastShownList.get(targetIndex.getZeroBased());
-            model.deletePerson(personToRemove);
-            return new CommandResult(String.format(MESSAGE_REMOVE_PERSON_SUCCESS, Messages.format(personToRemove)));
+            model.updateSinglePersonList(personToRemove);
+            // just show message
+            return new CommandResult(CONFIRMATION_MESSAGE_PROMPT, false, false, false, true);
         } else {
             // Should not reach here
             throw new CommandException(Messages.MESSAGE_INVALID_COMMAND_FORMAT);

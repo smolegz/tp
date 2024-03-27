@@ -224,6 +224,10 @@ public class MainWindow extends UiPart<Stage> {
                 handleAddByStep();
             }
 
+            if (commandResult.isRemoveCommand()) {
+
+            }
+
             return commandResult;
         } catch (CommandException | ParseException e) {
             logger.info("An error occurred while executing command: " + commandText);

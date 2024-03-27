@@ -148,6 +148,12 @@ public class ModelManager implements Model {
         filteredPersons.setPredicate(predicate);
     }
 
+    // to update the filtered person list with a single person
+    public void updateSinglePersonList(Person person) {
+        requireNonNull(person);
+        filteredPersons.setPredicate(person::equals);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
