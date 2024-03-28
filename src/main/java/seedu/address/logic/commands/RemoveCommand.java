@@ -84,7 +84,7 @@ public class RemoveCommand extends Command {
             Person personToRemove = lastShownList.get(targetIndex.getZeroBased());
             model.updateSinglePersonList(personToRemove);
             // just show message
-            return new CommandResult(CONFIRMATION_MESSAGE_PROMPT, false, false, false, true);
+            return new CommandResult(CONFIRMATION_MESSAGE_PROMPT);
         } else {
             // Should not reach here
             throw new CommandException(Messages.MESSAGE_INVALID_COMMAND_FORMAT);
