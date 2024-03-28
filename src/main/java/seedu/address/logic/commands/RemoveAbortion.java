@@ -1,10 +1,10 @@
 package seedu.address.logic.commands;
 
-import seedu.address.model.Model;
-import seedu.address.logic.commands.exceptions.CommandException;
-
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+
+import seedu.address.model.Model;
+import seedu.address.logic.commands.exceptions.CommandException;
 
 public class RemoveAbortion extends RemoveConfirmation {
 

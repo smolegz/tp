@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
-import seedu.address.ui.CommandBox;
 import seedu.address.logic.parser.RemoveCommandParser;
+import seedu.address.ui.CommandBox;
 
 /**
  * Prompts user confirmation upon remove to ensure safe deletion.
