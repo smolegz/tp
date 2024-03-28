@@ -53,7 +53,6 @@ public class CommandBox extends UiPart<Region> {
 
         try {
             commandExecutor.execute(commandText);
-            commandTextField.setText("");
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         } finally {
@@ -131,7 +130,7 @@ public class CommandBox extends UiPart<Region> {
     /**
      * Encapsulates the input history of typed commands.
      */
-    public class InputHistory {
+    private class InputHistory {
         private ArrayList<String> inputList;
         private int currentIndex;
 
