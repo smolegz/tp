@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
@@ -22,6 +23,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final ObservableList<Person> previousStateSnapshot;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -34,6 +36,7 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        previousStateSnapshot = FXCollections.observableArrayList();
     }
 
     public ModelManager() {
@@ -142,16 +145,41 @@ public class ModelManager implements Model {
         return filteredPersons;
     }
 
+    /**
+     * Returns an unmodifiable view of the previous list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Person> getPreviousList() {
+        return FXCollections.unmodifiableObservableList(previousStateSnapshot);
+    }
+
+    /**
+     * Returns an unmodifiable view of the filtered list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
+        saveCurrentState();
         filteredPersons.setPredicate(predicate);
     }
 
-    // to update the filtered person list with a single person
+    /**
+     * Updates the filtered person list with a single person.
+     */
     public void updateSinglePersonList(Person person) {
         requireNonNull(person);
+        saveCurrentState();
         filteredPersons.setPredicate(person::equals);
+    }
+
+    /**
+     * Saves the current state of the filtered person list.
+     */
+    private void saveCurrentState() {
+        previousStateSnapshot.clear();
+        previousStateSnapshot.addAll(filteredPersons);
     }
 
     @Override

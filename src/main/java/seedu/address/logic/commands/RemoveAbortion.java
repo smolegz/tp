@@ -13,7 +13,7 @@ public class RemoveAbortion extends RemoveConfirmation {
             "Here is the list of existing contacts!";
 
     public CommandResult execute(Model model) throws CommandException {
-        if (!isValidConfirmation()) {
+        if (!isValidConfirmation(model)) {
             throw new CommandException(MESSAGE_INVALID_DECISION_MAKING);
         }
         requireNonNull(model);

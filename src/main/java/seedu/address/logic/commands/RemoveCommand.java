@@ -20,7 +20,7 @@ public class RemoveCommand extends Command {
     public static final String COMMAND_WORD = "remove";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Remove the person identified by the matching name in the contacts list.\n"
+            + ": Remove the person identified by the matching name or index in the contacts list.\n"
             + "Parameters: EXISTING_CONTACT_NAME\n"
             + "Example: " + COMMAND_WORD + " John Doe";
 
@@ -128,7 +128,7 @@ public class RemoveCommand extends Command {
      * Checks if the index is valid for removal.
      */
     private boolean isValidRemovalIndex(Index targetIndex, List<Person> lastShownList) {
-        return targetIndex.getZeroBased() < lastShownList.size();
+        return (targetIndex.getZeroBased() < lastShownList.size()) && (targetIndex.getZeroBased() >= 0);
     }
 
     /**

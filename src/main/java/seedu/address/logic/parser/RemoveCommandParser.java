@@ -3,15 +3,29 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.LogicManager;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 
 /**
- * Parses input arguments and creates a new RemoveCommand object
+ * Parses input arguments and creates a new RemoveCommand object.
+ * Determines if the user input argument is an index or a name.
  */
 public class RemoveCommandParser {
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
+
+    public static Index index;
+
+    public static int currentFilteredListSize;
 
     /**
      * Parses the given {@code String} of arguments in the context of the RemoveCommand
@@ -24,7 +38,8 @@ public class RemoveCommandParser {
         String[] identifiers = argsToArray(args);
 
         if (isIndexArg(identifiers)) {
-            return new RemoveCommand(ParserUtil.parseIndex(identifiers[0]));
+            index = ParserUtil.parseIndex(identifiers[0]);
+            return new RemoveCommand(index);
         } else {
             return new RemoveCommand(new NameContainsKeywordsPredicate(Arrays.asList(identifiers)));
         }
@@ -82,10 +97,11 @@ public class RemoveCommandParser {
      * Returns the arguments keyed in by the user after the "remove" COMMAND_WORD, if any.
      */
     public String getRemoveCommandArguments(String removeFullCommand) {
-        if (removeFullCommand == null || removeFullCommand.trim().length() < 7) {
+        if (!isRemoveCommand(removeFullCommand)) {
             return "";
+        } else {
+            return removeFullCommand.trim().substring(7).trim();
         }
-        return removeFullCommand.trim().substring(7).trim();
     }
 
     /**
@@ -99,10 +115,20 @@ public class RemoveCommandParser {
      * Returns true if the remove command has an index argument.
      */
     public boolean hasIndexArgument(String fullCommand) {
-        if (!isRemoveCommand(fullCommand)) {
-            return false;
-        }
         String arguments = getRemoveCommandArguments(fullCommand);
-        return hasArgument(arguments) && isInteger(arguments);
+        return isRemoveCommand(fullCommand) && hasArgument(arguments) && isInteger(arguments);
     }
+
+    public boolean isValidRemoveIndexCommand(String fullCommand, Model model) {
+        if (!hasIndexArgument(fullCommand)) {
+            return false;
+        } else {
+            String arguments = getRemoveCommandArguments(fullCommand);
+            List<Person> lastShownList = model.getPreviousList();
+            logger.info("List size:" + lastShownList.size());
+            logger.info("Index:" + arguments);
+            return (index.getZeroBased() < lastShownList.size()) && (index.getZeroBased() > 0);
+        }
+    }
+
 }

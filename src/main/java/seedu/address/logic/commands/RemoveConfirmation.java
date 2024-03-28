@@ -1,12 +1,20 @@
 package seedu.address.logic.commands;
 
+import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.LogicManager;
 import seedu.address.logic.parser.RemoveCommandParser;
+import seedu.address.model.Model;
 import seedu.address.ui.CommandBox;
+
+import java.util.logging.Logger;
 
 /**
  * Prompts user confirmation upon remove to ensure safe deletion.
  */
 public abstract class RemoveConfirmation extends Command {
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
+
     protected static final String MESSAGE_INVALID_DECISION_MAKING = "'yes' or 'no' is only used for decision making!\n"
             + "Please only use these two commands when prompted by the system during contact removal!";
 
@@ -20,13 +28,12 @@ public abstract class RemoveConfirmation extends Command {
      *
      * @return True if the previous command is a remove command and has an index argument.
      */
-    public boolean isValidConfirmation() {
+    public boolean isValidConfirmation(Model model) {
         String previousCommand = CommandBox.getPreviousCommand().trim();
-        if (removeParser.isRemoveCommand(previousCommand)) {
-            return removeParser.hasIndexArgument(previousCommand);
-        } else {
-            return false;
-        }
+        logger.info("Previous command: " + previousCommand);
+        return removeParser.isRemoveCommand(previousCommand)
+                && removeParser.isValidRemoveIndexCommand(previousCommand, model);
+
     }
 
 }

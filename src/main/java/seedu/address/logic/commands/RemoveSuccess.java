@@ -23,7 +23,7 @@ public class RemoveSuccess extends RemoveConfirmation {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (!isValidConfirmation()) {
+        if (!isValidConfirmation(model)) {
             throw new CommandException(MESSAGE_INVALID_DECISION_MAKING);
         }
         Person personToRemove = model.getFilteredPersonList().get(DEFAULT_INDEX);

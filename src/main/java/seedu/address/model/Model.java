@@ -98,6 +98,11 @@ public interface Model {
     ObservableList<Person> getFilteredPersonList();
 
     /**
+     * Returns the previous filtered list of persons.
+     */
+    ObservableList<Person> getPreviousList();
+
+    /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */
