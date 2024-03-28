@@ -79,10 +79,20 @@ public class RemoveCommandParser {
     }
 
     /**
-     * Returns the arguments of the remove command.
+     * Returns the arguments keyed in by the user after the "remove" COMMAND_WORD, if any.
      */
     public String getRemoveCommandArguments(String removeFullCommand) {
+        if (removeFullCommand == null || removeFullCommand.trim().length() < 7) {
+            return "";
+        }
         return removeFullCommand.trim().substring(7).trim();
+    }
+
+    /**
+     * Returns true if there are arguments, false if there are none following the "remove" COMMAND_WORD.
+     */
+    public boolean hasArgument(String arguments) {
+        return (arguments != null) && (!arguments.isEmpty());
     }
 
     /**
@@ -93,6 +103,6 @@ public class RemoveCommandParser {
             return false;
         }
         String arguments = getRemoveCommandArguments(fullCommand);
-        return isInteger(arguments);
+        return hasArgument(arguments) && isInteger(arguments);
     }
 }
