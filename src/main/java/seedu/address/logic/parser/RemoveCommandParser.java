@@ -59,12 +59,40 @@ public class RemoveCommandParser {
     /**
      * Returns true if the string is an integer.
      */
-    private boolean isInteger(String str) {
+    public boolean isInteger(String str) {
+        if (str.trim().isEmpty()) {
+            return false;
+        }
         try {
             Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    /**
+     * Returns true if the command starts with COMMAND_WORD "remove".
+     */
+    public boolean isRemoveCommand(String fullCommand) {
+        return fullCommand.trim().startsWith("remove");
+    }
+
+    /**
+     * Returns the arguments of the remove command.
+     */
+    public String getRemoveCommandArguments(String removeFullCommand) {
+        return removeFullCommand.trim().substring(7).trim();
+    }
+
+    /**
+     * Returns true if the remove command has an index argument.
+     */
+    public boolean hasIndexArgument(String fullCommand) {
+        if (!isRemoveCommand(fullCommand)) {
+            return false;
+        }
+        String arguments = getRemoveCommandArguments(fullCommand);
+        return isInteger(arguments);
     }
 }

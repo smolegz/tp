@@ -7,29 +7,26 @@ import seedu.address.logic.parser.RemoveCommandParser;
  * Prompts user confirmation upon remove to ensure safe deletion.
  */
 public abstract class RemoveConfirmation extends Command {
-    protected static final String MESSAGE_INVALID_DECISION_MAKING = "'yes' or 'no' is only used for decision making!"
-            + "Please start with a valid command word!";
+    protected static final String MESSAGE_INVALID_DECISION_MAKING = "'yes' or 'no' is only used for decision making!\n"
+            + "Please only use these two commands when prompted by the system during contact removal!";
 
-    private final RemoveCommandParser parserHelper = new RemoveCommandParser();
+    /**
+     * Parser object to parse the previous command to verify if it is a remove command.
+     */
+    private final RemoveCommandParser removeParser = new RemoveCommandParser();
 
-    // TO PROPERLY IMPLEMENT!! - done, left with slap
-    // to check if previous command from command history is remove INDEX, as in other cases, typing in the command
-    // "yes" or "no" will not make sense
+    /**
+     * Checks if this confirmation command is valid, specifically used in the context of confirming a contact removal.
+     *
+     * @return True if the previous command is a remove command and has an index argument.
+     */
     public boolean isValidConfirmation() {
         String previousCommand = CommandBox.getPreviousCommand().trim();
-        if (previousCommand.startsWith("remove ")) {
-            String indexString = previousCommand.substring(7).trim();
-            if (indexString.isEmpty()) {
-                return false;
-            }
-            try {
-                Integer.parseInt(indexString);
-                return true;
-            } catch (NumberFormatException e) {
-                return false;
-            }
+        if (removeParser.isRemoveCommand(previousCommand)) {
+            return removeParser.hasIndexArgument(previousCommand);
         } else {
             return false;
         }
     }
+
 }
