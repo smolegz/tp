@@ -21,11 +21,9 @@ import seedu.address.model.person.Person;
  */
 public class RemoveCommandParser {
 
+    private static Index index;
+
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
-
-    public static Index index;
-
-    public static int currentFilteredListSize;
 
     /**
      * Parses the given {@code String} of arguments in the context of the RemoveCommand
@@ -119,6 +117,9 @@ public class RemoveCommandParser {
         return isRemoveCommand(fullCommand) && hasArgument(arguments) && isInteger(arguments);
     }
 
+    /**
+     * Returns true if the command is a valid "remove INDEX" command.
+     */
     public boolean isValidRemoveIndexCommand(String fullCommand, Model model) {
         if (!hasIndexArgument(fullCommand)) {
             return false;

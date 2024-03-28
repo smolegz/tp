@@ -22,10 +22,9 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
     private static final int ZERO_INDEX = 0;
     private static final Logger logger = LogsCenter.getLogger(CommandBox.class);
+    private static String previousCommand;
 
     private final CommandExecutor commandExecutor;
-
-    private static String previousCommand;
 
     private InputHistory inputHistory;
 
