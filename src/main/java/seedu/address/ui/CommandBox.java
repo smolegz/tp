@@ -43,6 +43,9 @@ public class CommandBox extends UiPart<Region> {
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
     }
 
+    /**
+     * Returns the previous command in its String form.
+     */
     public static String getPreviousCommand() {
         return previousCommand;
     }
@@ -183,6 +186,9 @@ public class CommandBox extends UiPart<Region> {
             return this.inputList.get(currentIndex);
         }
 
+        /**
+         * Retrieves the previous command in its String format.
+         */
         public String getPreviousCommand() {
             return inputList.get(inputList.size() - 1);
         }

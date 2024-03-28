@@ -30,7 +30,13 @@ public class RemoveCommandParser {
         }
     }
 
-    // helper, to follow single layer abstraction
+    /**
+     * Splits the arguments into an array of strings.
+     *
+     * @param args The arguments that user has keyed in.
+     * @return An array of string(s).
+     * @throws ParseException If the user only input "remove" without any arguments.
+     */
     public String[] argsToArray(String args) throws ParseException {
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
@@ -40,6 +46,12 @@ public class RemoveCommandParser {
         return trimmedArgs.split("\\s+");
     }
 
+    /**
+     * Returns true if the array only contains a single argument, which is an integer.
+     *
+     * @param args The arguments that user has keyed in.
+     * @return True if the argument is a single index.
+     */
     public boolean isIndexArg(String[] args) {
         return args.length == 1 && isInteger(args[0]);
     }
