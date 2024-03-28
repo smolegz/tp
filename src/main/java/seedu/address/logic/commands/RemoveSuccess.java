@@ -21,9 +21,6 @@ public class RemoveSuccess extends RemoveConfirmation {
 
     private final int DEFAULT_INDEX = 0;
 
-    public RemoveSuccess() {
-    }
-
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
