@@ -47,7 +47,7 @@ public class RemoveCommandParser {
     }
 
     /**
-     * Returns true if the array only contains a single argument, which is an integer.
+     * Returns true if the array only contains a single argument, and that single argument is an integer.
      *
      * @param args The arguments that user has keyed in.
      * @return True if the argument is a single index.
