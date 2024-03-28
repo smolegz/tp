@@ -511,12 +511,16 @@ The behaviour of these implementations follow the behaviours as specified by [Ja
 #### Design Considerations
 - Single Responsibility Principle
   - The `ExitWindow` maintains the responsibility of displaying exit confirmation and handling a user choice, which reduces coupling between itself and other Ui components.
+  
+
 - Alternate implementation: A text field input that requires user to enter yes/no for confirmation. This design was not conceived as it requires the handling of invalid input, as is not as simple to implement as compared to the current implementation. Moreover, confirmation utilizing buttons is more intuitive for majority of users.
 
 ### Input History Navigation
 #### Implementation
 
-This Ui feature allow users to restore previously entered commands typed in the [`CommandBox`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/CommandBox.java), regardless of the validity of the command. Similar to the CLI, users would use the Up/Down arrow keys to navigate previously typed commands in the input history. The class that encapsulates all the history of the commands is `InputHistory` which is declared as a nested class inside `CommandBox`, since the history of commands should be the responsibility of `CommandBox` and should not be openly accessible to other classes.
+This Ui feature allow users to restore previously entered commands typed in the [`CommandBox`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/CommandBox.java), regardless of the validity of the command. Similar to the CLI, users would use the Up/Down arrow keys to navigate previously typed commands in the input history.
+
+The class that encapsulates all the history of the commands is `InputHistory` which is declared as a nested class inside `CommandBox`, since the history of commands should be the responsibility of `CommandBox` and should not be openly accessible to other classes.
 
 `InputHistory` is instantiated whenever the constructor of `CommandBox` is called. As such, there is an association between `InputHistory` and `CommandBox`. The implementation of `InputHistory` encapsulates an `ArrayList<String>` and an index-pointer. Whenever a command is entered inside `CommandBox`, the command typed will be stored inside `InputHistory` (regardless of validity), as shown by the code snippet below:
 
@@ -544,7 +548,10 @@ public class CommandBox extends UiPart<Region> {
 }
 ```
 
-`CommandBox#handleArrowKey()` is called when a `KeyEvent` is detected by JavaFX event listener. With reference to the code snippet below, the function consists of three conditional statements that check: (i) if `InputHistory` is empty; (ii) if the key pressed is an Up key; or (iii) if key pressed is a Down key. When `CommandBox#setTextField()` is called, it requests for the command from `InputHistory#getCommand()` that is pointed by the pointer, and sets the text field of `CommandBox`.
+`CommandBox#handleArrowKey()` is called when a `KeyEvent` is detected by JavaFX event listener. With reference to the code snippet below, the function consists of three conditional statements that check: (i) if `InputHistory` is empty; (ii) if the key pressed is an Up key; or (iii) if key pressed is a Down key.
+
+When `CommandBox#setTextField()` is called, it requests for the command from `InputHistory#getCommand()` that is pointed by the pointer, and sets the text field of `CommandBox`.
+
 ```Java
 private void handleArrowKey(KeyEvent event) {
         String keyName = event.getCode().getName();
@@ -564,13 +571,28 @@ private void handleArrowKey(KeyEvent event) {
 }
 ```
 
+How the `InputHistory` index-pointer works:
+- Whenever a new command has been entered, the command is added into the list. The index-pointer is set to the **size** of the `ArrayList` (i.e. it is pointing towards an empty slot in the `ArrayList`).
+
+
+- During a Up key press, the index-pointer is decremented by one (i.e. it is pointing towards an earlier command in the history).
+
+
+- During a Down key press, the index-pointer is incremented by one (i.e. it is point towards a later command in the history).
+
 #### Design Considerations
 - Single Responsibility Principle 
-  - `CommandBox` and `InputHistory` are gathered together as the two classes share the responsibilities of receiving and retrieving user inputs within the text field, respectively, hence increasing the overall cohesion of Ui components.
+  - `CommandBox` and `InputHistory` are gathered together as the two classes share the responsibilities of receiving and retrieving user inputs within the text field, hence increasing the overall cohesion of Ui components.
+  
+
 - `inputHistory` is set as a private variable as no other class should have access to the internal of the class, except `CommandBox` itself. This allows encapsulation and information-hiding from other classes. Setter and Getter methods of `InputHistory` such as `decrementIndex()`, `incrementIndex()` and `addToInputHistory()` etc. serve as functions to retrieve and modify the value of the class.
-- Both `InputHistory#decrementIndex()` and `inputHistory#incrementIndex()` are designed with guard clauses to prevent the index pointer from dropping below zero and exceeding beyond the bounds of the `ArrayList<String>`.
+
+
+- Both `InputHistory#decrementIndex()` and `inputHistory#incrementIndex()` are designed with guard clauses to prevent the index pointer from reducing below zero or exceeding beyond the bounds of the `ArrayList<String>`.
+
+
 - Alternative Design
-  - Currently, the implementation of `InputHistory` consists of an `ArrayList<String>` that stores all previously typed commands. An alternative solution to using an ArrayList would be LinkedList. However, LinkedList is not adopted as Java's LinkedList is implemented as Doubly-linked list which causes more memory overhead than ArrayList. Moreover, due to regular access of elements in the collection, ArrayList is a better design decision as its `get` operation runs in constant time O(1), as compared to LinkedList `get` O(n). Other methods such as `remove` and `search` etc. were not considered in the design decision as these operations are not needed for implementing `InputHistory`, but maybe relevant for future extensions to the class.
+  - Currently, the implementation of `InputHistory` consists of an `ArrayList<String>` that stores all previously typed commands. An alternative solution to using an ArrayList would be LinkedList. However, LinkedList is not adopted as Java's LinkedList is implemented as Doubly-linked list which causes more memory overhead than ArrayList. Moreover, due to regular access of elements in the collection, ArrayList is a better design decision as its `get` operation runs in constant time O(1), as compared to LinkedList `get` O(n). Other methods such as `remove` and `search` etc. were not considered in the design decision as these operations are not needed for implementing `InputHistory`, but may be relevant for future extensions to the class.
 
 --------------------------------------------------------------------------------------------------------------------
 
