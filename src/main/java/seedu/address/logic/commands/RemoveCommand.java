@@ -25,15 +25,12 @@ public class RemoveCommand extends Command {
             + "Example: " + COMMAND_WORD + " John Doe";
 
     public static final String MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND = "No contacts found with the given name!";
+
     public static final String MESSAGE_PERSONS_TO_REMOVE_FOUND = "%1$d contact(s) found with the given name. "
             + "Please specify the index of the contact to remove.\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-
     private static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
-
-    // EXPERIMENTAL STAGE - TRACKING OF PREVIOUS COMMAND YET TO BE DECIDED & IMPLEMENTED
-    private static final boolean IS_REMOVE_COMMAND = true;
 
     private final NameContainsKeywordsPredicate predicate;
 
@@ -50,6 +47,7 @@ public class RemoveCommand extends Command {
 
     /**
      * Constructs the second RemoveCommand with the given index.
+     *
      * @param targetIndex Index of the contact to be removed.
      */
     public RemoveCommand(Index targetIndex) {
@@ -64,7 +62,7 @@ public class RemoveCommand extends Command {
         // First constructor is called, 1st part of RemoveCommand function - finding the contact for safe removal
         if (predicate != null && targetIndex == null) {
             model.updateFilteredPersonList(predicate);
-            // if no matching names found
+            // No matching names found
             if (model.getFilteredPersonList().size() == 0) {
                 throw new CommandException(MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND);
             } else {
@@ -72,24 +70,18 @@ public class RemoveCommand extends Command {
                         String.format(MESSAGE_PERSONS_TO_REMOVE_FOUND, model.getFilteredPersonList().size()));
             }
         } else if (targetIndex != null && predicate == null) {
-            // Second constructor is called, 2nd part of RemoveCommand function - actual removal of contact
-            // Can be called without the first part (i.e. function like original Delete Command)
-            // Index called refers to the filtered list from part 1
+            // Second constructor is called, specifying actual index of contact for removal
             List<Person> lastShownList = model.getFilteredPersonList();
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
-            // get target person's full name (update: wouldn't work since NameContains... can reorder keywords - not unique)
-            // updateFilteredPersonList with only the target person
             Person personToRemove = lastShownList.get(targetIndex.getZeroBased());
             model.updateSinglePersonList(personToRemove);
-            // just show message
             return new CommandResult(CONFIRMATION_MESSAGE_PROMPT);
         } else {
             // Should not reach here
             throw new CommandException(Messages.MESSAGE_INVALID_COMMAND_FORMAT);
         }
-
 
     }
 
@@ -116,7 +108,6 @@ public class RemoveCommand extends Command {
 
     @Override
     public String toString() {
-
         if (predicate != null && targetIndex == null) {
             return new ToStringBuilder(this)
                     .add("predicate", predicate)
@@ -126,7 +117,6 @@ public class RemoveCommand extends Command {
                     .add("targetIndex", targetIndex)
                     .toString();
         }
-
     }
 
 }

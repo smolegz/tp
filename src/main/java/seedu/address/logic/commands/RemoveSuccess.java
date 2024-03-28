@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.Messages;
-import seedu.address.model.person.Person;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
@@ -16,8 +16,6 @@ public class RemoveSuccess extends RemoveConfirmation {
     public static final String COMMAND_WORD = "yes";
 
     public static final String MESSAGE_REMOVE_PERSON_SUCCESS = "Successfully Removed Contact: %1$s";
-
-
 
     private final int DEFAULT_INDEX = 0;
 
