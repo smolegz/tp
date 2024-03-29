@@ -489,6 +489,111 @@ Alternative 1 is chosen for the following reasons:
 * Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
     * Reduce complexity and potential dependencies.
 
+### Exit Window
+#### Implementation
+For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seeks confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
+
+<puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
+
+The Ui layout of `ExitWindow` is defined under [`ExitWindow.fxml`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/resources/view/ExitWindow.fxml). Below elucidates how `ExitWindow` is used:
+1. User executes the command `exit`, or other similar commands that resolves to `exit` deemed by the [fuzzy input algorithm](#fuzzy-input).
+2. An exit window will appear prompting for user confirmation to exit - Yes/No button.
+3. User would select either one of the 2 options.
+
+<pump src="diagrams/ExitCommandActivityDiagram.pump" alt="Flow of Exit command"/>
+
+In `ExitWindow.fxml`, the `Yes` button is set as the default button such that the button receives a VK_ENTER press; the `Yes` button will always be in focus whenever `ExitWindow` is displayed. When a positive confirmation is received, `ExitWindow#yesButton()` would be called to terminate LookMeUp.
+
+Consequently, the `No` button is set as the cancel button where it would receive a VK_ESC press that hides `ExitWindow`. `ExitWindow#NoButton()` would be called when a negative confirmation is received.
+
+The behaviour of these implementations follow the behaviours as specified by [JavaFx](https://openjfx.io/javadoc/11/javafx.controls/javafx/scene/control/Button.html).
+
+#### Design Considerations
+- Single Responsibility Principle
+  - The `ExitWindow` maintains the responsibility of displaying exit confirmation and handling a user choice, which reduces coupling between itself and other Ui components.
+  
+
+- Alternate implementation: A text field input that requires user to enter yes/no for confirmation. This design was not conceived as it requires the handling of invalid input, as is not as simple to implement as compared to the current implementation. Moreover, confirmation utilizing buttons is more intuitive for majority of users.
+
+### Input History Navigation
+#### Implementation
+
+This Ui feature allow users to restore previously entered commands typed in the [`CommandBox`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/CommandBox.java), regardless of the validity of the command. Similar to the CLI, users would use the Up/Down arrow keys to navigate previously typed commands in the input history.
+
+The class that encapsulates all the history of the commands is `InputHistory` which is declared as a nested class inside `CommandBox`; this is because the history of commands should be the responsibility of `CommandBox` class and should not be openly accessible to other classes.
+
+`InputHistory` is instantiated whenever the constructor of `CommandBox` is called. As such, there is an association between `InputHistory` and `CommandBox`. The implementation of `InputHistory` encapsulates an `ArrayList<String>` and an index-pointer. Whenever a command is received by `CommandBox`, the command typed will be stored inside `InputHistory` (regardless of validity), as shown by the code snippet below:
+
+```Java
+@FXML
+public class CommandBox extends UiPart<Region> {
+    
+    ///Handles the event whenever a command is entered.
+    @FXML
+    private void handleCommandEntered() {
+        String commandText = commandTextField.getText();
+        if (commandText.equals("")) {
+            return;
+        }
+
+        try {
+            commandExecutor.execute(commandText); //execute command in Logic
+        } catch (CommandException | ParseException e) {
+            setStyleToIndicateCommandFailure();
+        } finally {
+            inputHistory.addToInputHistory(commandText); 
+            commandTextField.setText(""); // clears the textfield
+        }
+    }
+}
+```
+
+`CommandBox#handleArrowKey()` is called when a `KeyEvent` is detected by JavaFX event listener. With reference to the code snippet below, the function checks if `InputHistory` is empty. If the history is empty, it performs nothing. Else, it checks if whether the key pressed is an Up key, or a Down key. The code snippet below shows the implementation of `CommandBox#handleArrowKey()`:
+
+```Java
+private void handleArrowKey(KeyEvent event) {
+        String keyName = event.getCode().getName();
+        
+        //Performs nothing if there is no history.
+        if (inputHistory.inputList.isEmpty()) {
+            return;
+        }
+        if (keyName.equals("Up")) {
+            inputHistory.decrementIndex(); //Reduces pointer by 1
+            setTextField(); // Sets textfield according to pointer
+        }
+        if (keyName.equals("Down")) {
+            inputHistory.incrementIndex(); //Increment pointer by 1
+            setTextField(); //Sets textfield according to pointer
+        }
+}
+```
+
+When `CommandBox#setTextField()` is called, it requests for the command from `InputHistory#getCommand()` that is pointed by the pointer, and sets the text field of `CommandBox` that is returned by the method.
+
+How the `InputHistory` index-pointer works:
+- Whenever a new command has been entered, the command is added into the list. The index-pointer is set to the **size** of the `ArrayList` (i.e. it is pointing towards an empty slot in the `ArrayList`).
+
+
+- During an Up key press, the index-pointer is decremented by one (i.e. it is pointing towards an earlier command in the history).
+
+
+- During a Down key press, the index-pointer is incremented by one (i.e. it is point towards a later command in the history).
+
+#### Design Considerations
+- Single Responsibility Principle 
+  - `CommandBox` and `InputHistory` are gathered together as the two classes share the responsibilities of receiving and retrieving user inputs within the text field, hence increasing the overall cohesion of Ui components.
+  
+
+- `inputHistory` is set as a private variable as no other class should have access to the internal of the class, except `CommandBox` itself. This allows encapsulation and information-hiding from other classes. Setter and Getter methods of `InputHistory` such as `decrementIndex()`, `incrementIndex()` and `addToInputHistory()` etc. serve as functions to retrieve and modify the value of the class.
+
+
+- Both `InputHistory#decrementIndex()` and `inputHistory#incrementIndex()` are designed with guard clauses to prevent the index pointer from reducing below zero or exceeding beyond the bounds of the `ArrayList<String>`.
+
+
+- Alternative Design
+  - Currently, the implementation of `InputHistory` consists of an `ArrayList<String>` that stores all previously typed commands. An alternative solution to using an ArrayList would be LinkedList. However, LinkedList is not adopted as Java's LinkedList is implemented as Doubly-linked list which causes more memory overhead than ArrayList. Moreover, due to regular access of elements in the collection, ArrayList is a better design decision as its `get` operation runs in constant time O(1), as compared to LinkedList `get` O(n). Other methods such as `remove` and `search` etc. were not considered in the design decision as these operations are not needed for implementing `InputHistory`, but may be relevant for future extensions to the class.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
