@@ -454,7 +454,7 @@ a message to prompt the user to enter the name of the person they wish to add.
 
 The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
 
-<puml src="diagrams/proccessName.puml" alt="processName" />
+<puml src="diagrams/processName.puml" alt="processName" />
 
 
 * Step 3 : The user enters a valid name.
@@ -474,7 +474,7 @@ The following activity diagram summarizes the flow of a user when trying to ente
 
 The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
 
-<puml src="diagrams/proccessNumber.puml" alt="processNumber" />
+<puml src="diagrams/processNumber.puml" alt="processNumber" />
 * Step 5 : The user enters a "83452897".
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
@@ -492,7 +492,7 @@ The following activity diagram summarizes the flow of a user when trying to ente
 
 The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
 
-<puml src="diagrams/proccessEmail.puml" alt="processEmail" />
+<puml src="diagrams/processEmail.puml" alt="processEmail" />
 
 * Step 7 : The user enters "jack@gmail.com".
     * AddCommandHelper will check its `status` attribute
