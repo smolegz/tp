@@ -51,7 +51,7 @@ public class DialogBox extends HBox {
         return new DialogBox(text);
     }
 
-    public static DialogBox getDukeDialog(String text) {
+    public static DialogBox getAddCommandHelperDialog(String text) {
         var db = new DialogBox(text);
         db.flip();
         return db;

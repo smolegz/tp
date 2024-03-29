@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+
+repeat :User enters email;
+  :process email;
+repeat while (Email is valid?) is (no)
+
+
+@enduml
