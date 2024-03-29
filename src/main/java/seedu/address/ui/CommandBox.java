@@ -130,7 +130,7 @@ public class CommandBox extends UiPart<Region> {
     /**
      * Encapsulates the input history of typed commands.
      */
-    public class InputHistory {
+    private class InputHistory {
         private ArrayList<String> inputList;
         private int currentIndex;
 
