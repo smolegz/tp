@@ -496,7 +496,7 @@ For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS21
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The Ui layout of `ExitWindow` is defined under [`ExitWindow.fxml`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/resources/view/ExitWindow.fxml). Below elucidates how `ExitWindow` is used:
-1. User executes the command `exit`, or other similar commands that resolves to `exit` deemed by the Fuzzy input algorithm.
+1. User executes the command `exit`, or other similar commands that resolves to `exit` deemed by the [fuzzy input algorithm](#fuzzy-input).
 2. An exit window will appear prompting for user confirmation to exit - Yes/No button.
 3. User would select either one of the 2 options.
 
@@ -520,14 +520,14 @@ The behaviour of these implementations follow the behaviours as specified by [Ja
 
 This Ui feature allow users to restore previously entered commands typed in the [`CommandBox`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/CommandBox.java), regardless of the validity of the command. Similar to the CLI, users would use the Up/Down arrow keys to navigate previously typed commands in the input history.
 
-The class that encapsulates all the history of the commands is `InputHistory` which is declared as a nested class inside `CommandBox`, since the history of commands should be the responsibility of `CommandBox` and should not be openly accessible to other classes.
+The class that encapsulates all the history of the commands is `InputHistory` which is declared as a nested class inside `CommandBox`; this is because the history of commands should be the responsibility of `CommandBox` class and should not be openly accessible to other classes.
 
-`InputHistory` is instantiated whenever the constructor of `CommandBox` is called. As such, there is an association between `InputHistory` and `CommandBox`. The implementation of `InputHistory` encapsulates an `ArrayList<String>` and an index-pointer. Whenever a command is entered inside `CommandBox`, the command typed will be stored inside `InputHistory` (regardless of validity), as shown by the code snippet below:
+`InputHistory` is instantiated whenever the constructor of `CommandBox` is called. As such, there is an association between `InputHistory` and `CommandBox`. The implementation of `InputHistory` encapsulates an `ArrayList<String>` and an index-pointer. Whenever a command is received by `CommandBox`, the command typed will be stored inside `InputHistory` (regardless of validity), as shown by the code snippet below:
 
 ```Java
 @FXML
 public class CommandBox extends UiPart<Region> {
-    ///
+    
     ///Handles the event whenever a command is entered.
     @FXML
     private void handleCommandEntered() {
@@ -548,9 +548,7 @@ public class CommandBox extends UiPart<Region> {
 }
 ```
 
-`CommandBox#handleArrowKey()` is called when a `KeyEvent` is detected by JavaFX event listener. With reference to the code snippet below, the function consists of three conditional statements that check: (i) if `InputHistory` is empty; (ii) if the key pressed is an Up key; or (iii) if key pressed is a Down key.
-
-When `CommandBox#setTextField()` is called, it requests for the command from `InputHistory#getCommand()` that is pointed by the pointer, and sets the text field of `CommandBox`.
+`CommandBox#handleArrowKey()` is called when a `KeyEvent` is detected by JavaFX event listener. With reference to the code snippet below, the function checks if `InputHistory` is empty. If the history is empty, it performs nothing. Else, it checks if whether the key pressed is an Up key, or a Down key. The code snippet below shows the implementation of `CommandBox#handleArrowKey()`:
 
 ```Java
 private void handleArrowKey(KeyEvent event) {
@@ -566,16 +564,18 @@ private void handleArrowKey(KeyEvent event) {
         }
         if (keyName.equals("Down")) {
             inputHistory.incrementIndex(); //Increment pointer by 1
-            setTextField(); //Sets textfield according to point
+            setTextField(); //Sets textfield according to pointer
         }
 }
 ```
+
+When `CommandBox#setTextField()` is called, it requests for the command from `InputHistory#getCommand()` that is pointed by the pointer, and sets the text field of `CommandBox` that is returned by the method.
 
 How the `InputHistory` index-pointer works:
 - Whenever a new command has been entered, the command is added into the list. The index-pointer is set to the **size** of the `ArrayList` (i.e. it is pointing towards an empty slot in the `ArrayList`).
 
 
-- During a Up key press, the index-pointer is decremented by one (i.e. it is pointing towards an earlier command in the history).
+- During an Up key press, the index-pointer is decremented by one (i.e. it is pointing towards an earlier command in the history).
 
 
 - During a Down key press, the index-pointer is incremented by one (i.e. it is point towards a later command in the history).
