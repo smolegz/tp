@@ -624,8 +624,8 @@ Given below is an example usage scenario and how the feature mechanism behaves a
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
   
 ### Design consideration:
-`SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
-Single Responsibility Principle and Interface Segregation Principle.
+`SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
+Principle and Interface Segregation Principle.
 * Single Responsibility Principle
     * The class maintains single responsibility by defining methods for duplicating person strategies without burdening
       implementations with unrelated methods
