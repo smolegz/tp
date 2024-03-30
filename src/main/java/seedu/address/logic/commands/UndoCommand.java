@@ -5,6 +5,9 @@ import seedu.address.model.Model;
 
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
+/**
+ * Undoes the most recent command that modifies the contact list.
+ */
 public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";

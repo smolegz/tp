@@ -114,18 +114,29 @@ public interface Model {
      */
     void updateSinglePersonList(Person person);
 
-    // undo
+    /**
+     * Undoes the address book to its previous state.
+     */
     void undoAddressBook();
 
-    // can undo
+    /**
+     * Returns true if {@code undo()} has address book state to restore to.
+     */
     boolean canUndoAddressBook();
 
-    // redo
+    /**
+     * Redoes the address book to its previously undone state.
+     */
     void redoAddressBook();
 
-    // can redo
+    /**
+     * Returns true if {@code redo()} has address book state to restore to, after an undo.
+     */
     boolean canRedoAddressBook();
 
-    // commit
+    /**
+     * Saves a copy of the current {@code AddressBook} state at the end of the state list
+     * after state-changing operations (e.g. add, remove).
+     */
     void commitAddressBook();
 }

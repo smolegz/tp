@@ -5,6 +5,9 @@ import seedu.address.model.Model;
 
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
+/**
+ * Redoes the most recent undo command.
+ */
 public class RedoCommand extends Command {
 
         public static final String COMMAND_WORD = "redo";
