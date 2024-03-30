@@ -113,4 +113,19 @@ public interface Model {
      * @throws NullPointerException if {@code person} is null.
      */
     void updateSinglePersonList(Person person);
+
+    // undo
+    void undoAddressBook();
+
+    // can undo
+    boolean canUndoAddressBook();
+
+    // redo
+    void redoAddressBook();
+
+    // can redo
+    boolean canRedoAddressBook();
+
+    // commit
+    void commitAddressBook();
 }
