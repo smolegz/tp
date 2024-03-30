@@ -25,8 +25,8 @@ import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemoveAbortion;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.commands.RemoveSuccess;
-import seedu.address.logic.commands.sortfunctions.SortCommand;
 import seedu.address.logic.commands.UndoCommand;
+import seedu.address.logic.commands.sortfunctions.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.logic.parser.fuzzy.FuzzyCommandParser;
 
