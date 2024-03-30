@@ -1,0 +1,11 @@
+@startuml
+start
+:User enters exit command;
+:       Exit window shows.\nUser choose whether to exit.;
+if () then(<color:red>[yes])
+:Closes MainWindow \n    and Exit Window;
+else ([no])
+:Hides exit window;
+endif
+stop
+@enduml

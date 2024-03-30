@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+repeat :User enters address;
+  :process address;
+repeat while (address are valid?) is (no)
+
+@enduml

@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -26,6 +27,8 @@ public class CommandHelperWindow extends AnchorPane {
 
     private AddCommandHelper addCommandHelper;
 
+
+
     /**
      * Starts the CommandHelper Window
      */
@@ -37,12 +40,13 @@ public class CommandHelperWindow extends AnchorPane {
 
     public void setCommandHelper(AddCommandHelper a) {
         this.addCommandHelper = a;
-        dialogContainer.getChildren().addAll(DialogBox.getDukeDialog("Hello, please enter the name of the person"));
+        dialogContainer.getChildren()
+                .addAll(DialogBox.getAddCommandHelperDialog("Hello, please enter the name of the person"));
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Creates two dialog boxes, one echoing user input and the other containin AddCommandHelper's reply depending
+     * on whether the input by the user is valid or not.
      */
     @FXML
     private void handleUserInput() {
@@ -55,8 +59,9 @@ public class CommandHelperWindow extends AnchorPane {
         }
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getDukeDialog(response));
-
+                DialogBox.getAddCommandHelperDialog(response));
         userInput.clear();
     }
+
+
 }
