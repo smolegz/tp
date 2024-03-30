@@ -62,6 +62,7 @@ public class OverwriteCommand extends Command {
 
         Person target = model.getPerson(this.indexOfTarget - 1);
         model.setDuplicatePerson(target, toAdd);
+        model.commitAddressBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
     @Override
