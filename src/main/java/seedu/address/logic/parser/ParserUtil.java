@@ -2,8 +2,10 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -21,6 +23,7 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_FIELDS = "Field(s) is not recognised.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -120,5 +123,27 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parse list of fields provided.
+     * @param fieldsList List of fields of {@code Person}.
+     * @throws ParseException if invalid fields detected.
+     */
+    public static void parseFieldsToCopy(List<String> fieldsList) throws ParseException {
+        List<String> acceptableFields = new ArrayList<>();
+        acceptableFields.add("name");
+        acceptableFields.add("phone");
+        acceptableFields.add("email");
+        acceptableFields.add("address");
+        if (fieldsList.isEmpty()) {
+            throw new ParseException(MESSAGE_INVALID_FIELDS);
+        }
+        for (String field : fieldsList) {
+            boolean inAcceptableFieldsList = acceptableFields.contains(field.toLowerCase());
+            if (!inAcceptableFieldsList) {
+                throw new ParseException(MESSAGE_INVALID_FIELDS);
+            }
+        }
     }
 }

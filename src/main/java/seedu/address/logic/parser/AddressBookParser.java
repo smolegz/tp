@@ -12,6 +12,7 @@ import seedu.address.logic.commands.AddByStepCommand;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DuplicateCommand;
 import seedu.address.logic.commands.EditCommand;
@@ -104,6 +105,9 @@ public class AddressBookParser {
 
         case OverwriteCommand.COMMAND_WORD:
             return new OverwriteCommandParser().parse(arguments);
+
+        case CopyCommand.COMMAND_WORD:
+            return new CopyCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
