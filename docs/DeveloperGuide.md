@@ -255,6 +255,162 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
+### Safe-Removal feature
+
+#### Implementation
+
+The feature to remove contacts from the address book is facilitated by `RemoveCommand` and `RemoveConfirmation`.
+
+The safe-removal mechanism consists of several components:
+1. `RemoveCommand`: The main command class that performs the preparation of removal in 2 main parts: shortlisting the 
+target person to be removed by matching contact name, and seeking confirmation of the removal process.
+2. `RemoveCommandParser`: A class that parses the user input to determine the target person to be removed. The class
+   parses the `Predicate` input when users key in `remove NAME`, to aid in the shortlisting process. The class also parses
+   the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual contact to
+   be removed.
+3. `RemoveConfirmation`, `RemoveSuccess` and `RemoveAbortion`: Classes that prompt the user to confirm the removal of
+   the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
+   the success or failure of the removal process.
+
+Our implementation follows Liskov's Substitution Principle closely. `RemoveConfirmation` was designed to be an abstract
+class to allow for extension of the 2 confirmation methods via the `RemoveSuccess` and `RemoveAbortion` classes. This
+decision makes it easier to group similar methods and messages together for better code extendability and
+maintainability when it comes to enhancing the confirmation process.
+
+Given below is an example usage scenario and how the safe-removal mechanism behaves at each step.
+> Assuming existing contacts in the address book (shown in a simplified list for ease of understanding):
+> 1. Paul Walker
+> 2. Alice Cooper
+> 3. Dylan Walker
+> 4. Paul Cooper
+
+* **Step 1**: The user executes `remove Paul` command. 
+    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called 
+  in response.
+    * `RemoveCommand` will shortlist the target person to be removed by matching the contact name with the input.
+        * The input will be parsed by `RemoveCommandParser` to obtain the intended `Predicate`, in this case, `Paul`.
+    > Matching contacts:
+  > 1. Paul Walker 
+  > 2. Paul Cooper
+
+    * `RemoveCommand` will then prompt the user to key in the index of the contact to remove. e.g. `remove 1`
+  > **_NOTE:_** This step can be foregone if the user is very sure of the INDEX of the contact to be removed from the 
+    > original list in the address book. The user can key in `remove INDEX` and proceed with Step 2 directly. 
+
+
+* **Step 2**: The user executes `remove 1` command.
+    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
+    * `RemoveCommand` will proceed with the confirmation process of the actual contact to be removed.
+        * The input will be parsed by `RemoveCommandParser` to obtain the intended `Index` to be removed.
+        * User will then be prompted to confirm the removal of the contact with "yes"/"no"
+        * The user will then key in `yes` or `no` to confirm or abort the removal process.
+  > Are you sure you want to remove the following contact? (yes/no):
+    > 1. Paul Walker
+
+
+
+* **Step 3a**: The user confirms the removal of the contact by executing `yes` command.
+    * The `yes` command calls `RemoveSuccess#execute()` to confirm the removal process.
+    * The confirmation process will be handled by `RemoveSuccess` and its parent class `RemoveConfirmation`.
+        * `RemoveSuccess#execute()` checks if the `yes` input is valid, calling `RemoveConfirmation#isValidInput()`
+        * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
+            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX` 
+          command, that serves as a precursor to the removal  confirmation process.
+    * If the user confirms the removal with `yes`, `RemoveSuccess` will proceed with the removal process.
+        * The contact will be removed from the address book and `RemoveSuccess` will provide feedback on the success of 
+      the removal process.
+
+
+* **Step 3b**: The user aborts the removal of the contact by executing `no` command.
+    * The `no` command calls `RemoveAbortion#execute()` to abort the removal process.
+    * The abortion process will be handled by `RemoveAbortion` and its parent class `RemoveConfirmation`.
+        * `RemoveAbortion#execute()` checks if the `no` input is valid, calling `RemoveConfirmation#isValidInput()`
+        * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
+            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX` 
+          command, that serves as a precursor to the removal abortion process.
+  * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
+      * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion` 
+    will provide feedback on the abortion of the removal process.
+
+
+#### Design considerations:
+
+Several design considerations were taken into account when implementing the safe-removal feature.
+
+_**FIRST CATEGORY**: For shortlisting the contact to be removed and seeking confirmation of the contact to be removed:_ 
+
+
+* **Alternative 1 (current choice)**: To use the same command word (i.e. `remove` - `remove NAME` and `remove INDEX`)
+to perform the shortlisting of contacts with matching names, as well as the confirmation of the contact to be removed.
+  * Pros: Simplifies the command structure, more intuitive for users to approach removal process
+    * Using the same command word `remove` for both shortlisting and confirmation processes reduces the cognitive load,
+    allowing the process to be more user-friendly
+  * Cons: May lead to ambiguity in the command execution process to new developers who are used to the conventions set
+  by other commands, as this command structure makes use of an overloaded `RemoveCommand` constructor
+
+
+* **Alternative 2**: To use the existing `find` command to shortlist the contact to be removed, then use the `delete`
+command to perform the deletion
+* Pros: Separates the shortlisting and confirmation processes
+  * This reduces ambiguity in the command execution process for future developers
+* Cons: Require 2 different commands for deletion 
+  * Increasing the number of commands required to perform the removal process, makes it less intuitive for users to
+      approach the removal process. Furthermore, when it comes to **removing contacts**, users might find it a lot more 
+        intuitive (as it is self-explanatory) to use a`delete`/`remove` command instead of having to use `find` first, 
+        where in a natural logical context, most users would only use `find` if they are simply looking for a contact.
+
+
+**Decision**: 
+Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1** due to the enhanced 
+user experience it provides, making the removal process more intuitive and user-friendly. 
+
+**Other considerations**:
+1. **Single Responsibility Principle**: The `RemoveCommand` class is designed to handle both the shortlisting and 
+confirmation processes. It is natural for concerns to arise regarding adhering to the Single Responsibility Principle. 
+However, this class is focused on the single task of preparation for deletion, without handling the actual deletion.
+There is still a clear separation of concerns, with `RemoveCommand` class handling the preparation (shortlisting and 
+prompting of confirmation), and `RemoveConfirmation`, `RemoveSuccess`, `RemoveAbortion` classes handling the actual
+deletion. Thus, the Single Responsibility Principle is still adhered to.
+2. **Re-branding of `delete` to `remove`**: Given most people will use the original `delete` directly in `delete INDEX`, 
+we have decided to re-brand the double-purpose command as `remove` to avoid confusion. Using a replacement word that 
+is explanatory and intuitive in the context of the contact deletion process, while subtle, adds to the overall user 
+experience.
+
+
+_**SECOND CATEGORY**: Mechanism to perform the actual deletion upon confirmation_
+
+Given the key purpose of this feature is for **SAFE** deletion, this step is crucial to ensure that there is a safety
+net for users before the actual removal of the contact.
+
+
+* **Alternative 1 (current choice)**: To prompt the users for confirmation via a `yes`/`no`, then proceed with 
+parsing the `yes`/`no` user input as independent commands in `AddressBookParser`
+  * Pros: Maintains a similar command structure/workflow as all other commands (to go through `AddressBookParser`)
+  * Cons: Requires backward reference of previous command to check if the input was a valid `remove INDEX` input, 
+  currently implemented in `RemoveConfirmation#isValidInput()`
+    * This leads to a more complex implementation, as details of the previous command might be accidentally exposed if 
+    not implemented carefully.
+
+
+* **Alternative 2**: To create functions that directly handle the confirmation process within `RemoveCommand`
+  * Pros: Removes the need to access the previous command and assess its validity 
+  * Cons: Changes the command structure/workflow, making it less intuitive for users to approach the removal process
+    * This alternative would require a more complex implementation, as the confirmation process would be directly 
+    handled within `RemoveCommand`, leading to a more monolithic class structure. This would make it harder to 
+    maintain and extend the code in the future, as the class would be responsible for the preparation (shortlisting and 
+    confirmation) processes **AND** the actual process of deleting the contact, violating the Single Responsibility 
+    Principle.
+  
+
+**Decision**: 
+Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1**
+
+Addressing the cons of Alternative 1, our current implementation is such that details of previous command are retrieved 
+from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method. This avoids exposure of the 
+`remove INDEX` command details, ensuring Separation of Concerns and adhering to the Single Responsibility Principle as 
+the `RemoveConfirmation` class solely handles the confirmation process itself and checks directly related to it.
+
+
 ### Fuzzy Input
 
 #### Implementation
@@ -419,6 +575,185 @@ Responsibility Principle.
   `UniquePersonList`.
     * There is not a need to apply sorting strategies to another different data structure.
 
+
+### Add By Step
+
+#### Implementation
+
+We design a new helper class known as AddCommandHelper. The helper class will have its own GUI that starts up when the 
+user types the `addbystep` command. At each stage, CommandHelperWindow will display a message, prompting the user
+to enter their detail, e.g. name, phone number, email address, etc. When the user enters a detail, the helper class
+will call the respective `parse` method in `ParserUtil` class (e.g. `parseEmail` will be called to check if the user
+has entered a valid email). In order to keep track of what details that have been entered into the AddCommandHelper, 
+we design a Enum `Status` that is updated in AddCommandHelper whenever a valid detail has been entered by the user.
+Once all the valid details have been entered, a new instance of `FormattedCommandPerson`will be created. When the user 
+enters the `cp`, the correctly formatted command will be added to their clipboard.
+
+
+`FormattedCommandPerson` inherits directly from the `Person` class. In accordance to the Open-Close 
+principle, the inherited class `FormattedCommandPerson` has the method `getFormattedCommand()` which will 
+return the correctly formatted command to add a person of those specific details into LookMeUp. 
+
+
+Given below is an example of how the user can interact with the AddCommandHelper: 
+
+
+
+* Step 1 : The user enters the `addbystep` command, displaying the GUI for the AddCommandHelper. The GUI will display 
+a message to prompt the user to enter the name of the person they wish to add. 
+* Step 2 : The user may accidentally press ENTER, causing the name to be blank. 
+   * AddCommandHelper will check its `status` attribute
+   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will invoke the `ParserUtil.ParseName`
+  method to check the validity of the name
+   * The name is found to be invalid, and a ParseException is thrown, with the error message displayed to the user, 
+  stating the constraints of the detail entered (i.e. the name cannot be blank)
+   * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid name
+
+The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
+
+<puml src="diagrams/processName.puml" alt="processName" />
+
+
+* Step 3 : The user enters a valid name.
+   * AddCommandHelper will check its `status` attribute
+   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will call on the 
+  `ParserUtil.ParseName()` method to check the validity of the name.
+   * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to 
+  `status.GET_NUMBER`. 
+   * The CommandHelperWindow will now display a message for the user to enter the number next
+* Step 4 : The user enters only 2 digits into the field before accidentally pressing enter.
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the 
+  `ParserUtil.ParseNumber()` method to check the validity of the number
+    * The number is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
+      stating the constraints of the detail entered (i.e. the number should be at least 3 digits long)
+    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid number
+
+The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
+
+<puml src="diagrams/processNumber.puml" alt="processNumber" />
+* Step 5 : The user enters a "83452897".
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
+  `ParserUtil.ParseName()` method to check the validity of the number.
+    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
+      `status.GET_EMAIL`. 
+    * The CommandHelperWindow will now display a message for the user to enter the email next
+*  Step 6 : The user enters "jack.com.sg" before accidentally pressing enter.
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
+      `ParserUtil.ParseEmail()` method to check the validity of the number
+    * The email is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
+      stating the constraints of the detail entered (i.e. the email should have a "@" followed by a domain name)
+    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid email
+
+The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
+
+<puml src="diagrams/processEmail.puml" alt="processEmail" />
+
+* Step 7 : The user enters "jack@gmail.com".
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
+      `ParserUtil.ParseEmail()` method to check the validity of the number
+    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
+      `status.GET_ADDRESS`
+    * The CommandHelperWindow will now display a message for the user to enter the address next
+* Step 8 : The user enters "Bishan St 24" before pressing enter.
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_ADDRESS`, AddCommandHelper will call on the
+      `ParserUtil.ParseAddress()` method to check the validity of the number
+    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
+      `status.GET_TAG`
+    * The CommandHelperWindow will now display a message for the user to enter the tag next
+      
+    * | Note that a person can have 0 or 1 tag, so leaving the field blank is still considered a valid  input |
+      |-------------------------------------------------------------------------------------------------------|
+The following activity diagram summarizes the flow of a user when trying to enter an email into the CommandHelper:
+
+<puml src="diagrams/processAddress.puml" alt="processAddress" />
+
+* Step 9 : The user enters "@#" before pressing enter. 
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
+      `ParserUtil.ParseTag()` method to check the validity of the tag
+    * The tag is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
+      stating the constraints of the detail entered (i.e. tags should only be alphanumeric)
+    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid tag
+* Step 10 : The user enters "friend".
+    * AddCommandHelper will check its `status` attribute
+    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
+      `ParserUtil.parseTag()` method to check the validity of the number
+    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
+      `status.COMPLETE`.
+    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
+
+The following activity diagram summarizes the flow of a user when trying to enter a tag into the CommandHelper:
+
+<puml src="diagrams/processTag.puml" alt="processTag" />
+
+* Step 11 : User makes another input into the CommandHelperWindow.
+    * Any subsequent input entered by the user will result in the same message being displayed to the user, informing 
+  the user to type "cp" so as to copy the command to the user's clipboard
+
+The following activity diagram summarizes the entire flow of a user when trying to use CommandHelper:
+
+<puml src="diagrams/AddByStepActivityDiagram.puml" alt="AddByStepActivityDiagram" />
+
+    
+
+
+#### Design considerations:
+
+Aspect: How to implement assistance functions to aid users in typing their commands.
+
+* **Alternative 1 (current choice)** Create a new helper class and GUI to prompt users for the necessary details.
+* Pros:
+  * It is easy to implement a new class, and due to the high cohesion of the previous code, we are able to reuse
+    methods defined previously in `ParserUtil` to check the validity of the fields entered by the user.
+  * The CommandHelper class can be implemented separately from the rest of the classes. This results in lower coupling
+    between the newly implemented CommandHelper class and the remaining classes, resulting in easier maintenance and
+    integration
+* Cons:
+    * The startup of another GUI for the helper class may introduce lag, especially on the older computers.
+
+* **Alternative 2** Implement a command to display the format for users to follow.
+* Pros:
+    * It easier to implement as compared to the CommandHelper class, prompts do not actually have any form of user
+    interactions.
+* Cons:
+    * It does not benefit users as much, as they can still make mistakes when it comes to following the exact format
+  of the command.
+
+* **Alternative 3** Implement a command autocomplete some commands for users.
+* Pros:
+    * It can be built directly into the original GUI for AddressBook, there is no need for separate GUI for the
+    CommandHelper class
+* Cons:
+    * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
+    tags). It cannot fill in the exact details 
+    * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
+    perform checking of the command first, before letting the user know that the entered command is invalid. 
+
+
+
+
+
+
+### \[Future Development\] Extension of Helper class to general commands
+
+Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
+makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
+format. To a new user who is unfamiliar with the other commands, we can add more types of assistance to the helper 
+class. The general helper class can prompt the user for the command they need help with. The user may enter "delete"
+when they need help with the correct formatting of the `delete` command. The helper class can then prompt users for the 
+necessary details needed for that command. 
+
+Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
+fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
+by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
+of the user once all of them have been entered.
+
+
 ### Duplicate feature
 
 #### Implementation
@@ -468,8 +803,8 @@ Given below is an example usage scenario and how the feature mechanism behaves a
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
   
 ### Design consideration:
-`SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
-Single Responsibility Principle and Interface Segregation Principle.
+`SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
+Principle and Interface Segregation Principle.
 * Single Responsibility Principle
     * The class maintains single responsibility by defining methods for duplicating person strategies without burdening
       implementations with unrelated methods
@@ -593,6 +928,7 @@ How the `InputHistory` index-pointer works:
 
 - Alternative Design
   - Currently, the implementation of `InputHistory` consists of an `ArrayList<String>` that stores all previously typed commands. An alternative solution to using an ArrayList would be LinkedList. However, LinkedList is not adopted as Java's LinkedList is implemented as Doubly-linked list which causes more memory overhead than ArrayList. Moreover, due to regular access of elements in the collection, ArrayList is a better design decision as its `get` operation runs in constant time O(1), as compared to LinkedList `get` O(n). Other methods such as `remove` and `search` etc. were not considered in the design decision as these operations are not needed for implementing `InputHistory`, but may be relevant for future extensions to the class.
+
 
 --------------------------------------------------------------------------------------------------------------------
 

@@ -22,6 +22,7 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
     private static final int ZERO_INDEX = 0;
     private static final Logger logger = LogsCenter.getLogger(CommandBox.class);
+    private static String previousCommand;
 
     private final CommandExecutor commandExecutor;
 
@@ -42,6 +43,14 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     * Returns the previous command in its String form.
+     */
+    public static String getPreviousCommand() {
+        return previousCommand;
+    }
+
+
+    /**
      * Handles the Enter button pressed event.
      */
     @FXML
@@ -58,6 +67,7 @@ public class CommandBox extends UiPart<Region> {
         } finally {
             inputHistory.addToInputHistory(commandText);
             commandTextField.setText("");
+            previousCommand = inputHistory.getPreviousCommand();
         }
     }
 
@@ -181,6 +191,12 @@ public class CommandBox extends UiPart<Region> {
             return this.inputList.get(currentIndex);
         }
 
+        /**
+         * Retrieves the previous command in its String format.
+         */
+        public String getPreviousCommand() {
+            return inputList.get(inputList.size() - 1);
+        }
     }
 
 }
