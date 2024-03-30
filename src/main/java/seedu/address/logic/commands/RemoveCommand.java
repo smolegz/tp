@@ -20,16 +20,17 @@ public class RemoveCommand extends Command {
     public static final String COMMAND_WORD = "remove";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Remove the person identified by the matching name in the contacts list.\n"
+            + ": Remove the person identified by the matching name or index in the contacts list.\n"
             + "Parameters: EXISTING_CONTACT_NAME\n"
             + "Example: " + COMMAND_WORD + " John Doe";
 
     public static final String MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND = "No contacts found with the given name!";
+
     public static final String MESSAGE_PERSONS_TO_REMOVE_FOUND = "%1$d contact(s) found with the given name. "
             + "Please specify the index of the contact to remove.\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_REMOVE_PERSON_SUCCESS = "Removed Contact: %1$s";
+    private static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
 
     private final NameContainsKeywordsPredicate predicate;
 
@@ -37,6 +38,7 @@ public class RemoveCommand extends Command {
 
     /**
      * Constructs the first RemoveCommand with the given predicate.
+     *
      * @param predicate Keyword to filter out the contacts that match the given name, for safe deletion.
      */
     public RemoveCommand(NameContainsKeywordsPredicate predicate) {
@@ -45,7 +47,8 @@ public class RemoveCommand extends Command {
     }
 
     /**
-     * Constructs the second RemoveCommand with the given index.
+     * Constructs the second RemoveCommand with the given index of the contact.
+     *
      * @param targetIndex Index of the contact to be removed.
      */
     public RemoveCommand(Index targetIndex) {
@@ -53,37 +56,86 @@ public class RemoveCommand extends Command {
         this.predicate = null;
     }
 
+    /**
+     * Executes the RemoveCommand, ensuring safe removal of contacts, preventing accidental deletions.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return A command result reflecting the type of RemoveCommand.
+     * @throws CommandException If the command cannot be executed.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-
-        // First constructor is called, 1st part of RemoveCommand function - finding the contact for safe removal
-        if (predicate != null && targetIndex == null) {
-            model.updateFilteredPersonList(predicate);
-            // if no matching names found
-            if (model.getFilteredPersonList().size() == 0) {
-                throw new CommandException(MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND);
-            } else {
-                return new CommandResult(
-                        String.format(MESSAGE_PERSONS_TO_REMOVE_FOUND, model.getFilteredPersonList().size()));
-            }
-        } else if (targetIndex != null && predicate == null) {
-            // Second constructor is called, 2nd part of RemoveCommand function - actual removal of contact
-            // Can be called without the first part (i.e. function like original Delete Command)
-            // Index called refers to the filtered list from part 1
-            List<Person> lastShownList = model.getFilteredPersonList();
-            if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-            Person personToRemove = lastShownList.get(targetIndex.getZeroBased());
-            model.deletePerson(personToRemove);
-            return new CommandResult(String.format(MESSAGE_REMOVE_PERSON_SUCCESS, Messages.format(personToRemove)));
+        if (isFirstConstructor()) {
+            return firstExecuteHelper(model);
+        } else if (isSecondConstructor()) {
+            return secondExecuteHelper(model);
         } else {
-            // Should not reach here
             throw new CommandException(Messages.MESSAGE_INVALID_COMMAND_FORMAT);
         }
+    }
 
+    /**
+     * Checks if the first RemoveCommand constructor is used.
+     */
+    public boolean isFirstConstructor() {
+        return predicate != null && targetIndex == null;
+    }
 
+    /**
+     * Executes the first part of the RemoveCommand function.
+     * Returns a CommandResult that shortlists the matching contacts for safe removal.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return A command result reflecting the first type of RemoveCommand.
+     * @throws CommandException If there are no matching contacts found.
+     */
+    public CommandResult firstExecuteHelper(Model model) throws CommandException {
+        model.updateFilteredPersonList(predicate);
+        if (model.getFilteredPersonList().size() == 0) {
+            throw new CommandException(MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND);
+        } else {
+            return new CommandResult(
+                    String.format(MESSAGE_PERSONS_TO_REMOVE_FOUND, model.getFilteredPersonList().size()));
+        }
+    }
+
+    /**
+     * Checks if the second RemoveCommand constructor is used.
+     */
+    public boolean isSecondConstructor() {
+        return targetIndex != null && predicate == null;
+    }
+
+    /**
+     * Executes the second part of the RemoveCommand function.
+     * Returns a CommandResult that seeks confirmation for the contact to remove.
+     *
+     * @param model {@code Model} which the command should operate on.
+     * @return A command result reflecting the second type of RemoveCommand.
+     * @throws CommandException If the index is invalid for removal.
+     */
+    public CommandResult secondExecuteHelper(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+        if (!isValidRemovalIndex(targetIndex, lastShownList)) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+        model.updateSinglePersonList(getPerson(targetIndex, lastShownList));
+        return new CommandResult(CONFIRMATION_MESSAGE_PROMPT);
+    }
+
+    /**
+     * Checks if the index is valid for removal.
+     */
+    private boolean isValidRemovalIndex(Index targetIndex, List<Person> lastShownList) {
+        return (targetIndex.getZeroBased() < lastShownList.size()) && (targetIndex.getZeroBased() >= 0);
+    }
+
+    /**
+     * Retrieves the person to be removed based on the index.
+     */
+    private Person getPerson(Index targetIndex, List<Person> lastShownList) {
+        return lastShownList.get(targetIndex.getZeroBased());
     }
 
     @Override
@@ -109,7 +161,6 @@ public class RemoveCommand extends Command {
 
     @Override
     public String toString() {
-
         if (predicate != null && targetIndex == null) {
             return new ToStringBuilder(this)
                     .add("predicate", predicate)
@@ -119,7 +170,6 @@ public class RemoveCommand extends Command {
                     .add("targetIndex", targetIndex)
                     .toString();
         }
-
     }
 
 }
