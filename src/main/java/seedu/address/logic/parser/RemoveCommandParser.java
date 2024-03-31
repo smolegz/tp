@@ -128,7 +128,7 @@ public class RemoveCommandParser {
             List<Person> lastShownList = model.getPreviousList();
             logger.info("List size:" + lastShownList.size());
             logger.info("Index:" + arguments);
-            return (index.getZeroBased() < lastShownList.size()) && (index.getZeroBased() > 0);
+            return (index.getZeroBased() < lastShownList.size()) && (index.getZeroBased() >= 0);
         }
     }
 

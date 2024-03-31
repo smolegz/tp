@@ -113,4 +113,30 @@ public interface Model {
      * @throws NullPointerException if {@code person} is null.
      */
     void updateSinglePersonList(Person person);
+
+    /**
+     * Undoes the address book to its previous state.
+     */
+    void undoAddressBook();
+
+    /**
+     * Returns true if {@code undo()} has address book state to restore to.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Redoes the address book to its previously undone state.
+     */
+    void redoAddressBook();
+
+    /**
+     * Returns true if {@code redo()} has address book state to restore to, after an undo.
+     */
+    boolean canRedoAddressBook();
+
+    /**
+     * Saves a copy of the current {@code AddressBook} state at the end of the state list
+     * after state-changing operations (e.g. add, remove).
+     */
+    void commitAddressBook();
 }
