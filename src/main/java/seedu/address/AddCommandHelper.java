@@ -179,7 +179,7 @@ public class AddCommandHelper {
     }
 
     private String formattedCommand() {
-        assert this.status != Status.COMPLETE : "Command should have been compeleted before this function is called.";
+        assert this.status == Status.COMPLETE : "Command should have been compeleted before this function is called.";
         FormattedCommandPerson p = new FormattedCommandPerson(name, phone, email, address, tags);
         return "add " + p.getFormattedCommand();
     }
@@ -209,6 +209,3 @@ public class AddCommandHelper {
     }
 
 }
-
-
-
