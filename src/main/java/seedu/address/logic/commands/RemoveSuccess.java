@@ -29,6 +29,7 @@ public class RemoveSuccess extends RemoveConfirmation {
         Person personToRemove = model.getFilteredPersonList().get(DEFAULT_INDEX);
         model.deletePerson(personToRemove);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.commitAddressBook();
         return new CommandResult(successMessage(personToRemove));
     }
 

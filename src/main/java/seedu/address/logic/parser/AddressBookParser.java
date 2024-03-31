@@ -22,9 +22,11 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.OverwriteCommand;
+import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemoveAbortion;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.commands.RemoveSuccess;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.sortfunctions.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.logic.parser.fuzzy.FuzzyCommandParser;
@@ -83,6 +85,12 @@ public class AddressBookParser {
 
         case RemoveAbortion.COMMAND_WORD:
             return new RemoveAbortion();
+
+        case RedoCommand.COMMAND_WORD:
+            return new RedoCommand();
+
+        case UndoCommand.COMMAND_WORD:
+            return new UndoCommand();
 
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
