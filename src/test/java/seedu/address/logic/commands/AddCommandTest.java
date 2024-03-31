@@ -54,6 +54,18 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_commitAddressBook_success() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person validPerson = new PersonBuilder().build();
+
+        AddCommand addCommand = new AddCommand(validPerson);
+        addCommand.execute(modelStub);
+
+        assertTrue(modelStub.isCommitAddressBookCalled());
+    }
+
+
+    @Test
     public void equals() {
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
@@ -182,6 +194,31 @@ public class AddCommandTest {
         public void updateSinglePersonList(Person person) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void undoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean canUndoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void redoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean canRedoAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void commitAddressBook() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -207,6 +244,7 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+        private boolean commitAddressBookCalled = false;
 
         @Override
         public boolean hasPerson(Person person) {
@@ -223,6 +261,18 @@ public class AddCommandTest {
         @Override
         public AddressBook getAddressBook() {
             return new AddressBook();
+        }
+
+        @Override
+        public void commitAddressBook() {
+            commitAddressBookCalled = true;
+        }
+
+        /**
+         * Returns true if commitAddressBook() is called.
+         */
+        public boolean isCommitAddressBookCalled() {
+            return commitAddressBookCalled;
         }
     }
 
