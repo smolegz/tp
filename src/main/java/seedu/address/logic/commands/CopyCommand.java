@@ -17,7 +17,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
 /**
- * Copy the fields of a person based on the provided index.
+ * Copies the fields of a person based on the provided index.
  */
 public class CopyCommand extends Command {
 
@@ -47,9 +47,18 @@ public class CopyCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Person person = model.getPerson(targetIndex.getZeroBased());
-        StringBuilder result = new StringBuilder();
 
+        Person person = model.getPerson(targetIndex.getZeroBased());
+        StringBuilder result = getInfo(person);
+
+        StringSelection toCopyString = new StringSelection(result.toString().trim());
+        clipboard.setContents(toCopyString, null);
+
+        return new CommandResult(MESSAGE_SUCCESS, false, false);
+    }
+
+    private StringBuilder getInfo(Person person) {
+        StringBuilder result = new StringBuilder();
         for (String field : fieldsToCopyList) {
             if (field.equals("name")) {
                 Name name = person.getName();
@@ -69,10 +78,7 @@ public class CopyCommand extends Command {
             }
         }
 
-        StringSelection toCopyString = new StringSelection(result.toString().trim());
-        clipboard.setContents(toCopyString, null);
-
-        return new CommandResult(MESSAGE_SUCCESS, false, false);
+        return result;
     }
 
 
