@@ -35,12 +35,12 @@ public class AddCommandHelper {
 
     private static final String COPY_SUCCESSS_MESSAGE = "You have copied the command to your clipboard!"
             + "Type \"cp\" if you wish to copy again. You may close the window to go back to LookMeUp";
-    private static final String COPY_COMMAND = "cp";
+    public static final String COPY_COMMAND = "cp";
 
     private Status status;
 
     private Name name;
-    private Number number;
+
     private Email email;
 
     private Address address;
@@ -179,14 +179,12 @@ public class AddCommandHelper {
     }
 
     private String formattedCommand() {
-        assert this.status == Status.COMPLETE : "Command should have been compeleted before this function is called.";
+        assert this.status == Status.COMPLETE : "Command should have been completed before this function is called.";
         FormattedCommandPerson p = new FormattedCommandPerson(name, phone, email, address, tags);
         return "add " + p.getFormattedCommand();
     }
 
-    private boolean isExitCommand(String cmd) {
-        return cmd.equals("exit");
-    }
+
 
     private String getSuccessMessage(Status oldStatus, Status newStatus) {
         if (newStatus.equals(Status.COPY)) {
@@ -206,6 +204,10 @@ public class AddCommandHelper {
                 + "it is copied.";
         command.putString(formattedCommand());
         clipboard.setContent(command);
+    }
+
+    public Status getStatus() {
+        return this.status;
     }
 
 }
