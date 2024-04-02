@@ -1,9 +1,9 @@
 package seedu.address;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.ui.Status;
 
@@ -11,7 +11,7 @@ public class AddCommandHelperTest {
 
 
     @Test
-    public void setStatus_from_name_to_number_success() {
+    public void setStatus_nameToNumber_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -23,7 +23,7 @@ public class AddCommandHelperTest {
     }
 
     @Test
-    public void setStatus_from_name_to_number_fail() {
+    public void setStatus_number_fail() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -37,7 +37,7 @@ public class AddCommandHelperTest {
 
 
     @Test
-    public void setStatus_from_number_to_email_success() {
+    public void setStatus_numberToEmail_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -50,7 +50,7 @@ public class AddCommandHelperTest {
     }
 
     @Test
-    public void setStatus_from_email_to_address_success() {
+    public void setStatus_emailToAddress_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -64,7 +64,7 @@ public class AddCommandHelperTest {
     }
 
     @Test
-    public void setStatus_from_address_to_tag_success() {
+    public void setStatus_addressToTag_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -79,7 +79,7 @@ public class AddCommandHelperTest {
     }
 
     @Test
-    public void setStatus_from_tag_to_complete_success() {
+    public void setStatus_tagTocomplete_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -95,7 +95,7 @@ public class AddCommandHelperTest {
     }
 
     @Test
-    public void setStatus_from_complete_to_complete_success() {
+    public void setStatus_completeToComplete_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
