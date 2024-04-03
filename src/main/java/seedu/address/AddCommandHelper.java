@@ -24,6 +24,8 @@ import seedu.address.ui.Status;
  */
 public class AddCommandHelper {
 
+    public static final String COPY_COMMAND = "cp";
+
     private static final String SUCCESS_MESSAGE = "You have successfully entered ";
 
     private static final String NEXT_PROMPT = ". Next, please enter ";
@@ -35,7 +37,7 @@ public class AddCommandHelper {
 
     private static final String COPY_SUCCESSS_MESSAGE = "You have copied the command to your clipboard!"
             + "Type \"cp\" if you wish to copy again. You may close the window to go back to LookMeUp";
-    public static final String COPY_COMMAND = "cp";
+
 
     private Status status;
 
