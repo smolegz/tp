@@ -166,6 +166,7 @@ public class MainWindow extends UiPart<Stage> {
     private void handleAddByStep() {
         try {
             Stage stage = new Stage();
+            stage.setResizable(false);
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/CommandHelperWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
