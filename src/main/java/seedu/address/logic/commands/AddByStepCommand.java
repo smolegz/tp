@@ -10,7 +10,8 @@ public class AddByStepCommand extends Command {
 
     public static final String COMMAND_WORD = "addbystep";
 
-    public static final String MESSAGE_SUCCESS = "addbystep";
+
+    public static final String MESSAGE_SUCCESS = "Opened addbystep window";
 
     @Override
     public CommandResult execute(Model model) {
