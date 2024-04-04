@@ -58,6 +58,14 @@ So say goodbye to traditional address book applications and say hello to the fut
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+> [!TIP]
+> * LookMeUp supports **fuzzy input** with a maximum allowance of 1 misspelled letter,
+    preventing users from needing to retype the entire command due to a single spelling mistake
+    >   * Examples:
+          >     * `swot` will be interpreted as `sort`
+>     * `addystep` will be interpreted as `addbystep`
+> * LookMeUp text field supports **command history** accessibiity.
+    >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
 ### Viewing help : `help`
 
