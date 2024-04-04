@@ -93,7 +93,7 @@ Examples:
 
 ### Adding a person (With System Prompts): `addbystep`
 
-<img src="images/AddByStep.png" width="50%"/>
+<img src="images/AddByStep.png" width="40%"/>
 
 Adds a person to the address book but prompts will be provided for each field required as per the `add` command.
 
@@ -145,7 +145,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
-<img src="images/findAlexDavidResult.png" width="50%"/>
+<img src="images/findAlexDavidResult.png" width="50%"/> <br>
 
 ### Removing a person (With safe removal): `remove`
 
