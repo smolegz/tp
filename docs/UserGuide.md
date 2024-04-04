@@ -71,7 +71,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 <img src="images/Ui-help.png" width="50%"/>
 
-Shows a message explaning how to access the help page.
+Shows a message explaining how to access the help page.
 
 <img src="images/helpMessage.png" width="50%"/>
 
