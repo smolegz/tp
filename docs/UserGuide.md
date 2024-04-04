@@ -238,6 +238,13 @@ To duplicate the contact, run the following `duplicate` command and enter to see
 ![Command](images/duplicate-command.png)
 ![Success](images/duplicate-success.png)
 
+### Overwriting an Existing Contact : `overwrite`
+
+Overwrites and existing contact in the address book, **assuming that a contact with an identical identity which is **already existing** in the Address Book.
+
+Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+* `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
+* The index **must be positive integer** 1, 2, 3, …​
 
 ### Clearing all entries : `clear`
 
