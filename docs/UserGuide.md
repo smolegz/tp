@@ -4,9 +4,11 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# LookMeUp User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Welcome to LookMeUp, your one-stop desktop app that revolutionizes contacts management for NUS students in hall committees. Liking the speed and effectiveness of Command Line Interface (CLI) or visual simplicity of Graphical User Interface (GUI)? LookMeUp caters to your needs, it ensures that managing your contacts is quicker and more efficient than ever before.
+
+So say goodbye to traditional address book applications and say hello to the future of contact management with LookMeUp!
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -26,27 +28,17 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
    ![Ui](images/Ui.png)
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
 
-   * `list` : Lists all contacts.
-
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
-
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
-
-   * `clear` : Deletes all contacts.
-
-   * `exit` : Exits the app.
-
-1. Refer to the [Features](#features) below for details of each command.
+1. Refer to the [Command Summary](#command-summary) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Features
 
+
 <box type="info" seamless>
 
-**Notes about the command format:**<br>
+**Syntax of Commands:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -66,7 +58,18 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+> [!TIP]
+> * LookMeUp supports **fuzzy input** with a maximum allowance of 1 misspelled letter,
+preventing users from needing to retype the entire command due to a single spelling mistake
+>   * Examples:
+>     * `swot` will be interpreted as `sort`
+>     * `addystep` will be interpreted as `addbystep`
+> * LookMeUp text field supports **command history** accessibiity.
+>   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
+
 ### Viewing help : `help`
+
+![Ui-help](images/Ui-help.png)
 
 Shows a message explaning how to access the help page.
 
@@ -75,20 +78,33 @@ Shows a message explaning how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a person (Full Command): `add`
 
 Adds a person to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
-<box type="tip" seamless>
-
-**Tip:** A person can have any number of tags (including 0)
-</box>
+> [!TIP]
+> A person can have any number of tags (including 0)
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+
+### Adding a person (With System Prompts): `addbystep`
+
+![AddByStep](images/AddByStep.png)
+
+Adds a person to the address book but prompts will be provided for each field required as per the `add` command.
+
+Format: `addbystep`
+
+> [!NOTE]
+> * If you enter `addbystep` with any additional parameters, _e.g. `addbystep 123`_, the additional parameters will be ignored,
+and `addbystep` window will still launch as per normal.
+> * Once you have added all the details, you have to close the window and retype the command to create a `add` command
+> * Since this is an accessory window, **maximising of the window is not supported**.
+
 
 ### Listing all persons : `list`
 
@@ -131,19 +147,138 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
-### Deleting a person : `delete`
+### Removing a person (With safe removal): `remove`
 
-Deletes the specified person from the address book.
+Removes a person based on name, and confirms with the corresponding index in the filtered name list.
 
-Format: `delete INDEX`
+Format in 3 steps:
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+1. **Optional**: `remove NAME`
+   *  By using the name of the contact to delete
+      ![Remove](images/remove.png)
+     * LookMeUp will return matching contact names in a `filtered list`.
+     * LookMeUp will prompt user a specified `INDEX` to remove.
+       ![Remove-index](images/remove-index.png)
+2. `remove INDEX`
+   ![Index-remove](images/index-remove.png)
+   * Removes the person in the filtered results by the specified index.
+   * The `INDEX` refers to the index number shown in the displayed person list.
+   * The index must be a `positive integer` 1, 2, 3, …​
+   * If **STEP 1** was skipped. the contact at the specified index based on the default list of all contacts will be retrieved
+     * LookMeUp will prompt a confirmation message to confirm removal
+3. Confirmation: `yes/no`
+   ![Confirmation](images/confirmation.png)
+   1. If `yes`:
+      ![Confirmation](images/yes-confirm.png)
+      ![Result](images/yes-result.png)
+   2. If `no`:
+      ![Confirmation](images/no-confirm.png)
+      ![Result](images/no-result.png)
 
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+### Undo Previous Command : `undo`
+
+For any command that changes the universal list of contacts _e.g. `add`, `remove`, `clear`, `overwrite`, `duplicate` and `edit`_,
+the `undo` command will revert the state of the contact list prior to the execution of a command. 
+
+> [!NOTE]
+> LookMeUp supports up to 3 consecutive `undo`
+>   * You are able to backtrack your actions up to 3 times. 
+
+Format: `undo`
+For example, referring to the previous command, assuming you have `removed` a contact, you can type `undo` to recover the removed contact:
+![Undo](images/undo.png)
+
+The removed contact will then be restored, **even to its original index**.
+![Recovered](images/recovered.png)
+
+Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact was added.
+
+> [!IMPORTANT]
+> Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
+>   * That is, when you launch the app again, you will not be able to undo any commands from the previous time you launched it.
+
+###  Redo Undid Command : `redo`
+
+Redo the most recent `undo` command.
+
+Format: `redo`
+
+For example, entering `redo` after previous `undo` example will revert the contacts to before `undo` was being executed.
+
+> [!IMPORTANT]
+> `redo` only works when `undo` was called.
+> If there were no commands undone, entering `redo` will prompt an **error**.
+
+### Copies a Person Information to Clipboard : `copy`
+
+Copies a person’s information such as name, phone number, address and email into your OS clipboard. 
+This feature allows you to copy **more than one** piece of a contact’s information, and allows you to specify the order of a person’s information to be copied. 
+If multiple fields are provided, results are separated by a single whitespace.
+
+> [!NOTE]
+> Duplicated fields that are specified are safely process and copied 
+> * Refer to the table below 
+
+Format: `copy INDEX FIELD(s)`
+
+Example:
+![Example-Bert](images/example.png)
+
+Based on the sample contact above:
+Sample Commands     | Details | Results
+-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+`copy 4 name`    | Copies the name of contact indexed 4 | `Bert`
+`copy 4 name address` | Copies the name and address of contact indexed 4 | `Bert Sesame Street`
+`copy 4 phone email` | Copies the phone and email of contact indexed 4 | `88891234 Sesame Street`
+`copy 4 email email`   | Copies the email of contact indexed 4 **(Duplicated fields are ignored)** | `Bert@gmail.com`
+`copy 4 nnamee phone`  | Incorrect field detected | `N.A.`
+
+### Sorting the Contacts : `sort`
+
+Sorts the entries in the address book based on the given condition.
+
+Format: `sort KEYWORD`
+
+* LookMeUp supports the following `KEYWORDs` : `name`, `tag`
+  * `Name`: Sorts the entries based on lexicographical order of names.
+  * `Tag`: Sorts the entries based on lexicographical order of tags.
+
+> [!IMPORTANT]
+> * `Fuzzy input` does not support `KEYWORD`
+>   * e.g. `sort NAMEE` will result in an error.
+> * Only **1 keyword** can be entered after `sort`
+>   * e.g. `sort NAME OTHERS` will result in an error.
+
+### Filtering by Tag : `filter`
+
+Shows a list of persons in the address book, filtered by `specified tag`.
+
+Format: `filter TAGNAME`
+
+### Adding a Contact with Duplicate Identity : `duplicate`
+
+Adds the new contact to the address book, **assuming that a contact with an identical identity already exists**.
+
+Format: `duplicate n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+
+Example:
+Say you have a list of contacts like the following, and you wish to add a contact with an **identical name** to the first entry `Alex Yeoh`
+![Sample](images/sample.png)
+
+You will encounter the following error using the `add` command
+![Error](images/error.png)
+
+To duplicate the contact, run the following `duplicate` command and enter to see the results.
+![Command](images/duplicate-command.png)
+![Success](images/duplicate-success.png)
+
+### Overwriting an Existing Contact : `overwrite`
+
+Overwrites and existing contact in the address book, **assuming that a contact with an identical identity which is **already existing** in the Address Book.
+
+Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+* `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
+* The index **must be positive integer** 1, 2, 3, …​
 
 ### Clearing all entries : `clear`
 
@@ -153,7 +288,7 @@ Format: `clear`
 
 ### Exiting the program : `exit`
 
-Exits the program.
+A pop-up would be shown that prompts you for **confirmation** to exit the address book.
 
 Format: `exit`
 
@@ -172,9 +307,6 @@ If your changes to the data file makes its format invalid, AddressBook will disc
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -193,12 +325,17 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List**   | `list`
-**Help**   | `help`
+| Command                                        | Details                                                                                                                                                                                                                                  |
+|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `list`                                         | List all contacts                                                                                                                                                                                                                        |
+| `add n/…​ p/…​ e/…​ a/…​ [tTAG]…​`             | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
+| `remove NAME`<br/>`remove INDEX`<br/>`yes/no`  | Removes a contact with multiple prompts that first shortlist contacts with matching names, then confirms the contact to remove based on the index keyed in.                                                                              |
+| `undo`                                         | Undo the previous command entered.                                                                                                                                                                                                       |
+| `redo`                                         | Reverses the previous `undo` command.                                                                                                                                                                                                    |
+| `copy INDEX FIELD(s)`                          | Copies a contact's information e.g. name, phone, email and address into OS clipboard.                                                                                                                                                    |
+| `sort KEYWORD`                                 | Sorts contacts based on the input condition.<br/>**KEYWORDS:**<br/>`NAME`,`TAG`                                                                                                                                                          |
+| `filter TAGNAME`                               | Shows a list of persons in the address book, filtered by the specified tag.<br/>**Example:**<br/>`filter friends`                                                                                                                        |
+| `duplicate n/…​ p/…​ e/…​ a/…​`                | Adds the new contact to the address book, **assuming that a contact with identical identity already exists**.<br/>**Example:**<br/>`duplicate n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                |
+| `overwrite INDEX n/…​ p/…​ e/…​ a/…​ [tTAG]…​` | Overwrites an existing contact in the address book, **assuming that a contact with an identical identity already exists**.<br/>**Example:**<br/>`overwrite 2 n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` |
+| `clear`                                        | Deletes all contacts                                                                                                                                                                                                                     |
+| `exit`                                         | Exits and closes the program.                                                                                                                                                                                                            |
