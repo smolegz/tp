@@ -197,6 +197,17 @@ Similarly, `undoing` after adding a contact would mean reverting the contact lis
 > Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
 >   * That is, when you launch the app again, you will not be able to undo any commands from the previous time you launched it.
 
+###  Redo Undid Command : `redo`
+
+Redo the most recent `undo` command.
+
+Format: `redo`
+
+For example, entering `redo` after previous `undo` example will revert the contacts to before `undo` was being executed.
+
+> [!IMPORTANT]
+> `redo` only works when `undo` was called.
+> If there were no commands undone, entering `redo` will prompt an **error**.
 
 ### Copies a Person Information to Clipboard : `copy`
 
