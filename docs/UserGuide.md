@@ -69,11 +69,11 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 ### Viewing help : `help`
 
-![Ui-help](images/Ui-help.png)
+<img src="images/Ui-help.png" width="50%"/>
 
 Shows a message explaning how to access the help page.
 
-![help message](images/helpMessage.png)
+<img src="images/helpMessage.png" width="50%"/>
 
 Format: `help`
 
@@ -93,7 +93,7 @@ Examples:
 
 ### Adding a person (With System Prompts): `addbystep`
 
-![AddByStep](images/AddByStep.png)
+<img src="images/AddByStep.png" width="50%"/>
 
 Adds a person to the address book but prompts will be provided for each field required as per the `add` command.
 
@@ -145,7 +145,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+<img src="images/findAlexDavidResult.png" width="50%"/>
 
 ### Removing a person (With safe removal): `remove`
 
@@ -154,26 +154,26 @@ Removes a person based on name, and confirms with the corresponding index in the
 Format in 3 steps:
 
 1. **Optional**: `remove NAME`
-   *  By using the name of the contact to delete
-      ![Remove](images/remove.png)
+   *  By using the name of the contact to delete<br>
+       <img src="images/remove.png" width="50%"/><br>
      * LookMeUp will return matching contact names in a `filtered list`.
-     * LookMeUp will prompt user a specified `INDEX` to remove.
-       ![Remove-index](images/remove-index.png)
-2. `remove INDEX`
-   ![Index-remove](images/index-remove.png)
+     * LookMeUp will prompt user a specified `INDEX` to remove.<br>
+       <img src="images/remove-index.png" width="50%"/><br>
+2. `remove INDEX`<br>
+   <img src="images/index-remove.png" width="50%"/><br>
    * Removes the person in the filtered results by the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
    * The index must be a `positive integer` 1, 2, 3, …​
    * If **STEP 1** was skipped. the contact at the specified index based on the default list of all contacts will be retrieved
      * LookMeUp will prompt a confirmation message to confirm removal
-3. Confirmation: `yes/no`
-   ![Confirmation](images/confirmation.png)
-   1. If `yes`:
-      ![Confirmation](images/yes-confirm.png)
-      ![Result](images/yes-result.png)
-   2. If `no`:
-      ![Confirmation](images/no-confirm.png)
-      ![Result](images/no-result.png)
+4. Confirmation: `yes/no`<br>
+   <img src="images/confirmation.png" width="50%"/><br>
+   1. If `yes`:<br>
+      <img src="images/yes-confirm.png" width="50%"/><br>
+      <img src="images/yes-result.png" width="50%"/><br>
+   2. If `no`:<br>
+      <img src="images/no-confirm.png" width="50%"/><br>
+      <img src="images/no-result.png" width="50%"/><br>
 
 ### Undo Previous Command : `undo`
 
@@ -185,11 +185,11 @@ the `undo` command will revert the state of the contact list prior to the execut
 >   * You are able to backtrack your actions up to 3 times. 
 
 Format: `undo`
-For example, referring to the previous command, assuming you have `removed` a contact, you can type `undo` to recover the removed contact:
-![Undo](images/undo.png)
+For example, referring to the previous command, assuming you have `removed` a contact, you can type `undo` to recover the removed contact:<br>
+<img src="images/undo.png" width="50%"/><br>
 
-The removed contact will then be restored, **even to its original index**.
-![Recovered](images/recovered.png)
+The removed contact will then be restored, **even to its original index**.<br>
+<img src="images/recovered.png" width="50%"/><br>
 
 Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact was added.
 
@@ -221,8 +221,8 @@ If multiple fields are provided, results are separated by a single whitespace.
 
 Format: `copy INDEX FIELD(s)`
 
-Example:
-![Example-Bert](images/example.png)
+Example:<br>
+<img src="images/example.png" width="50%"/><br>
 
 Based on the sample contact above:
 Sample Commands     | Details | Results
@@ -262,15 +262,15 @@ Adds the new contact to the address book, **assuming that a contact with an iden
 Format: `duplicate n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
 Example:
-Say you have a list of contacts like the following, and you wish to add a contact with an **identical name** to the first entry `Alex Yeoh`
-![Sample](images/sample.png)
+Say you have a list of contacts like the following, and you wish to add a contact with an **identical name** to the first entry `Alex Yeoh`<br>
+<img src="images/sample.png" width="50%"/><br>
 
-You will encounter the following error using the `add` command
-![Error](images/error.png)
+You will encounter the following error using the `add` command<br>
+<img src="images/error.png" width="50%"/><br>
 
-To duplicate the contact, run the following `duplicate` command and enter to see the results.
-![Command](images/duplicate-command.png)
-![Success](images/duplicate-success.png)
+To duplicate the contact, run the following `duplicate` command and enter to see the results.<br>
+<img src="images/duplicate-command.png" width="50%"/><br>
+<img src="images/duplicate-success.png" width="50%"/><br>
 
 ### Overwriting an Existing Contact : `overwrite`
 
