@@ -60,9 +60,9 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 > [!TIP]
 > * LookMeUp supports **fuzzy input** with a maximum allowance of 1 misspelled letter,
-    preventing users from needing to retype the entire command due to a single spelling mistake
-    >   * Examples:
-          >     * `swot` will be interpreted as `sort`
+    preventing users from needing to retype the entire command due to a single spelling mistake.
+  >   * Examples:
+  >     * `swot` will be interpreted as `sort`
 >     * `addystep` will be interpreted as `addbystep`
 > * LookMeUp text field supports **command history** accessibility.
     >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
