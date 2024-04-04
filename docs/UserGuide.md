@@ -222,6 +222,21 @@ Sample Commands     | Details | Results
 `copy 4 email email`   | Copies the email of contact indexed 4 **(Duplicated fields are ignored)** | `Bert@gmail.com`
 `copy 4 nnamee phone`  | Incorrect field detected | `N.A.`
 
+### Sorting the Contacts : `sort`
+
+Sorts the entries in the address book based on the given condition.
+
+Format: `sort KEYWORD`
+
+* LookMeUp supports the following `KEYWORDs` : `name`, `tag`
+    * `Name`: Sorts the entries based on lexicographical order of names.
+    * `Tag`: Sorts the entries based on lexicographical order of tags.
+
+> [!IMPORTANT]
+> * `Fuzzy input` does not support `KEYWORD`
+    >   * e.g. `sort NAMEE` will result in an error.
+> * Only **1 keyword** can be entered after `sort`
+    >   * e.g. `sort NAME OTHERS` will result in an error.
 
 ### Filtering by Tag : `filter`
 
