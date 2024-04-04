@@ -64,7 +64,7 @@ So say goodbye to traditional address book applications and say hello to the fut
     >   * Examples:
           >     * `swot` will be interpreted as `sort`
 >     * `addystep` will be interpreted as `addbystep`
-> * LookMeUp text field supports **command history** accessibiity.
+> * LookMeUp text field supports **command history** accessibility.
     >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
 ### Viewing help : `help`
