@@ -58,14 +58,6 @@ So say goodbye to traditional address book applications and say hello to the fut
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
-> [!TIP]
-> * LookMeUp supports **fuzzy input** with a maximum allowance of 1 misspelled letter,
-preventing users from needing to retype the entire command due to a single spelling mistake
->   * Examples:
->     * `swot` will be interpreted as `sort`
->     * `addystep` will be interpreted as `addbystep`
-> * LookMeUp text field supports **command history** accessibiity.
->   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
 ### Viewing help : `help`
 
@@ -197,17 +189,6 @@ Similarly, `undoing` after adding a contact would mean reverting the contact lis
 > Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
 >   * That is, when you launch the app again, you will not be able to undo any commands from the previous time you launched it.
 
-###  Redo Undid Command : `redo`
-
-Redo the most recent `undo` command.
-
-Format: `redo`
-
-For example, entering `redo` after previous `undo` example will revert the contacts to before `undo` was being executed.
-
-> [!IMPORTANT]
-> `redo` only works when `undo` was called.
-> If there were no commands undone, entering `redo` will prompt an **error**.
 
 ### Copies a Person Information to Clipboard : `copy`
 
@@ -233,21 +214,6 @@ Sample Commands     | Details | Results
 `copy 4 email email`   | Copies the email of contact indexed 4 **(Duplicated fields are ignored)** | `Bert@gmail.com`
 `copy 4 nnamee phone`  | Incorrect field detected | `N.A.`
 
-### Sorting the Contacts : `sort`
-
-Sorts the entries in the address book based on the given condition.
-
-Format: `sort KEYWORD`
-
-* LookMeUp supports the following `KEYWORDs` : `name`, `tag`
-  * `Name`: Sorts the entries based on lexicographical order of names.
-  * `Tag`: Sorts the entries based on lexicographical order of tags.
-
-> [!IMPORTANT]
-> * `Fuzzy input` does not support `KEYWORD`
->   * e.g. `sort NAMEE` will result in an error.
-> * Only **1 keyword** can be entered after `sort`
->   * e.g. `sort NAME OTHERS` will result in an error.
 
 ### Filtering by Tag : `filter`
 
@@ -272,13 +238,6 @@ To duplicate the contact, run the following `duplicate` command and enter to see
 ![Command](images/duplicate-command.png)
 ![Success](images/duplicate-success.png)
 
-### Overwriting an Existing Contact : `overwrite`
-
-Overwrites and existing contact in the address book, **assuming that a contact with an identical identity which is **already existing** in the Address Book.
-
-Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
-* `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
-* The index **must be positive integer** 1, 2, 3, …​
 
 ### Clearing all entries : `clear`
 
@@ -339,3 +298,4 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 | `overwrite INDEX n/…​ p/…​ e/…​ a/…​ [tTAG]…​` | Overwrites an existing contact in the address book, **assuming that a contact with an identical identity already exists**.<br/>**Example:**<br/>`overwrite 2 n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` |
 | `clear`                                        | Deletes all contacts                                                                                                                                                                                                                     |
 | `exit`                                         | Exits and closes the program.                                                                                                                                                                                                            |
+
