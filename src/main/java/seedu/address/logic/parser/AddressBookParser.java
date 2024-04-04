@@ -12,7 +12,7 @@ import seedu.address.logic.commands.AddByStepCommand;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
-import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.commands.DuplicateCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
@@ -21,9 +21,11 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.OverwriteCommand;
+import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemoveAbortion;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.commands.RemoveSuccess;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.sortfunctions.SortCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.logic.parser.fuzzy.FuzzyCommandParser;
@@ -71,9 +73,6 @@ public class AddressBookParser {
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
 
-        case DeleteCommand.COMMAND_WORD:
-            return new DeleteCommandParser().parse(arguments);
-
         case RemoveCommand.COMMAND_WORD:
             return new RemoveCommandParser().parse(arguments);
 
@@ -82,6 +81,12 @@ public class AddressBookParser {
 
         case RemoveAbortion.COMMAND_WORD:
             return new RemoveAbortion();
+
+        case RedoCommand.COMMAND_WORD:
+            return new RedoCommand();
+
+        case UndoCommand.COMMAND_WORD:
+            return new UndoCommand();
 
         case ClearCommand.COMMAND_WORD:
             return new ClearCommand();
@@ -112,6 +117,9 @@ public class AddressBookParser {
 
         case OverwriteCommand.COMMAND_WORD:
             return new OverwriteCommandParser().parse(arguments);
+
+        case CopyCommand.COMMAND_WORD:
+            return new CopyCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

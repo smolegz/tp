@@ -57,6 +57,7 @@ public class DuplicateCommand extends Command {
         }
 
         model.addDuplicatePerson(toAdd);
+        model.commitAddressBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
     @Override

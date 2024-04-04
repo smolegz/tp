@@ -48,7 +48,7 @@ public class SortCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         sortStrategy.sort(model.getAddressBook());
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-
+        model.commitAddressBook();
         return new CommandResult("Sorted address book by: " + sortStrategy.getCategory());
     }
 }
