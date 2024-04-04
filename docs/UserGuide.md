@@ -225,13 +225,14 @@ Example:
 ![Example-Bert](images/example.png)
 
 Based on the sample contact above:
-Sample Commands     | Details | Results
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`copy 4 name`    | Copies the name of contact indexed 4 | `Bert`
-`copy 4 name address` | Copies the name and address of contact indexed 4 | `Bert Sesame Street`
-`copy 4 phone email` | Copies the phone and email of contact indexed 4 | `88891234 Sesame Street`
-`copy 4 email email`   | Copies the email of contact indexed 4 **(Duplicated fields are ignored)** | `Bert@gmail.com`
-`copy 4 nnamee phone`  | Incorrect field detected | `N.A.`
+
+| Sample Commands       | Details                                                                    | Results                  |
+|-----------------------|----------------------------------------------------------------------------|--------------------------|
+| `copy 4 name`         | Copies the name of contact indexed 4                                       | `Bert`                   |
+| `copy 4 name address` | Copies the name and address of contact indexed 4                           | `Bert Sesame Street`     |
+| `copy 4 phone email`  | Copies the phone and email of contact indexed 4                            | `88891234 Sesame Street` |
+| `copy 4 email email`  | Copies the email of contact indexed 4  **(Duplicated fields are ignored)** | `Bert@gmail.com`         |
+| `copy 4 nnamee phone` | Incorrect field detected                                                   | `N.A.`                   |
 
 ### Sorting the Contacts : `sort`
 
