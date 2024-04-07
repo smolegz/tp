@@ -258,7 +258,7 @@ Format: `filter TAGNAME`
 
 ### Adding a Contact with Duplicate Identity : `duplicate`
 
-Adds the new contact to the address book, **assuming that a contact with an identical identity already exists**.
+Adds the new contact to the address book, **assuming that a contact with an identical name already exists**.
 
 Format: `duplicate n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
@@ -275,11 +275,22 @@ To duplicate the contact, run the following `duplicate` command and enter to see
 
 ### Overwriting an Existing Contact : `overwrite`
 
-Overwrites and existing contact in the address book, **assuming that a contact with an identical identity which is **already existing** in the Address Book.
+Overwrites an existing contact in the address book, **assuming that a contact with an identical name **already exists** in the Address Book.
 
 Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 * `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
 * The index **must be positive integer** 1, 2, 3, …​
+
+Example:
+Say you tried to add a contact with an **identical name** to the first entry `Alex Yeoh`<br>
+<img src="images/sample.png" width="50%"/><br>
+
+You will encounter the following error using the `add` command<br>
+<img src="images/error.png" width="50%"/><br>
+
+In the case where you actually intended to overwrite the contact instead, run the following `overwrite` command and enter to see the results.<br>
+<img src="images/overwrite-example.png" width="50%"/><br>
+<img src="images/overwrite-success.png" width="50%"/><br>
 
 ### Clearing all entries : `clear`
 
