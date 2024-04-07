@@ -20,7 +20,7 @@ public class OverwriteCommand extends Command {
 
     public static final String COMMAND_WORD = "overwrite";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Overwrites a person in the address book. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
@@ -56,14 +56,11 @@ public class OverwriteCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (!model.hasPerson(toAdd)) {
+        Person target = model.getPerson(this.indexOfTarget - 1);
+        if (!model.hasPerson(target)) {
             throw new CommandException(MESSAGE_NO_EXISTING_PERSON);
         }
-
-        Person target = model.getPerson(this.indexOfTarget - 1);
         model.setDuplicatePerson(target, toAdd);
-        // KIV - as current feature doesn't work as expected
-        // potentially need to adjust placement of model.commitAddressBook()
         model.commitAddressBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }

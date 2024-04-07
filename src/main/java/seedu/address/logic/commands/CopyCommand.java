@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -23,6 +24,7 @@ public class CopyCommand extends Command {
 
     public static final String COMMAND_WORD = "copy";
     public static final String MESSAGE_SUCCESS = "Successfully copied!";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "The person index you have specified is not in the contact.";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Copies the information of a contact.\n"
             + "copy INDEX name/contact/address/email\n"
             + "Example: copy 1 name email\n"
@@ -44,9 +46,16 @@ public class CopyCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(Model model) {
+    public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        int zeroBasedIndex = targetIndex.getZeroBased();
+        int addressBookSize = model.getAddressBook().getPersonList().size();
+
+        if (zeroBasedIndex < 0 || zeroBasedIndex >= addressBookSize) {
+            throw new CommandException(MESSAGE_PERSON_NOT_FOUND);
+        }
 
         Person person = model.getPerson(targetIndex.getZeroBased());
         StringBuilder result = getInfo(person);
