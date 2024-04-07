@@ -969,10 +969,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `LookMeUp` and the **Actor** is the `user`, unless specified otherwise)
 
 **Use case:** UC1 - Add a contact\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -999,7 +998,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case resumes from step 4.
 
 **Use case:** UC2 - Remove a contact\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -1034,7 +1032,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case ends.
 
 **Use case:** UC3 - Filter contacts by tags\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -1087,7 +1084,12 @@ Use case ends.
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **IT-savvy**: The user is not familiar with the exact format of the add command.
 * **Side pop-up window**: Additional windows that can be opened by the user during usage of the software(e.g. the help window).
-
+* **SOLID principle**: The SOLID principle is a set of five design principles used in object-oriented programming to make software designs more understandable, flexible, and maintainable. The acronym SOLID stands for:
+    * Single Responsibility Principle
+    * Open/Closed Principle
+    * Liskov Substitution Principle
+    * Interface Segregation Principle
+    * Dependency Inversion Principle
 
 --------------------------------------------------------------------------------------------------------------------
 
