@@ -378,4 +378,4 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 ## Glossary
 
 ### Lexicographical
-* Order of words based on the alphabetical order of their letters. 
+* Order of words based on the alphabetical order of their letters.
