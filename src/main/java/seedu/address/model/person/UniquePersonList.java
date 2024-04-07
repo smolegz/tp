@@ -93,9 +93,7 @@ public class UniquePersonList implements Iterable<Person> {
             throw new DuplicatePersonNotFoundException();
         }
 
-        if (target.isSamePerson(editedPerson)) {
-            internalList.set(index, editedPerson);
-        }
+        internalList.set(index, editedPerson);
     }
 
     /**
