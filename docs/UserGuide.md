@@ -91,6 +91,10 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+> [!NOTE]
+> * Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
+being recognized as a new, unique name. e.g. John Doe is not the same as JohnDoe
+
 ### Adding a person (With System Prompts): `addbystep`
 
 <img src="images/AddByStep.png" width="40%"/>
