@@ -33,6 +33,9 @@ public class OverwriteCommandParser implements Parser<OverwriteCommand> {
     public OverwriteCommand parse(String args) throws ParseException {
 
         int indexOfFirstPrefix = args.indexOf('n') - 1;
+        if (indexOfFirstPrefix < 0) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, OverwriteCommand.MESSAGE_USAGE));
+        }
         int indexOfTarget = Integer.parseInt(args.substring(1, indexOfFirstPrefix));
 
         ArgumentMultimap argMultimap =
