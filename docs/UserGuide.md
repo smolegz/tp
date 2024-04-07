@@ -373,3 +373,9 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 | `clear`                                        | Deletes all contacts                                                                                                                                                                                                                     |
 | `exit`                                         | Exits and closes the program.                                                                                                                                                                                                            |
 
+--------------------------------------------------------------------------------------------------------------------
+
+## Glossary
+
+### Lexicographical
+* Order of words based on the alphabetical order of their letters. 
