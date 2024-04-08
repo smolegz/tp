@@ -106,6 +106,7 @@ Format: `addbystep`
 > [!NOTE]
 > * If you enter `addbystep` with any additional parameters, _e.g. `addbystep 123`_, the additional parameters will be ignored,
 and `addbystep` window will still launch as per normal.
+> * Currently, `addbystep` does not support the filling of tags when adding a new contact.
 > * Once you have added all the details, you have to close the window and retype the command to create a `add` command
 > * Since this is an accessory window, **maximising of the window is not supported**.
 

@@ -45,7 +45,7 @@ public class CommandHelperWindow extends AnchorPane {
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containin AddCommandHelper's reply depending
+     * Creates two dialog boxes, one echoing user input and the other containing AddCommandHelper's reply depending
      * on whether the input by the user is valid or not.
      */
     @FXML
