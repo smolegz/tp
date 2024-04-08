@@ -13,9 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 /**
- * An example of a custom control using FXML.
- * This control represents a dialog box consisting of an ImageView to represent the speaker's face and a label
- * containing text from the speaker.
+ * A UI component that displays messages to the user depending on
+ * the validity of the user's input.
  */
 public class DialogBox extends HBox {
     @FXML
@@ -37,7 +36,7 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left and text on the right.
+     * Flips the dialog box such that the text appears on the left.
      */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
@@ -47,13 +46,29 @@ public class DialogBox extends HBox {
     }
 
 
+    /**
+     * Returns a new instance of DialogBox displaying the user's
+     * input.
+     *
+     * @param text String representing user's input.
+     * @return a new instance of DialogBox containing the user's
+     *     input.
+     */
     public static DialogBox getUserDialog(String text) {
         return new DialogBox(text);
     }
 
+    /**
+     * Returns a new instance of DialogBox displaying the AddCommandHelper's
+     * output.
+     *
+     * @param text String representing AddCommandHelper's output.
+     * @return a new instance of DialogBox containing AddCommandHelper's
+     *     output.
+     */
     public static DialogBox getAddCommandHelperDialog(String text) {
-        var db = new DialogBox(text);
-        db.flip();
-        return db;
+        DialogBox dialogBox = new DialogBox(text);
+        dialogBox.flip();
+        return dialogBox;
     }
 }
