@@ -70,6 +70,9 @@ public class AddressBookParser {
         case AddCommand.COMMAND_WORD:
             return new AddCommandParser().parse(arguments);
 
+        case AddByStepCommand.COMMAND_WORD:
+            return new AddByStepCommand();
+
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
 
@@ -105,9 +108,6 @@ public class AddressBookParser {
 
         case SortCommand.COMMAND_WORD:
             return new SortCommand(arguments);
-
-        case AddByStepCommand.COMMAND_WORD:
-            return new AddByStepCommand();
 
         case FilterCommand.COMMAND_WORD:
             return new FilterCommandParser().parse(arguments);

@@ -108,6 +108,10 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+> [!NOTE]
+> * Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
+being recognized as a new, unique name. e.g. John Doe is not the same as JohnDoe
+
 ### Adding a person (With System Prompts): `addbystep`
 
 <img src="images/AddByStep.png" width="40%"/>
@@ -119,6 +123,7 @@ Format: `addbystep`
 > [!NOTE]
 > * If you enter `addbystep` with any additional parameters, _e.g. `addbystep 123`_, the additional parameters will be ignored,
 and `addbystep` window will still launch as per normal.
+> * Currently, `addbystep` does not support the filling of tags when adding a new contact.
 > * Once you have added all the details, you have to close the window and retype the command to create a `add` command
 > * Since this is an accessory window, **maximising of the window is not supported**.
 
@@ -290,7 +295,7 @@ Format: `filter TAGNAME`
 
 ### Adding a Contact with Duplicate Identity : `duplicate`
 
-Adds the new contact to the address book, **assuming that a contact with an identical identity already exists**.
+Adds the new contact to the address book, **assuming that a contact with an identical name already exists**.
 
 Format: `duplicate n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
@@ -312,6 +317,17 @@ Overwrites an existing contact in the address book, provided that a contact with
 Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 * `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
 * The index **must be positive integer** 1, 2, 3, …​
+
+Example:
+Say you tried to add a contact with an **identical name** to the first entry `Alex Yeoh`<br>
+<img src="images/sample.png" width="50%"/><br>
+
+You will encounter the following error using the `add` command<br>
+<img src="images/error.png" width="50%"/><br>
+
+In the case where you actually intended to overwrite the contact instead, run the following `overwrite` command and enter to see the results.<br>
+<img src="images/overwrite-example.png" width="50%"/><br>
+<img src="images/overwrite-success.png" width="50%"/><br>
 
 ### Clearing all entries : `clear`
 
@@ -361,7 +377,7 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 | Command                                        | Details                                                                                                                                                                                                                                  |
 |------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `list`                                         | List all contacts                                                                                                                                                                                                                        |
-| `add n/…​ p/…​ e/…​ a/…​ [tTAG]…​`             | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
+| `add n/…​ p/…​ e/…​ a/…​ [t/TAG]…​`            | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
 | `remove NAME`<br/>`remove INDEX`<br/>`yes/no`  | Removes a contact with multiple prompts that first shortlist contacts with matching names, then confirms the contact to remove based on the index keyed in.                                                                              |
 | `undo`                                         | Undo the previous command entered.                                                                                                                                                                                                       |
 | `redo`                                         | Reverses the previous `undo` command.                                                                                                                                                                                                    |
