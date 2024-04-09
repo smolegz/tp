@@ -19,11 +19,11 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
-1. Download the latest `addressbook.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases/tag/v1.3(final)).
+1. Download the latest `LookMeUp.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases/tag/v1.3(final)).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar LookMeUp.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    <img src="images/Ui.png" width="50%"/>
 
@@ -67,6 +67,10 @@ So say goodbye to traditional address book applications and say hello to the fut
 > * LookMeUp text field supports **command history** accessibility.
     >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
+> [! WARNING]
+> Command prefixes (n/…​ a/…​ p/…​ e/…​ t/…​) only accepts lower case characters.
+>   * Examples like N/…​ A/…​ P/…​ E/…​ T/…​ where prefixes are capital letters will not be accepted.
+
 ### Viewing help : `help`
 
 <img src="images/Ui-help.png" width="50%"/>
@@ -85,7 +89,20 @@ Adds a person to the address book.
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
 > [!TIP]
-> A person can have any number of tags (including 0)
+> 
+> * A person can have any number of tags **(including 0)**.
+> 
+> * There are no character limit restrictions for each input.
+>   * However, it is advisable to keep each field under **100 characters** to ensure compatibility with your device's resolution.
+
+> [!IMPORTANT]
+>
+> * Phone numbers should only contain numbers **(min 3 numbers)**.
+> 
+> * Name, address, email and tag inputs only support **alphanumeric characters** (with email accepting a single `@`).
+>   * LookMeUp does not support non-alphanumeric characters. 
+>   * LookMeUp does not support spacing for the input entered.
+
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
@@ -133,6 +150,15 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+> [!NOTE]
+> 
+> Editing a contact with the same value will still be considered a successful edit, and LookMeUp will prompt a "successful" message.
+> 
+> LookMeUp will display the entire contact fields in the "successful" message (shown below).
+> 
+> <img src="images/successEdit.png" width="100%"/>
+
 
 ### Locating persons by name: `find`
 
@@ -255,6 +281,12 @@ Format: `sort KEYWORD`
 > * Only **1 keyword** can be entered after `sort`
     >   * e.g. `sort NAME OTHERS` will result in an error.
 
+> [! NOTE]
+> When `sort tag` is executed, LookMeUp sorts tags by 
+> **numbering**, followed by contacts **without tags**, and finally **alphabetically**
+> 
+>    <img src="images/savetag.png" width="50%"/><br>
+
 ### Filtering by Tag : `filter`
 
 Shows a list of persons in the address book, filtered by `specified tag`.
@@ -280,7 +312,7 @@ To duplicate the contact, run the following `duplicate` command and enter to see
 
 ### Overwriting an Existing Contact : `overwrite`
 
-Overwrites an existing contact in the address book, **assuming that a contact with an identical name **already exists** in the Address Book.
+Overwrites an existing contact in the address book, provided that a contact with an identical identity already exists in the address book.
 
 Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 * `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
@@ -357,3 +389,9 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 | `clear`                                        | Deletes all contacts                                                                                                                                                                                                                     |
 | `exit`                                         | Exits and closes the program.                                                                                                                                                                                                            |
 
+--------------------------------------------------------------------------------------------------------------------
+
+## Glossary
+
+### Lexicographical
+* Order of words based on the alphabetical order of their letters.
