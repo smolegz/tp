@@ -5,7 +5,7 @@ package seedu.address.ui;
  * they key in fields for the add command by by step.
  */
 public enum Status {
-    GET_NAME, GET_NUMBER, GET_EMAIL, GET_ADDRESS, GET_TAG, COMPLETE, COPY;
+    GET_NAME, GET_NUMBER, GET_EMAIL, GET_ADDRESS, COMPLETE, COPY;
 
     @Override
     public String toString() {
@@ -22,9 +22,6 @@ public enum Status {
             break;
         case GET_ADDRESS:
             msg = "address";
-            break;
-        case GET_TAG:
-            msg = "tag (optional)";
             break;
         case COMPLETE:
             msg = "complete command";
