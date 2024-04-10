@@ -47,6 +47,7 @@ public class CopyCommandTest {
     public void execute_copyName_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> field = new ArrayList<>();
         field.add("name");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
                 model,
@@ -62,6 +63,7 @@ public class CopyCommandTest {
     public void execute_copyPhone_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> field = new ArrayList<>();
         field.add("phone");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
                 model,
@@ -77,6 +79,7 @@ public class CopyCommandTest {
     public void execute_copyAddress_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> field = new ArrayList<>();
         field.add("address");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
                 model,
@@ -92,6 +95,7 @@ public class CopyCommandTest {
     public void execute_copyEmail_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> field = new ArrayList<>();
         field.add("email");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
                 model,
@@ -106,6 +110,7 @@ public class CopyCommandTest {
     @ValueSource(ints = {1, 3, 5})
     public void execute_duplicateName_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("name", "name");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
                 model,
@@ -120,6 +125,7 @@ public class CopyCommandTest {
     @ValueSource(ints = {2, 4, 6})
     public void execute_duplicateEmail_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("email", "email" , "email");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
                 model,
@@ -134,6 +140,7 @@ public class CopyCommandTest {
     @ValueSource(ints = {1, 5, 7})
     public void execute_copyPhoneAndAddress_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("phone", "address");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
                 model,
@@ -149,6 +156,7 @@ public class CopyCommandTest {
     @ValueSource(ints = {1, 2, 5})
     public void execute_copyNameAndEmail_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("name", "email");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
                 model,
@@ -165,6 +173,7 @@ public class CopyCommandTest {
     public void execute_copyEmailWithDuplicateAddress_success(int index)
             throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("email", "address", "address");
+        System.setProperty("java.awt.headless", "true");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
                 model,
