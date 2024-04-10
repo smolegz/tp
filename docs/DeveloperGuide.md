@@ -487,7 +487,7 @@ For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algor
 Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
 misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
 
-### \[Future Development\] Fuzzy Input with varying distance metric
+#### \[Future Development\] Fuzzy Input with varying distance metric
 
 Currently, the MAX_DISTANCE for the distance metric is set to 1. To enhance user-experience and accommodate longer
 commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
@@ -720,10 +720,9 @@ Aspect: How to implement assistance functions to aid users in typing their comma
     * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
     tags). It cannot fill in the exact details 
     * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
-    perform checking of the command first, before letting the user know that the entered command is invalid. 
+    perform checking of the command first, before letting the user know that the entered command is invalid.
 
-
-### \[Future Development\] Extension of Helper class to general commands
+#### \[Future Development\] Extension of Helper class to general commands
 
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
 makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
