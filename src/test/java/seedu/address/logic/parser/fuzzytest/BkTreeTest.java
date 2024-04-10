@@ -1,16 +1,18 @@
 package seedu.address.logic.parser.fuzzytest;
 
-import org.junit.jupiter.api.Test;
-import seedu.address.logic.parser.fuzzy.BkTreeCommandMatcher;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.parser.fuzzy.BkTreeCommandMatcher;
+
 
 public class BkTreeTest {
     @Test
-    void testBkTree_FindClosestMatch() {
+    void testBkTreeFindClosestMatch() {
         List<String> items = Arrays.asList("taylar", "taytay", "tayler", "taylor");
         BkTreeCommandMatcher<String> bkTree = new BkTreeCommandMatcher<>(items);
         String query = "tailor";
@@ -19,7 +21,7 @@ public class BkTreeTest {
     }
 
     @Test
-    void testBkTree_GetClosestDistance() {
+    void testBkTreeGetClosestDistance() {
         List<String> items = Arrays.asList("taylar", "taytay", "tayler", "taylor");
         BkTreeCommandMatcher<String> bkTree = new BkTreeCommandMatcher<>(items);
         String query = "taylo";

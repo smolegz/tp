@@ -1,11 +1,10 @@
 package seedu.address.logic.parser.fuzzytest;
 
-import org.junit.jupiter.api.Test;
-import seedu.address.logic.parser.fuzzy.BkTreeNode;
-import seedu.address.logic.parser.fuzzy.LevenshteinDistance;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.parser.fuzzy.LevenshteinDistance;
 
 public class LevenshteinTest {
     @Test

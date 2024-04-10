@@ -1,14 +1,15 @@
 package seedu.address.logic.parser.fuzzytest;
 
-import org.junit.jupiter.api.Test;
-import seedu.address.logic.parser.fuzzy.FuzzyCommandParser;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.parser.fuzzy.FuzzyCommandParser;
 
 public class FuzzyCommandParserTest {
 
     @Test
-    void testFuzzyParser_Exact() {
+    void testFuzzyParserExact() {
         String userInput1 = "add";
         String expected1 = "add";
         assertEquals(expected1, FuzzyCommandParser.parseCommand(userInput1));
@@ -19,7 +20,7 @@ public class FuzzyCommandParserTest {
     }
 
     @Test
-    void testFuzzyParser_WithinMaxError() {
+    void testFuzzyParserWithinMaxError() {
         String userInput1 = "wdd";
         String expected = "add";
         assertEquals(expected, FuzzyCommandParser.parseCommand(userInput1));
@@ -32,7 +33,7 @@ public class FuzzyCommandParserTest {
     }
 
     @Test
-    void testFuzzyParser_BeyondMaxError() {
+    void testFuzzyParserBeyondMaxError() {
         String userInput1 = "adding";
         String expected = "error";
         assertEquals(expected, FuzzyCommandParser.parseCommand(userInput1));
