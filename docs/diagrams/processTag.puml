@@ -1,8 +1,0 @@
-@startuml
-'https://plantuml.com/activity-diagram-beta
-
-repeat :User enters tag(s);
-  :process tags(s);
-repeat while (Tag(s) are valid?) is (no)
-
-@enduml

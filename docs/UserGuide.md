@@ -121,11 +121,14 @@ Adds a person to the address book but prompts will be provided for each field re
 Format: `addbystep`
 
 > [!NOTE]
-> * If you enter `addbystep` with any additional parameters, _e.g. `addbystep 123`_, the additional parameters will be ignored,
-and `addbystep` window will still launch as per normal.
+> * If you enter `addbystep` with any additional parameters, _e.g. `addbystep 123`_, the additional parameters 
+will be ignored, and `addbystep` window will still launch as per normal.
 > * Currently, `addbystep` does not support the filling of tags when adding a new contact.
 > * Once you have added all the details, you have to close the window and retype the command to create a `add` command
 > * Since this is an accessory window, **maximising of the window is not supported**.
+> * `addbystep` Only helps you to format the command correctly, it does not help to check if the person that you are 
+adding is a duplicate. You have to copy the command to your clipboard and paste it into LookMeUp to verify if the 
+person is non-duplicate.
 
 
 ### Listing all persons : `list`
