@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# LookMeUp Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -458,7 +458,6 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
       * `FuzzyCommandParser#parseCommand())` will return `null` string to `AddressBookParser#parseCommand()`
       * Since `null` is not a recognised command, `ParseException` will be thrown.
 
-* <insert UML diagrams>
     
 #### Design considerations:
 
@@ -724,10 +723,6 @@ Aspect: How to implement assistance functions to aid users in typing their comma
     perform checking of the command first, before letting the user know that the entered command is invalid. 
 
 
-
-
-
-
 ### \[Future Development\] Extension of Helper class to general commands
 
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
@@ -741,6 +736,11 @@ Aside from adding more functionalities to the helper class, we can also implemen
 fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
 by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
 of the user once all of them have been entered.
+
+### Planned Enhancements 
+
+1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
+an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
 
 
 ### Duplicate feature
@@ -940,7 +940,7 @@ NUS students who stay on campus
 
 ## User Stories
 **Value proposition**:
-1. Keeps track of the location and details of upcoming meetings specific to each contact, knowing when and who to make calls with
+1. Keeps track of the location and details specific to each contact, knowing who to make calls with
 2. Given how students who stay on campus find themselves in many different committees and interest groups, our Address Book seeks to provide features that allows them to compartmentalise their contacts and access various groups easily
 
 
@@ -1065,7 +1065,6 @@ Use case ends.
 6.  The startup time for the application should not take more than 10 minutes.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
-*{More to be added}*
 
 ### Glossary
 
@@ -1108,8 +1107,6 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1125,18 +1122,9 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
-
-
-### Planned Enhancements 
-
-1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
-an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
