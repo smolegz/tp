@@ -8,6 +8,6 @@ with(this){return _c('div',{attrs:{"id":"app"}},[_c('header',{attrs:{"sticky":""
 with(this){return _c('div',{attrs:{"id":"content-wrapper"}},[_c('h1',{attrs:{"id":"kervyn-tan-jiawei"}},[_v("Kervyn Tan Jiawei"),_c('a',{staticClass:"fa fa-anchor",attrs:{"href":"#kervyn-tan-jiawei","onclick":"event.stopPropagation()"}})]),_v(" "),_c('h2',{attrs:{"id":"about-me"}},[_v("About Me"),_c('a',{staticClass:"fa fa-anchor",attrs:{"href":"#about-me","onclick":"event.stopPropagation()"}})]),_v(" "),_c('p',[_v("Y2 Computer Science student passionate in the world of Web Development!")]),_v(" "),_c('p',[_v("Like to read books on programming/new topics as well as cycling on the weekends")])])}
 },function anonymous(
 ) {
-with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.4.0")]),_v(", generated on Thu, 11 Apr 2024, 1:49:59 GMT+8]")])])])}
+with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.4.0")]),_v(", generated on Thu, 11 Apr 2024, 2:05:07 GMT+8]")])])])}
 }];
   

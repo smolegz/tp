@@ -40,7 +40,7 @@
       "src": "DeveloperGuide.md",
       "title": "Developer Guide",
       "headings": {
-        "ab-3-developer-guide": "AB-3 Developer Guide",
+        "lookmeup-developer-guide": "LookMeUp Developer Guide",
         "acknowledgements": "Acknowledgements",
         "setting-up-getting-started": "Setting up, getting started",
         "design": "Design",
@@ -60,6 +60,7 @@
         "design-consideration": "Design consideration:",
         "add-by-step": "Add By Step",
         "future-development-extension-of-helper-class-to-general-commands": "[Future Development] Extension of Helper class to general commands",
+        "planned-enhancements": "Planned Enhancements",
         "duplicate-feature": "Duplicate feature",
         "design-consideration-2": "Design consideration:",
         "exit-window": "Exit Window",
@@ -75,8 +76,7 @@
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
         "deleting-a-person": "Deleting a person",
-        "saving-data": "Saving data",
-        "planned-enhancements": "Planned Enhancements"
+        "saving-data": "Saving data"
       },
       "headingKeywords": {}
     },
@@ -153,7 +153,7 @@
       "src": "index.md",
       "title": "",
       "headings": {
-        "addressbook-level-3": "AddressBook Level-3"
+        "lookmeup": "LookMeUp"
       },
       "headingKeywords": {}
     },
