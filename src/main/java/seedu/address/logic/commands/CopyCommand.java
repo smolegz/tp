@@ -90,5 +90,21 @@ public class CopyCommand extends Command {
         return result;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof CopyCommand)) {
+            return false;
+        }
+
+        CopyCommand otherCopyCommand = (CopyCommand) other;
+        return targetIndex.equals(otherCopyCommand.targetIndex)
+                       && fieldsToCopyList.equals(otherCopyCommand.fieldsToCopyList);
+    }
+
 
 }

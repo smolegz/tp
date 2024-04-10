@@ -1,14 +1,10 @@
 package seedu.address.logic.commands;
 
-import org.junit.jupiter.api.BeforeEach;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import seedu.address.commons.core.index.Index;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
-import seedu.address.model.person.Person;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -19,11 +15,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import seedu.address.commons.core.index.Index;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Person;
+
+
 
 /**
  * Contains integration tests and unit tests for EditCommand.
@@ -45,7 +47,9 @@ public class CopyCommandTest {
         List<String> field = new ArrayList<>();
         field.add("name");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getName());
@@ -58,7 +62,9 @@ public class CopyCommandTest {
         List<String> field = new ArrayList<>();
         field.add("phone");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getPhone());
@@ -71,7 +77,9 @@ public class CopyCommandTest {
         List<String> field = new ArrayList<>();
         field.add("address");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getAddress());
@@ -84,7 +92,9 @@ public class CopyCommandTest {
         List<String> field = new ArrayList<>();
         field.add("email");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), field),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getEmail());
@@ -96,7 +106,9 @@ public class CopyCommandTest {
     public void execute_duplicateName_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("name", "name");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getName());
@@ -108,7 +120,9 @@ public class CopyCommandTest {
     public void execute_duplicateEmail_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("email", "email" , "email");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         String expectedResult = String.valueOf(expectedModel.getPerson(index - 1).getEmail());
@@ -116,11 +130,13 @@ public class CopyCommandTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1 ,5 ,7})
+    @ValueSource(ints = {1, 5, 7})
     public void execute_copyPhoneAndAddress_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("phone", "address");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         Person person = expectedModel.getPerson(index - 1);
@@ -129,24 +145,29 @@ public class CopyCommandTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1 ,2 ,5})
+    @ValueSource(ints = {1, 2, 5})
     public void execute_copyNameAndEmail_success(int index) throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("name", "email");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         Person person = expectedModel.getPerson(index - 1);
-        String expectedResult= person.getName() + " " + person.getEmail();
+        String expectedResult = person.getName() + " " + person.getEmail();
         assertEquals(expectedResult, actualResult);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1 ,7 ,4})
-    public void execute_copyEmailWithDuplicateAddress_success(int index) throws IOException, UnsupportedFlavorException {
+    @ValueSource(ints = {1, 7, 4})
+    public void execute_copyEmailWithDuplicateAddress_success(int index)
+            throws IOException, UnsupportedFlavorException {
         List<String> fields = Arrays.asList("email", "address", "address");
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_SUCCESS, expectedModel);
 
         String actualResult = (String) clipboard.getData(DataFlavor.stringFlavor);
         Person person = expectedModel.getPerson(index - 1);
@@ -158,7 +179,9 @@ public class CopyCommandTest {
     @ValueSource(ints = {8, 100})
     public void execute_indexBeyondAddressBookSize_failure(int index) throws IndexOutOfBoundsException {
         List<String> fields = Arrays.asList("name", "email"); // does not matter
-        assertCommandFailure(new CopyCommand(Index.fromOneBased(index), fields), model, CopyCommand.MESSAGE_PERSON_NOT_FOUND);
+        assertCommandFailure(new CopyCommand(Index.fromOneBased(index), fields),
+                model,
+                CopyCommand.MESSAGE_PERSON_NOT_FOUND);
     }
 
     @ParameterizedTest
@@ -166,7 +189,7 @@ public class CopyCommandTest {
     public void execute_negativeIndex_throwsException(int index) throws IndexOutOfBoundsException {
         List<String> fields = Arrays.asList("name", "email"); // does not matter
         assertThrows(IndexOutOfBoundsException.class, () -> {
-            new CopyCommand(Index.fromOneBased(index), fields);}
+            new CopyCommand(Index.fromOneBased(index), fields); }
         );
     }
 
