@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# LookMeUp Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -458,7 +458,6 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
       * `FuzzyCommandParser#parseCommand())` will return `null` string to `AddressBookParser#parseCommand()`
       * Since `null` is not a recognised command, `ParseException` will be thrown.
 
-* <insert UML diagrams>
     
 #### Design considerations:
 
@@ -601,6 +600,7 @@ Given below is an example of how the user can interact with the AddCommandHelper
 
 * Step 1 : The user enters the `addbystep` command, displaying the GUI for the AddCommandHelper. The GUI will display 
 a message to prompt the user to enter the name of the person they wish to add. 
+
 * Step 2 : The user may accidentally press ENTER, causing the name to be blank. 
    * AddCommandHelper will check its `status` attribute
    * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will invoke the `ParserUtil.ParseName`
@@ -608,10 +608,6 @@ a message to prompt the user to enter the name of the person they wish to add.
    * The name is found to be invalid, and a ParseException is thrown, with the error message displayed to the user, 
   stating the constraints of the detail entered (i.e. the name cannot be blank)
    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid name
-
-The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
-
-<puml src="diagrams/processName.puml" alt="processName" />
 
 
 * Step 3 : The user enters a valid name.
@@ -621,6 +617,11 @@ The following activity diagram summarizes the flow of a user when trying to ente
    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to 
   `status.GET_NUMBER`. 
    * The CommandHelperWindow will now display a message for the user to enter the number next
+
+The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
+
+<puml src="diagrams/processName.puml" alt="processName" />
+
 * Step 4 : The user enters only 2 digits into the field before accidentally pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the 
@@ -629,9 +630,6 @@ The following activity diagram summarizes the flow of a user when trying to ente
       stating the constraints of the detail entered (i.e. the number should be at least 3 digits long)
     * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid number
 
-The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
-
-<puml src="diagrams/processNumber.puml" alt="processNumber" />
 * Step 5 : The user enters a "83452897".
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
@@ -639,6 +637,11 @@ The following activity diagram summarizes the flow of a user when trying to ente
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
       `status.GET_EMAIL`. 
     * The CommandHelperWindow will now display a message for the user to enter the email next
+
+The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
+
+<puml src="diagrams/processNumber.puml" alt="processNumber" />
+
 *  Step 6 : The user enters "jack.com.sg" before accidentally pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
@@ -647,10 +650,6 @@ The following activity diagram summarizes the flow of a user when trying to ente
       stating the constraints of the detail entered (i.e. the email should have a "@" followed by a domain name)
     * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid email
 
-The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
-
-<puml src="diagrams/processEmail.puml" alt="processEmail" />
-
 * Step 7 : The user enters "jack@gmail.com".
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
@@ -658,42 +657,31 @@ The following activity diagram summarizes the flow of a user when trying to ente
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
       `status.GET_ADDRESS`
     * The CommandHelperWindow will now display a message for the user to enter the address next
+
+The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
+
+<puml src="diagrams/processEmail.puml" alt="processEmail" />
+
 * Step 8 : The user enters "Bishan St 24" before pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_ADDRESS`, AddCommandHelper will call on the
       `ParserUtil.ParseAddress()` method to check the validity of the number
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_TAG`
-    * The CommandHelperWindow will now display a message for the user to enter the tag next
+      `status.COMPLETE`
+    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
       
-    * | Note that a person can have 0 or 1 tag, so leaving the field blank is still considered a valid  input |
-      |-------------------------------------------------------------------------------------------------------|
+
 The following activity diagram summarizes the flow of a user when trying to enter an email into the CommandHelper:
 
 <puml src="diagrams/processAddress.puml" alt="processAddress" />
 
-* Step 9 : The user enters "@#" before pressing enter. 
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
-      `ParserUtil.ParseTag()` method to check the validity of the tag
-    * The tag is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. tags should only be alphanumeric)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid tag
-* Step 10 : The user enters "friend".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
-      `ParserUtil.parseTag()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.COMPLETE`.
-    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
 
-The following activity diagram summarizes the flow of a user when trying to enter a tag into the CommandHelper:
 
-<puml src="diagrams/processTag.puml" alt="processTag" />
-
-* Step 11 : User makes another input into the CommandHelperWindow.
-    * Any subsequent input entered by the user will result in the same message being displayed to the user, informing 
-  the user to type "cp" so as to copy the command to the user's clipboard
+* Step 9 : User makes another input into the CommandHelperWindow.
+    * If the command is `cp`, the window will display a success message and inform the user that they have successfully
+copied the command to the clipboard
+    * Otherwise, the same end message is displayed, asking the user to enter the `cp` command to copy the command to
+to their clipboard.
 
 The following activity diagram summarizes the entire flow of a user when trying to use CommandHelper:
 
@@ -747,6 +735,11 @@ Aside from adding more functionalities to the helper class, we can also implemen
 fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
 by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
 of the user once all of them have been entered.
+
+### Planned Enhancements 
+
+1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
+an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
 
 
 ### Duplicate feature
@@ -946,7 +939,7 @@ NUS students who stay on campus
 
 ## User Stories
 **Value proposition**:
-1. Keeps track of the location and details of upcoming meetings specific to each contact, knowing when and who to make calls with
+1. Keeps track of the location and details specific to each contact, knowing who to make calls with
 2. Given how students who stay on campus find themselves in many different committees and interest groups, our Address Book seeks to provide features that allows them to compartmentalise their contacts and access various groups easily
 
 
@@ -964,10 +957,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `LookMeUp` and the **Actor** is the `user`, unless specified otherwise)
 
 **Use case:** UC1 - Add a contact\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -994,7 +986,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case resumes from step 4.
 
 **Use case:** UC2 - Remove a contact\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -1029,7 +1020,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
       Use case ends.
 
 **Use case:** UC3 - Filter contacts by tags\
-**Actor:** User\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
@@ -1074,7 +1064,6 @@ Use case ends.
 6.  The startup time for the application should not take more than 10 minutes.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
-*{More to be added}*
 
 ### Glossary
 
@@ -1082,7 +1071,12 @@ Use case ends.
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **IT-savvy**: The user is not familiar with the exact format of the add command.
 * **Side pop-up window**: Additional windows that can be opened by the user during usage of the software(e.g. the help window).
-
+* **SOLID principle**: The SOLID principle is a set of five design principles used in object-oriented programming to make software designs more understandable, flexible, and maintainable. The acronym SOLID stands for:
+    * Single Responsibility Principle
+    * Open/Closed Principle
+    * Liskov Substitution Principle
+    * Interface Segregation Principle
+    * Dependency Inversion Principle
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1112,8 +1106,6 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1129,12 +1121,9 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
