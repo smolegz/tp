@@ -600,6 +600,7 @@ Given below is an example of how the user can interact with the AddCommandHelper
 
 * Step 1 : The user enters the `addbystep` command, displaying the GUI for the AddCommandHelper. The GUI will display 
 a message to prompt the user to enter the name of the person they wish to add. 
+
 * Step 2 : The user may accidentally press ENTER, causing the name to be blank. 
    * AddCommandHelper will check its `status` attribute
    * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will invoke the `ParserUtil.ParseName`
@@ -607,10 +608,6 @@ a message to prompt the user to enter the name of the person they wish to add.
    * The name is found to be invalid, and a ParseException is thrown, with the error message displayed to the user, 
   stating the constraints of the detail entered (i.e. the name cannot be blank)
    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid name
-
-The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
-
-<puml src="diagrams/processName.puml" alt="processName" />
 
 
 * Step 3 : The user enters a valid name.
@@ -620,6 +617,11 @@ The following activity diagram summarizes the flow of a user when trying to ente
    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to 
   `status.GET_NUMBER`. 
    * The CommandHelperWindow will now display a message for the user to enter the number next
+
+The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
+
+<puml src="diagrams/processName.puml" alt="processName" />
+
 * Step 4 : The user enters only 2 digits into the field before accidentally pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the 
@@ -628,9 +630,6 @@ The following activity diagram summarizes the flow of a user when trying to ente
       stating the constraints of the detail entered (i.e. the number should be at least 3 digits long)
     * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid number
 
-The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
-
-<puml src="diagrams/processNumber.puml" alt="processNumber" />
 * Step 5 : The user enters a "83452897".
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
@@ -638,6 +637,11 @@ The following activity diagram summarizes the flow of a user when trying to ente
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
       `status.GET_EMAIL`. 
     * The CommandHelperWindow will now display a message for the user to enter the email next
+
+The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
+
+<puml src="diagrams/processNumber.puml" alt="processNumber" />
+
 *  Step 6 : The user enters "jack.com.sg" before accidentally pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
@@ -646,10 +650,6 @@ The following activity diagram summarizes the flow of a user when trying to ente
       stating the constraints of the detail entered (i.e. the email should have a "@" followed by a domain name)
     * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid email
 
-The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
-
-<puml src="diagrams/processEmail.puml" alt="processEmail" />
-
 * Step 7 : The user enters "jack@gmail.com".
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
@@ -657,42 +657,31 @@ The following activity diagram summarizes the flow of a user when trying to ente
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
       `status.GET_ADDRESS`
     * The CommandHelperWindow will now display a message for the user to enter the address next
+
+The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
+
+<puml src="diagrams/processEmail.puml" alt="processEmail" />
+
 * Step 8 : The user enters "Bishan St 24" before pressing enter.
     * AddCommandHelper will check its `status` attribute
     * Since the `status` attribute is still at `Status.GET_ADDRESS`, AddCommandHelper will call on the
       `ParserUtil.ParseAddress()` method to check the validity of the number
     * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_TAG`
-    * The CommandHelperWindow will now display a message for the user to enter the tag next
+      `status.COMPLETE`
+    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
       
-    * | Note that a person can have 0 or 1 tag, so leaving the field blank is still considered a valid  input |
-      |-------------------------------------------------------------------------------------------------------|
+
 The following activity diagram summarizes the flow of a user when trying to enter an email into the CommandHelper:
 
 <puml src="diagrams/processAddress.puml" alt="processAddress" />
 
-* Step 9 : The user enters "@#" before pressing enter. 
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
-      `ParserUtil.ParseTag()` method to check the validity of the tag
-    * The tag is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. tags should only be alphanumeric)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid tag
-* Step 10 : The user enters "friend".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_TAG`, AddCommandHelper will call on the
-      `ParserUtil.parseTag()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.COMPLETE`.
-    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
 
-The following activity diagram summarizes the flow of a user when trying to enter a tag into the CommandHelper:
 
-<puml src="diagrams/processTag.puml" alt="processTag" />
-
-* Step 11 : User makes another input into the CommandHelperWindow.
-    * Any subsequent input entered by the user will result in the same message being displayed to the user, informing 
-  the user to type "cp" so as to copy the command to the user's clipboard
+* Step 9 : User makes another input into the CommandHelperWindow.
+    * If the command is `cp`, the window will display a success message and inform the user that they have successfully
+copied the command to the clipboard
+    * Otherwise, the same end message is displayed, asking the user to enter the `cp` command to copy the command to
+to their clipboard.
 
 The following activity diagram summarizes the entire flow of a user when trying to use CommandHelper:
 
@@ -734,10 +723,6 @@ Aspect: How to implement assistance functions to aid users in typing their comma
     perform checking of the command first, before letting the user know that the entered command is invalid. 
 
 
-
-
-
-
 ### \[Future Development\] Extension of Helper class to general commands
 
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
@@ -751,6 +736,11 @@ Aside from adding more functionalities to the helper class, we can also implemen
 fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
 by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
 of the user once all of them have been entered.
+
+### Planned Enhancements 
+
+1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
+an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
 
 
 ### Duplicate feature

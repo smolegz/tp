@@ -63,8 +63,9 @@ public class AddCommandHelperTest {
 
     }
 
+
     @Test
-    public void setStatus_addressToTag_success() {
+    public void setStatus_addressTocomplete_success() {
         AddCommandHelper a = new AddCommandHelper();
         try {
             a.getResponse("Jack");
@@ -73,22 +74,6 @@ public class AddCommandHelperTest {
             a.getResponse("Bishan St 39");
         } catch (ParseException e) {
             assert false : "No exception should be thrown for valid address";
-        }
-        assertEquals(a.getStatus(), Status.GET_TAG);
-
-    }
-
-    @Test
-    public void setStatus_tagTocomplete_success() {
-        AddCommandHelper a = new AddCommandHelper();
-        try {
-            a.getResponse("Jack");
-            a.getResponse("12345678");
-            a.getResponse("r@gmail.com");
-            a.getResponse("Bishan St 39");
-            a.getResponse(" ");
-        } catch (ParseException e) {
-            assert false : "No exception should be thrown for valid tag";
         }
         assertEquals(a.getStatus(), Status.COMPLETE);
 
