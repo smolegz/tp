@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:User enters "addbystep";
+repeat :User enters name;
+  :process name;
+repeat while (Name is valid?) is (no)
+repeat :User enters number;
+  :process number;
+repeat while (Number is valid?) is (no)
+repeat :User enters email;
+  :process email;
+repeat while (Email is valid?) is (no)
+repeat :User enters address;
+  :process address;
+repeat while (address are valid?) is (no)
+:display the end message;
+:User enters a command;
+
+if(Is it the copy command?) then (yes)
+:copy command to clipboard;
+else (no)
+:display the end message;
+endif
+
+
+stop
+
+
+@enduml
