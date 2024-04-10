@@ -36,10 +36,10 @@ public class CopyCommandTest {
     private Model expectedModel;
 
     @BeforeEach
-    public void setup() {
+    public void setUp() {
         model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        System.setProperty("java.awt.headless", "false");
+        System.setProperty("java.awt.headless", "true");
     }
 
     @ParameterizedTest
