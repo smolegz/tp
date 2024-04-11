@@ -25,9 +25,9 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
+import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import javafx.collections.ObservableList;
 import seedu.address.testutil.PersonBuilder;
 
 /**
