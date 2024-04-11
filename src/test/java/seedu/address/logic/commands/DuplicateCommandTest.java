@@ -17,18 +17,18 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
-import seedu.address.model.ModelManager;
 import seedu.address.model.Model;
-import seedu.address.model.UserPrefs;
-import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.testutil.PersonBuilder;
 import javafx.collections.ObservableList;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests and unit tests for DuplicateCommand.
