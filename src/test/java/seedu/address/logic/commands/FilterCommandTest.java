@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -22,10 +23,10 @@ public class FilterCommandTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Friends", "Colleagues", "Neighbours"})
-    public void execute_filteredListByTag_success(String tag) {
+    public void execute_getFilteredListByTag_success(String tag) {
         String[] tagKeywords = tag.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));
-        FilterCommand filterCommand =  new FilterCommand(predicate);
+        FilterCommand filterCommand = new FilterCommand(predicate);
 
         String expectedMessage = String.format(FilterCommand.MESSAGE_SUCCESS);
 
@@ -36,11 +37,11 @@ public class FilterCommandTest {
     }
     @ParameterizedTest
     @ValueSource(strings = {"Alex", "Bernice", "Charlotte"})
-    public void execute_filteredListByName_produceEmptyList_success(String name) {
+    public void execute_getFilteredListByName_produceEmptyList_success(String name) {
         String trimmedArgs = "name " + name;
         String[] tagKeywords = trimmedArgs.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));
-        FilterCommand filterCommand =  new FilterCommand(predicate);
+        FilterCommand filterCommand = new FilterCommand(predicate);
 
         String expectedMessage = String.format(FilterCommand.MESSAGE_SUCCESS);
 
@@ -52,11 +53,11 @@ public class FilterCommandTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"87438807", "99272758", "93210283"})
-    public void execute_filteredListByPhone_produceEmptyList_success(String phone) {
+    public void execute_getFilteredListByPhone_produceEmptyList_success(String phone) {
         String trimmedArgs = "phone " + phone;
         String[] tagKeywords = trimmedArgs.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));
-        FilterCommand filterCommand =  new FilterCommand(predicate);
+        FilterCommand filterCommand = new FilterCommand(predicate);
 
         String expectedMessage = String.format(FilterCommand.MESSAGE_SUCCESS);
 
@@ -69,11 +70,11 @@ public class FilterCommandTest {
     @ParameterizedTest
     @ValueSource(strings = {"Blk 30 Geylang Street 29, #06-40", "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
             "Blk 11 Ang Mo Kio Street 74, #11-04"})
-    public void execute_filteredListByAddress_produceEmptyList_success(String address) {
+    public void execute_getFilteredListByAddress_produceEmptyList_success(String address) {
         String trimmedArgs = "address " + address;
         String[] tagKeywords = trimmedArgs.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));
-        FilterCommand filterCommand =  new FilterCommand(predicate);
+        FilterCommand filterCommand = new FilterCommand(predicate);
 
         String expectedMessage = String.format(FilterCommand.MESSAGE_SUCCESS);
 
@@ -85,11 +86,11 @@ public class FilterCommandTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"alexyeoh@example.com", "berniceyu@example.com", "charlotte@example.com"})
-    public void execute_filteredListByEmail_produceEmptyList_success(String email) {
+    public void execute_getFilteredListByEmail_produceEmptyList_success(String email) {
         String trimmedArgs = "email " + email;
         String[] tagKeywords = trimmedArgs.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));
-        FilterCommand filterCommand =  new FilterCommand(predicate);
+        FilterCommand filterCommand = new FilterCommand(predicate);
 
         String expectedMessage = String.format(FilterCommand.MESSAGE_SUCCESS);
 
@@ -101,7 +102,7 @@ public class FilterCommandTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "91247393", "aLeX"})
-    public void execute_filteredListByInvalidValue_produceEmptyList_success(String name) {
+    public void execute_getFilteredListByInvalidValue_produceEmptyList_success(String name) {
         String trimmedArgs = "name " + name;
         String[] tagKeywords = trimmedArgs.split("\\s+");
         TagContainsKeywordsPredicate predicate = new TagContainsKeywordsPredicate(Arrays.asList(tagKeywords));

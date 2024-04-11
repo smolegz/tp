@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
@@ -11,18 +11,24 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.function.Predicate;
 
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
-import seedu.address.model.*;
+import seedu.address.model.AddressBook;
+import seedu.address.model.ModelManager;
+import seedu.address.model.Model;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.testutil.PersonBuilder;
+import javafx.collections.ObservableList;
 
 /**
  * Contains integration tests and unit tests for DuplicateCommand.
@@ -220,12 +226,6 @@ public class DuplicateCommandTest {
      * A Model stub that always accept the person being added.
      */
     private class ModelStubDuplicatePersonAdded extends DuplicateCommandTest.ModelStub {
-
-        Name name = new Name("Alex Yeoh");
-        Phone phone = new Phone("91234567");
-        Email email = new Email("alexyeoh@example.com");
-        Address address = new Address("Blk 230, Sembawang Crescent");
-        Person validPerson = new Person(name, phone, email, address, new HashSet<>());
         final ArrayList<Person> personsDuplicated = new ArrayList<>();
         private boolean commitAddressBookCalled = false;
 
