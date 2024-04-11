@@ -1,9 +1,15 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,16 +17,12 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.model.*;
-import seedu.address.model.person.*;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
 import seedu.address.testutil.PersonBuilder;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Predicate;
 
 /**
  * Contains integration tests and unit tests for DuplicateCommand.
