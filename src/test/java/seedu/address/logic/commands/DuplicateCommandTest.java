@@ -1,7 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import javafx.collections.ObservableList;
@@ -35,19 +36,39 @@ public class DuplicateCommandTest {
     }
     @Test
     public void execute_personAcceptedByModel_duplicateSuccessful() throws Exception {
-        DuplicateCommandTest.ModelStubDuplicatePersonAdded modelStub =
-                new DuplicateCommandTest.ModelStubDuplicatePersonAdded();
-        Name name = new Name("Alex Heng");
+        Name name = new Name("Alice Pauline");
         Phone phone = new Phone("91234567");
-        Email email = new Email("alexyeoh@example.com");
+        Email email = new Email("alicepauline@example.com");
         Address address = new Address("Blk 230, Sembawang Crescent");
         Person validPerson = new Person(name, phone, email, address, new HashSet<>());
-
-        CommandResult commandResult = new DuplicateCommand(validPerson).execute(modelStub);
+        CommandResult commandResult = new DuplicateCommand(validPerson).execute(model);
 
         assertEquals(String.format(DuplicateCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
                 commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(validPerson), modelStub.personsDuplicated);
+    }
+
+    @Test
+    public void equals() {
+        Person alice = new PersonBuilder().withName("Alice").build();
+        Person bob = new PersonBuilder().withName("Bob").build();
+        DuplicateCommand duplicateAliceCommand = new DuplicateCommand(alice);
+        DuplicateCommand duplicateBobCommand = new DuplicateCommand(bob);
+
+        // same object -> returns true
+        assertTrue(duplicateAliceCommand.equals(duplicateAliceCommand));
+
+        // same values -> returns true
+        DuplicateCommand duplicateAliceCommandCopy = new DuplicateCommand(alice);
+        assertTrue(duplicateAliceCommand.equals(duplicateAliceCommandCopy));
+
+        // different types -> returns false
+        assertFalse(duplicateAliceCommand.equals(1));
+
+        // null -> returns false
+        assertFalse(duplicateAliceCommand.equals(null));
+
+        // different person -> returns false
+        assertFalse(duplicateAliceCommand.equals(duplicateBobCommand));
     }
 
     /**
@@ -197,6 +218,12 @@ public class DuplicateCommandTest {
      * A Model stub that always accept the person being added.
      */
     private class ModelStubDuplicatePersonAdded extends DuplicateCommandTest.ModelStub {
+
+        Name name = new Name("Alex Yeoh");
+        Phone phone = new Phone("91234567");
+        Email email = new Email("alexyeoh@example.com");
+        Address address = new Address("Blk 230, Sembawang Crescent");
+        Person validPerson = new Person(name, phone, email, address, new HashSet<>());
         final ArrayList<Person> personsDuplicated = new ArrayList<>();
         private boolean commitAddressBookCalled = false;
 
@@ -207,7 +234,7 @@ public class DuplicateCommandTest {
         }
 
         @Override
-        public void addPerson(Person person) {
+        public void addDuplicatePerson(Person person) {
             requireNonNull(person);
             personsDuplicated.add(person);
         }
