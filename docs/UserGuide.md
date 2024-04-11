@@ -111,6 +111,8 @@ Examples:
 > [!NOTE]
 > * Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
 being recognized as a new, unique name. e.g. John Doe is not the same as JohnDoe
+> * Similarly, names are also case-sensitive, so do be careful when entering your contact's name as well. 
+e.g. John Doe is treated differently from John doe
 
 ### Adding a person (With System Prompts): `addbystep`
 
