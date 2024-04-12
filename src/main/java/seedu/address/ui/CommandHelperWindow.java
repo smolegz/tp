@@ -7,7 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import seedu.address.AddCommandHelper;
+import seedu.address.logic.AddCommandHelper;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**

@@ -13,7 +13,10 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+LookMeUp  is a brownfield software project based off AddressBook Level-3, taken under the CS2103T Software Engineering, 
+at National University of Singapore. 
+
+1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -577,115 +580,71 @@ Responsibility Principle.
 
 ### Add By Step
 
+#### Overview
+`addbystep` loads up a separate window, which will prompt the users for the necessary input fields for an `add` command.
+When all the fields have been successfully entered by the user, the user can copy the formatted command to their 
+clipboard.
+
 #### Implementation
 
-We design a new helper class known as AddCommandHelper. The helper class will have its own GUI that starts up when the 
-user types the `addbystep` command. At each stage, CommandHelperWindow will display a message, prompting the user
-to enter their detail, e.g. name, phone number, email address, etc. When the user enters a detail, the helper class
-will call the respective `parse` method in `ParserUtil` class (e.g. `parseEmail` will be called to check if the user
-has entered a valid email). In order to keep track of what details that have been entered into the AddCommandHelper, 
-we design a Enum `Status` that is updated in AddCommandHelper whenever a valid detail has been entered by the user.
-Once all the valid details have been entered, a new instance of `FormattedCommandPerson`will be created. When the user 
-enters the `cp`, the correctly formatted command will be added to their clipboard.
+The architecture diagram given below explains a high-level design of the `addbystep` feature.
 
 
-`FormattedCommandPerson` inherits directly from the `Person` class. In accordance to the Open-Close 
-principle, the inherited class `FormattedCommandPerson` has the method `getFormattedCommand()` which will 
-return the correctly formatted command to add a person of those specific details into LookMeUp. 
-
-
-Given below is an example of how the user can interact with the AddCommandHelper: 
+The `addbystep` feature is facilitated by the `AddCommandHelper` and the `CommandHelperWindow` class. The 
+`CommandHelperWindow` serves as the UI for the user to interact with the `AddCommandHelper`. The `AddCommandHelper` is 
+responsible for accepting and checking whether the user's input is valid or not before prompting the user for the next
+input field. 
 
 
 
-* Step 1 : The user enters the `addbystep` command, displaying the GUI for the AddCommandHelper. The GUI will display 
-a message to prompt the user to enter the name of the person they wish to add. 
+Given below is an example usage scenario and how the `AddCommandHelper` class behaves at each step. Note that while each 
+step for accepting fields may come off as repetitive, the type of invalid inputs for each field is different. Thus, we 
+wish to illustrate examples of invalid inputs for each field.
 
-* Step 2 : The user may accidentally press ENTER, causing the name to be blank. 
-   * AddCommandHelper will check its `status` attribute
-   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will invoke the `ParserUtil.ParseName`
-  method to check the validity of the name
-   * The name is found to be invalid, and a ParseException is thrown, with the error message displayed to the user, 
-  stating the constraints of the detail entered (i.e. the name cannot be blank)
-   * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid name
+* Step 1: The user enters the `addbystep` command, causing the `CommandHelperWindow` to load up. It prompts the user for 
+the name of the new contact.
 
+* Step 2: The user enters the name of the new contact.
+    * If the name entered by the user is invalid (i.e. not alphanumeric), an error message will be shown and the user
+will have to enter the name again 
+    * If the name entered by the user is valid, the user will be prompted to enter the next field (number)
 
-* Step 3 : The user enters a valid name.
-   * AddCommandHelper will check its `status` attribute
-   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will call on the 
-  `ParserUtil.ParseName()` method to check the validity of the name.
-   * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to 
-  `status.GET_NUMBER`. 
-   * The CommandHelperWindow will now display a message for the user to enter the number next
+* Step 3: The user enters the number of the new contact.
+    * If the number entered by the user is invalid (i.e. one digit), an error message will be shown and the user will
+will have to enter the number again
+    * If the number entered by the user is valid, the user will be prompted to enter the next field (email) 
 
-The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
+* Step 4: The user enters the email of the new contact.
+    * If the email entered by the user is invalid (i.e. does not have the `@` symbol) an error message will be shown 
+and the user will have to enter the email again
+    * If the email entered by the user is valid, the user will be prompted to enter the next field (address)
 
-<puml src="diagrams/processName.puml" alt="processName" />
+* Step 5: The user enters the address of the new contact.
+    * If the address entered by the user is invalid (i.e. blank), an error message will be shown and the user will have 
+to enter the address again
+    * If the address entered by the user is valid, the user will be prompted to type the copy command (`cp`)
 
-* Step 4 : The user enters only 2 digits into the field before accidentally pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the 
-  `ParserUtil.ParseNumber()` method to check the validity of the number
-    * The number is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. the number should be at least 3 digits long)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid number
+From steps 2 - 5, attached below is an activity diagram of how the user interacts with the `AddCommandHelper` when they 
+are keying in the necessary inputs. The `AddCommandHelper` continuously validates the user's input to ensure that they
+have entered all the necessary fields correctly.
 
-* Step 5 : The user enters a "83452897".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
-  `ParserUtil.ParseName()` method to check the validity of the number.
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_EMAIL`. 
-    * The CommandHelperWindow will now display a message for the user to enter the email next
+* Step 6: The user enters the `cp` command.
+    * The user can enter anything at this stage, but only the `cp` command will result in the formatted `add` command 
+to be copied to the clipboard. Other inputs will result in the same prompt message at the end of Step 5
 
-The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
-
-<puml src="diagrams/processNumber.puml" alt="processNumber" />
-
-*  Step 6 : The user enters "jack.com.sg" before accidentally pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
-      `ParserUtil.ParseEmail()` method to check the validity of the number
-    * The email is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. the email should have a "@" followed by a domain name)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid email
-
-* Step 7 : The user enters "jack@gmail.com".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
-      `ParserUtil.ParseEmail()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_ADDRESS`
-    * The CommandHelperWindow will now display a message for the user to enter the address next
-
-The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
-
-<puml src="diagrams/processEmail.puml" alt="processEmail" />
-
-* Step 8 : The user enters "Bishan St 24" before pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_ADDRESS`, AddCommandHelper will call on the
-      `ParserUtil.ParseAddress()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.COMPLETE`
-    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
-      
-
-The following activity diagram summarizes the flow of a user when trying to enter an email into the CommandHelper:
-
-<puml src="diagrams/processAddress.puml" alt="processAddress" />
+* Step 7: The successfully copied message will be displayed to the user, and the user can now close the
+`CommandHelperWindow` window.
+    * The user can still continue interacting with the `CommandHelperWindow`, but those interactions are
+meaningless, thus we will not go into the details of those interactions. 
 
 
-
-* Step 9 : User makes another input into the CommandHelperWindow.
-    * If the command is `cp`, the window will display a success message and inform the user that they have successfully
-copied the command to the clipboard
-    * Otherwise, the same end message is displayed, asking the user to enter the `cp` command to copy the command to
-to their clipboard.
-
-The following activity diagram summarizes the entire flow of a user when trying to use CommandHelper:
+Below is an activity diagram that summarizes the process of a user using the `addbystep` feature. 
 
 <puml src="diagrams/AddByStepActivityDiagram.puml" alt="AddByStepActivityDiagram" />
+
+
+
+
 
     
 
@@ -695,32 +654,32 @@ The following activity diagram summarizes the entire flow of a user when trying 
 Aspect: How to implement assistance functions to aid users in typing their commands.
 
 * **Alternative 1 (current choice)** Create a new helper class and GUI to prompt users for the necessary details.
-* Pros:
-  * It is easy to implement a new class, and due to the high cohesion of the previous code, we are able to reuse
-    methods defined previously in `ParserUtil` to check the validity of the fields entered by the user.
-  * The CommandHelper class can be implemented separately from the rest of the classes. This results in lower coupling
-    between the newly implemented CommandHelper class and the remaining classes, resulting in easier maintenance and
-    integration
-* Cons:
-    * The startup of another GUI for the helper class may introduce lag, especially on the older computers.
+  * Pros:
+    * It is easy to implement a new class, and due to the high cohesion of the previous code, we are able to reuse
+      methods defined previously in `ParserUtil`class to check the validity of the fields entered by the user
+    * The `CommandHelper` class can be implemented separately from the rest of the classes. This results in lower coupling
+      between the newly implemented `CommandHelper` class and the remaining classes, resulting in easier maintenance and
+      integration
+  * Cons:
+      * The startup of another GUI for the helper class may introduce lag, especially on the older computers
 
 * **Alternative 2** Implement a command to display the format for users to follow.
-* Pros:
-    * It easier to implement as compared to the CommandHelper class, prompts do not actually have any form of user
-    interactions.
-* Cons:
-    * It does not benefit users as much, as they can still make mistakes when it comes to following the exact format
-  of the command.
+  * Pros:
+    * It easier to implement as compared to the `CommandHelper` class, since prompts do not actually have any form of user
+    interaction
+  * Cons:
+      * It does not benefit users as much, as they can still make mistakes when it comes to following the exact format
+    of the command
 
-* **Alternative 3** Implement a command autocomplete some commands for users.
-* Pros:
-    * It can be built directly into the original GUI for AddressBook, there is no need for separate GUI for the
-    CommandHelper class
-* Cons:
-    * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
-    tags). It cannot fill in the exact details 
-    * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
-    perform checking of the command first, before letting the user know that the entered command is invalid.
+* **Alternative 3** Implement a function to autocomplete commands for users.
+  * Pros:
+      * It can be built directly into the original GUI for AddressBook, there is no need for a separate GUI for the
+      `CommandHelper` class
+  * Cons:
+      * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
+      tags). It cannot fill in the exact details 
+      * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
+      to perform checking of the command first, before letting the user know that the entered command is invalid.
 
 #### \[Future Development\] Extension of Helper class to general commands
 
@@ -732,14 +691,10 @@ when they need help with the correct formatting of the `delete` command. The hel
 necessary details needed for that command. 
 
 Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
-fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
+fields have been entered. As of now the `AddCommandHelper` does not check whether the details that are keyed in 
 by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
 of the user once all of them have been entered.
 
-### Planned Enhancements 
-
-1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
-an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
 
 
 ### Duplicate feature
@@ -1106,6 +1061,19 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
+### Add By Step 
+
+Loading up the AddByStep Window
+
+1. Type `addbystep` into LookMeUp
+    * Expected output: A new window should appear, prompting you for the name of the person to enter 
+2. Leave the name blank and press the ENTER key 
+    * Expected output: An error message should appear, and you have to enter the name again 
+3. Type `John` into the GUI 
+    * Expected output: The name will be successfully accepted, and you will be prompted for the next field
+4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
+case scenario in Add By Step.
+
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1127,3 +1095,11 @@ testers are expected to do more *exploratory* testing.
 1. Dealing with missing/corrupted data files
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+
+### Planned Enhancements
+
+Our team consists of 5 members. 
+
+1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
+   an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+

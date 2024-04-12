@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:AddCommandHelper prompts user for input;
+
+repeat
+:User enters input;
+:Input is checked by AddCommandHelper;
+if () then ([Input is invalid])
+:Show error message and prompt user for same input field;
+elseif () then ([Prompt user for next input])
+else ([Last input field needed from user?])
+
+
+
+
+stop
+
+@enduml
