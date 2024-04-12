@@ -1,31 +1,25 @@
 @startuml
-'https://plantuml.com/activity-diagram-beta
 
+sprite $rake [16x16/8] {
+0000000000000000
+0000000jj0000000
+0000000jj0000000
+0005555jj5555000
+000jjeejjeejj000
+000jj00jj00jj000
+000jj00jj00jj000
+0000000000000000
+}
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
 start
-:User enters "addbystep";
-repeat :User enters name;
-  :process name;
-repeat while (Name is valid?) is (no)
-repeat :User enters number;
-  :process number;
-repeat while (Number is valid?) is (no)
-repeat :User enters email;
-  :process email;
-repeat while (Email is valid?) is (no)
-repeat :User enters address;
-  :process address;
-repeat while (address are valid?) is (no)
-:display the end message;
-:User enters a command;
-
-if(Is it the copy command?) then (yes)
-:copy command to clipboard;
-else (no)
-:display the end message;
-endif
+:User executes "addbystep" command;
+:Get all the necessary inputs from user<$rake>;
+:User types the the "cp" command;
+:Command is copied to the clipboard of the user;
+:User closes the window;
 
 
 stop
-
-
 @enduml
