@@ -32,12 +32,14 @@ So say goodbye to traditional address book applications and say hello to the fut
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar LookMeUp.jar` command 
    to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   <img src="images/Ui.png" width="50%"/>
+    <p align = "center">
+        <img src="images/Ui.png" width="50%"/>
+    </p>   
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will 
    open the help window.<br>
 
-1. For users who are familiar with our app, or simply wish to get a quick reference to our commands, feel free to refer  
+1. For users who are familiar with our app, or simply wish to get a quick reference to our commands, feel free to refer
    to the [Command Summary](#command-summary) below! Else, you can refer to the [Features](#features) section for a
    detailed explanation of each command.
 
@@ -83,14 +85,17 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 ### Viewing help : `help`
 
-<img src="images/Ui-help.png" width="50%"/>
+<p align = "center">
+    <img src="images/Ui-help.png" width="50%"/>
+</p>
 
 Shows a message explaining how to access the help page.
 
-<img src="images/helpMessage.png" width="50%"/>
+<p align = "center"> 
+    <img src="images/helpMessage.png" width="50%"/>
+</p>
 
 Format: `help`
-
 
 ### Adding a person (Full Command): `add`
 
@@ -98,38 +103,36 @@ Adds a person to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
+Examples:
+* `add n/Taylor Sheesh p/98765432 e/taytay@taylor.com a/Rhode Island`
+* `add n/Ariana Grenade t/friend e/Arianator@ari.com a/Washington D.C. p/88883333 t/EternalSunshine`
+
 > [!TIP]
-> 
+>
 > * A person can have any number of tags **(including 0)**.
-> 
-> * There are no character limit restrictions for each input.
->   * However, it is advisable to keep each field under **100 characters** to ensure compatibility with your device's resolution.
+>
+> * There are no character limit restrictions for each input. 
+> * However, it is advisable to keep each field under **100 characters** to ensure compatibility with your device's resolution.
 
 > [!IMPORTANT]
 >
 > * Phone numbers should only contain numbers **(min 3 numbers)**.
-> 
-> * LookMeUp only supports **alphanumeric characters** for name, address, email and tag inputs 
->   (with email accepting a single `@`).
+>
+> * LookMeUp only supports **alphanumeric characters** for name, email and tag inputs
+>   * (with email accepting a single `@`).
 
 > [!NOTE]
-> 
-> **Why are there alphanumeric restrictions on the Address, Email and Tag inputs, and how does it help YOU?**
-> 
-> All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email 
-> and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student 
-> email, catching any accidental typos of non-alphanumeric characters. 
-> 
-> Similarly, all addresses and tags (in the context of classifying by interest groups, committees etc.) are
+>
+> **Why are there alphanumeric restrictions on the Email and Tag inputs, and how does it help YOU?**
+>
+> All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email
+> and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student
+> email, catching any accidental typos of non-alphanumeric characters.
+>
+> Similarly, tags (in the context of classifying by interest groups, committees etc.) are
 > expected to be alphanumeric, thus serves as another safety net.
-
-
-
-Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
-
-> [!NOTE]
+> 
+> [!WARNING]
 > * Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
 being recognized as a new, unique name. e.g. John Doe is not the same as JohnDoe
 > * Similarly, names are also case-sensitive, so do be careful when entering your contact's name as well. 
@@ -137,7 +140,9 @@ e.g. John Doe is treated differently from John doe
 
 ### Adding a person (With System Prompts): `addbystep`
 
-<img src="images/AddByStep.png" width="40%"/>
+<p align = "center">
+    <img src="images/AddByStep.png" width="40%"/>
+</p>
 
 To streamline the process of adding contacts, `addbystep` command offers user-friendly interface that prompts you for each required field
 in the address book entry.<br/>
@@ -177,8 +182,8 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
     specifying any tags after it.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 p/83838383 e/Arianana@nana.com` Edits the phone number and email address of the 1st person to be `83838383` and `Arianana@nana.com` respectively.
+*  `edit 2 n/Billie Eyelashes t/` Edits the name of the 2nd person to be `Billie Eyelashes` and clears all existing tags.
 
 > [!NOTE]
 > 
@@ -195,17 +200,19 @@ Finds persons whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* The search is case-insensitive. e.g `ariana` will match `Ariana`
+* The order of the keywords does not matter. e.g. `Ariana Eyelash` will match `Eyelash Ariana`
 * Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
+* Only full words will be matched e.g. `Aria` will not match `Ariana`
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+  e.g. `Ariana Sheesh` will return `Ariana Grenade`, `Taylor Sheesh`
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-<img src="images/findAlexDavidResult.png" width="50%"/> <br>
+* `find Taylor` returns `Taylor Sheesh` and `Taylor Laundry`
+* `find Billie Sheesh` returns `Billie Eyelash`, `Taylor Sheesh`<br>
+<p align = "center">
+    <img src="images/findBillieSheesh.png" width="50%"/> <br>
+</p>
 
 ### Removing a person (Safe Removal): `remove`
 
@@ -215,13 +222,17 @@ Format in 2 steps:
 
 1. `remove INDEX`<br>
    example: `remove 3`<br>
-   <img src="images/index-remove.png" width="50%"/><br>
+   <p align = "center">
+    <img src="images/index-remove.png" width="50%"/><br>
+   </p>
    * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
    * The index must be a `positive integer` 1, 2, 3, … and can only be as large as the index of the last contact in 
    the current list (be it the default or filtered).
      * LookMeUp then "spotlights" (only shows) this one contact, and prompts a confirmation message to confirm removal<br>
-       <img src="images/confirmation.png" width="50%"/><br>
+        <p align = "center">
+            <img src="images/confirmation.png" width="50%"/><br>
+        </p>
      > [!NOTE]
      > 
      > If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter      
@@ -232,11 +243,15 @@ Format in 2 steps:
    1. If `yes`:<br>
       
       Expected result: <br>
-      <img src="images/yes-result.png" width="50%"/><br> 
+      <p align = "center">
+         <img src="images/yes-result.png" width="50%"/><br> 
+      </p>
    2. If `no`:<br>
    
       Expected result: <br>
-      <img src="images/no-result.png" width="50%"/><br>
+      <p align = "center">
+         <img src="images/no-result.png" width="50%"/><br>
+      </p>
 
 > [!IMPORTANT] 
 > 
@@ -288,10 +303,14 @@ and `edit`_, the `undo` command will revert the state of the contact list prior 
 Format: `undo`
 For example, referring to the previous command, assuming you have removed a contact, you can type `undo` to recover the 
 removed contact:<br>
-<img src="images/undo.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/undo.png" width="50%"/><br>
+</p>
 
 The removed contact will then be restored, **even to its original index**.<br>
-<img src="images/recovered.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/recovered.png" width="50%"/><br>
+</p>
 
 Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact 
 was added.
@@ -325,17 +344,19 @@ If multiple fields are provided, results are separated by a single whitespace.
 Format: `copy INDEX FIELD(s)`
 
 Example:<br>
-<img src="images/example.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/example.png" width="50%"/><br>
+</p>
 
 Based on the sample contact above:
 
-| Sample Commands       | Details                                                                    | Results                  |
-|-----------------------|----------------------------------------------------------------------------|--------------------------|
-| `copy 4 name`         | Copies the name of contact indexed 4                                       | `Bert`                   |
-| `copy 4 name address` | Copies the name and address of contact indexed 4                           | `Bert Sesame Street`     |
-| `copy 4 phone email`  | Copies the phone and email of contact indexed 4                            | `88891234 Bert@gmail.com` |
-| `copy 4 email email`  | Copies the email of contact indexed 4  **(Duplicated fields are ignored)** | `Bert@gmail.com`         |
-| `copy 4 nnamee phone` | Incorrect field detected                                                   | `N.A.`                   |
+| Sample Commands       | Details                                                                    | Results                      |
+|-----------------------|----------------------------------------------------------------------------|------------------------------|
+| `copy 4 name`         | Copies the name of contact indexed 4                                       | `Taylor Sheesh`              |
+| `copy 4 name address` | Copies the name and address of contact indexed 4                           | `Taylor Sheesh Rhode Island` |
+| `copy 4 phone email`  | Copies the phone and email of contact indexed 4                            | `98765432 taytay@taylor.com` |
+| `copy 4 email email`  | Copies the email of contact indexed 4  **(Duplicated fields are ignored)** | `taytay@taylor.com`          |
+| `copy 4 nnamee phone` | Incorrect field detected                                                   | `N.A.`                       |
 
 ### Sorting the Contacts : `sort`
 
@@ -360,6 +381,9 @@ Shows a list of persons in the address book, filtered by `specified tag`.
 Format: `filter TAGNAME`
 
 Example: `filter 13`
+<p align = "center">
+    <img src="images/filtered.png" width="50%"/><br>
+</p>
 
 ### Adding a Contact with Duplicate Identity : `duplicate`
 
@@ -368,15 +392,23 @@ Adds the new contact to the address book, **assuming that a contact with an iden
 Format: `duplicate n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
 Example:
-Say you have a list of contacts like the following, and you wish to add a contact with an **identical name** to the first entry `Alex Yeoh`<br>
-<img src="images/sample.png" width="50%"/><br>
+Say you have a list of contacts like the following, and you wish to add a contact with an **identical name** to the first entry `Taylor Sheesh`<br>
+<p align = "center">
+    <img src="images/Ui.png" width="50%"/><br>
+</p>
 
 You will encounter the following error using the `add` command<br>
-<img src="images/error.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/error.png" width="50%"/><br>
+</p>
 
 To duplicate the contact, run the following `duplicate` command and enter to see the results.<br>
-<img src="images/duplicate-command.png" width="50%"/><br>
-<img src="images/duplicate-success.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/duplicate-command.png" width="50%"/><br>
+</p>
+<p align = "center">
+    <img src="images/duplicate-success.png" width="50%"/><br>
+</p>
 
 ### Overwriting an Existing Contact : `overwrite`
 
@@ -387,15 +419,23 @@ Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 * The index **must be positive integer** 1, 2, 3, …​
 
 Example:
-Say you tried to add a contact with an **identical name** to the first entry `Alex Yeoh`<br>
-<img src="images/sample.png" width="50%"/><br>
+Say you tried to add a contact with an **identical name** to the first entry `Taylor Sheesh`<br>
+<p align = "center">
+    <img src="images/Ui.png" width="50%"/><br>
+</p>
 
 You will encounter the following error using the `add` command<br>
-<img src="images/error.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/error.png" width="50%"/><br>
+</p>
 
 In the case where you actually intended to overwrite the contact instead, run the following `overwrite` command and enter to see the results.<br>
-<img src="images/overwrite-example.png" width="50%"/><br>
-<img src="images/overwrite-success.png" width="50%"/><br>
+<p align = "center">
+    <img src="images/overwrite-example.png" width="50%"/><br>
+</p>
+<p align = "center">
+    <img src="images/overwrite-success.png" width="50%"/><br>
+</p>
 
 ### Clearing all entries : `clear`
 
