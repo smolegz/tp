@@ -69,7 +69,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 </box>
 
 > [!TIP]
-> * LookMeUp supports **fuzzy input** with a maximum allowance of 1 misspelled letter,
+> * LookMeUp supports **fuzzy commands** with a maximum allowance of 1 misspelled letter,
     preventing users from needing to retype the entire command due to a single spelling mistake.
   >   * Examples:
   >     * `swot` will be interpreted as `sort`
@@ -139,7 +139,9 @@ e.g. John Doe is treated differently from John doe
 
 <img src="images/AddByStep.png" width="40%"/>
 
-Adds a person to the address book but prompts will be provided for each field required as per the `add` command.
+To streamline the process of adding contacts, `addbystep` command offers user-friendly interface that prompts you for each required field
+in the address book entry.<br/>
+While this simplifies the data entry process, you will still need to manually copy `cp` and paste the final result into the command box.
 
 Format: `addbystep`
 
@@ -167,6 +169,7 @@ Edits an existing person in the address book.
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* The index provided must be within the range of available contacts in the address book.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
@@ -364,6 +367,8 @@ Format: `sort KEYWORD`
 Shows a list of persons in the address book, filtered by `specified tag`.
 
 Format: `filter TAGNAME`
+
+Example: `filter 13`
 
 ### Adding a Contact with Duplicate Identity : `duplicate`
 
