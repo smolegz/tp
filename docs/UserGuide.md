@@ -397,5 +397,8 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 
 ## Glossary
 
+### BK-Tree
+* A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
+
 ### Lexicographical
 * Order of words based on the alphabetical order of their letters.

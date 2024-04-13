@@ -254,10 +254,6 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
 ### Safe-Removal feature
 
 #### Implementation
@@ -423,10 +419,13 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="250"/>
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
 4. `LevenshteinDistance`: An implementation of the DistanceFunction interface using the Levenshtein distance algorithm
+<br/>
+<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
 
 Our implementation follows the SOLID principle closely. We have designed interfaces to promote flexibility, especially
 complying with the Open-Close Principle. This design decision makes it easy to extend various `CommandMatchers` or
@@ -446,10 +445,6 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
     and `AddressBookParser#parseCommand()` will proceed on to the `list command`.
   * When calculating the distance between 2 items, `BkTree` calls `DistanceFunction#calculateDistance()` method.
     * In this case, LevenshteinDistance class will calculate the distance.
-
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" />
-<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
-
 
 * Step 2 : User entered unsupported command `peek`
     * The `peek` command calls `FuzzyCommandParser#parseCommand())`, causing `BkTreeCommandMatcher#findClosestMatch()` to
@@ -489,14 +484,6 @@ were compared to determine the optimal algorithm for our AddressBook.
 For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algorithm` proved to be the optimal choice.
 Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
 misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
-
-#### \[Future Development\] Fuzzy Input with varying distance metric
-
-Currently, the MAX_DISTANCE for the distance metric is set to 1. To enhance user-experience and accommodate longer
-commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
-to the length of the correct command string. This approach allows a more flexible and adaptable matching process,
-guaranteeing that the misspelling tolerance varies proportionately with command length. By dynamically adjusting the
-MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
 
 ### Sort feature
 
@@ -543,7 +530,7 @@ When user `add` contacts in the `AddressBook`, contacts will be sorted based on 
 
     <puml src="diagrams/SortCommandActivityDiagram.puml" alt="SortCommandActivityDiagram" />
 
-### Design consideration:
+#### Design consideration:
 `SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
 Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
 * Single Responsibility Principle
@@ -556,7 +543,7 @@ Single Responsibility Principle, Interface Segregation Principle and Open/Close 
   * Segregates behavior for sorting into distinct methods `sort` and `getCategory`, thus, allowing different sorting
   strategies to implement only the methods they need, rather than being forced to implement monolithic interface with
   unnecessary methods.
-
+<br/>
 * **Alternative 1 (current choice)** `sort` method of the `SortStrategy` to take in `AddressBook` as its parameter.
   * Pros: Straightforward design and easy to implement.
     * Sorting logic interacts directly with data structure being sorted.
@@ -641,13 +628,6 @@ meaningless, thus we will not go into the details of those interactions.
 Below is an activity diagram that summarizes the process of a user using the `addbystep` feature. 
 
 <puml src="diagrams/AddByStepActivityDiagram.puml" alt="AddByStepActivityDiagram" />
-
-
-
-
-
-    
-
 
 #### Design considerations:
 
@@ -912,8 +892,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | Student                                       | Sort the contacts alphabetically | Easily navigate the address book                                                        |
 
 
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is `LookMeUp` and the **Actor** is the `user`, unless specified otherwise)
@@ -931,7 +909,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -959,7 +937,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -989,7 +967,7 @@ Use case ends.
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -1013,7 +991,7 @@ Use case ends.
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
-### Non-Functional Requirements
+## Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
@@ -1024,7 +1002,7 @@ Use case ends.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
 
-### Glossary
+## Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
@@ -1036,6 +1014,10 @@ Use case ends.
     * Liskov Substitution Principle
     * Interface Segregation Principle
     * Dependency Inversion Principle
+* **Levenshtein distance**: Measure of the difference between two strings, representing the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other.
+* **BK-Tree**: A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
+
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1106,4 +1088,13 @@ Our team consists of 5 members.
 
 1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
    an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+
+2. Fuzzy Input with varying distance metric
+   * Currently, the MAX_DISTANCE for the distance metric is set to 1. 
+   * To enhance user-experience and accommodate longer commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
+to the length of the correct command string. 
+   * This approach allows a more flexible and adaptable matching process,
+guaranteeing that the misspelling tolerance varies proportionately with command length. 
+   * By dynamically adjusting the
+MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
 
