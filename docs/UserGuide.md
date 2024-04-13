@@ -214,14 +214,15 @@ Format in 2 steps:
 
 > [!IMPORTANT] 
 > 
-> How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
-> confirmation? 
+> **How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
+> confirmation?**
 > 
 > > [!NOTE] 
+> >
 > > System will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
 >    user wishes to continue with removal process or change to perform another command!
 >
->_TO TACKLE SOME COMMON SCENARIOS:_ <br>
+>_Some common scenarios:_ <br>
 > 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
    simply enter `remove 1` again, a __safety check__ which tells LookMeUp that you ***still*** wish to remove the current 
 > shortlisted contact, and then proceed with `yes` / `no` confirmation
