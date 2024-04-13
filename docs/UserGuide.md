@@ -107,7 +107,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 > **Why are there alphanumeric restrictions on the Address, Email and Tag inputs, and how does it help YOU?**
 > 
 > All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email 
-> and the Friendly Mail guidelines. This restriction ensures additional safety that the email entered is an NUS student 
+> and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student 
 > email, catching any accidental typos of non-alphanumeric characters. 
 > 
 > Similarly, all addresses and tags (in the context of classifying by interest groups, committees etc.) are
@@ -440,7 +440,7 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 |------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `list`                                         | List all contacts                                                                                                                                                                                                                        |
 | `add n/…​ p/…​ e/…​ a/…​ [t/TAG]…​`            | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
-| `remove NAME`<br/>`remove INDEX`<br/>`yes/no`  | Removes a contact with multiple prompts that first shortlist contacts with matching names, then confirms the contact to remove based on the index keyed in.                                                                              |
+| `remove INDEX`<br/>`yes/no`                    | Safe removal of contact based on the index of the contact keyed in, followed by confirmation step before actual removal.                                                                                                                 |
 | `undo`                                         | Undo the previous command entered.                                                                                                                                                                                                       |
 | `redo`                                         | Reverses the previous `undo` command.                                                                                                                                                                                                    |
 | `copy INDEX FIELD(s)`                          | Copies a contact's information e.g. name, phone, email and address into OS clipboard.                                                                                                                                                    |
