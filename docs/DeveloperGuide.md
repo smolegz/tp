@@ -13,7 +13,10 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+LookMeUp  is a brownfield software project based off AddressBook Level-3, taken under the CS2103T Software Engineering,
+at National University of Singapore.
+
+1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -158,47 +161,59 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo/redo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, 
+stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following 
+operations:
 
 * `VersionedAddressBook#commit()` — Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and 
+`Model#redoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the 
+initial address book state, and the `currentStatePointer` pointing to that single address book state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
+confirmation. The confirmation command calls `Model#commitAddressBook()`, causing the modified state of the address book 
+after the `remove 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
+shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls 
+`Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state 
+will not be saved into the `addressBookStateList`.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the 
+`undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once 
+to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no 
+previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the 
+case. If so, it will return an error to the user rather than attempting to perform the undo.
 
 </box>
 
@@ -208,7 +223,8 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the 
+lifeline reaches the end of diagram.
 
 </box>
 
@@ -216,19 +232,27 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` 
+once to the right, pointing to the previously undone state, and restores the address book to that state.
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address 
+book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` 
+to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as 
+`list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. 
+Thus, the `addressBookStateList` remains unchanged.
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not 
+pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be 
+purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern 
+desktop applications follow.
 
 <puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
@@ -246,14 +270,8 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
+  * Pros: Will use less memory (e.g. for `remove`, just save the person being deleted).
+  * Cons: Need to ensure that the implementation of each individual command are correct.
 
 ### Safe-Removal feature
 
@@ -262,7 +280,7 @@ _{Explain here how the data archiving feature will be implemented}_
 The feature to remove contacts from the address book is facilitated by `RemoveCommand` and `RemoveConfirmation`.
 
 The safe-removal mechanism consists of several components:
-1. `RemoveCommand`: The main command class that performs the preparation of removal in 2 main parts: shortlisting the 
+1. `RemoveCommand`: The main command class that performs the preparation of removal in 2 main parts: shortlisting the
 target person to be removed by matching contact name, and seeking confirmation of the removal process.
 2. `RemoveCommandParser`: A class that parses the user input to determine the target person to be removed. The class
    parses the `Predicate` input when users key in `remove NAME`, to aid in the shortlisting process. The class also parses
@@ -284,18 +302,18 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 > 3. Dylan Walker
 > 4. Paul Cooper
 
-* **Step 1**: The user executes `remove Paul` command. 
-    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called 
+* **Step 1**: The user executes `remove Paul` command.
+    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
   in response.
     * `RemoveCommand` will shortlist the target person to be removed by matching the contact name with the input.
         * The input will be parsed by `RemoveCommandParser` to obtain the intended `Predicate`, in this case, `Paul`.
     > Matching contacts:
-  > 1. Paul Walker 
+  > 1. Paul Walker
   > 2. Paul Cooper
 
     * `RemoveCommand` will then prompt the user to key in the index of the contact to remove. e.g. `remove 1`
-  > **_NOTE:_** This step can be foregone if the user is very sure of the INDEX of the contact to be removed from the 
-    > original list in the address book. The user can key in `remove INDEX` and proceed with Step 2 directly. 
+  > **_NOTE:_** This step can be foregone if the user is very sure of the INDEX of the contact to be removed from the
+    > original list in the address book. The user can key in `remove INDEX` and proceed with Step 2 directly.
 
 
 * **Step 2**: The user executes `remove 1` command.
@@ -314,7 +332,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
     * The confirmation process will be handled by `RemoveSuccess` and its parent class `RemoveConfirmation`.
         * `RemoveSuccess#execute()` checks if the `yes` input is valid, calling `RemoveConfirmation#isValidInput()`
         * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
-            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX` 
+            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal  confirmation process.
     * If the user confirms the removal with `yes`, `RemoveSuccess` will proceed with the removal process.
         * The contact will be removed from the address book and `RemoveSuccess` will provide feedback on the success of 
@@ -326,10 +344,10 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
     * The abortion process will be handled by `RemoveAbortion` and its parent class `RemoveConfirmation`.
         * `RemoveAbortion#execute()` checks if the `no` input is valid, calling `RemoveConfirmation#isValidInput()`
         * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
-            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX` 
+            * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal abortion process.
   * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
-      * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion` 
+      * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
     will provide feedback on the abortion of the removal process.
 
 
@@ -337,7 +355,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 
 Several design considerations were taken into account when implementing the safe-removal feature.
 
-_**FIRST CATEGORY**: For shortlisting the contact to be removed and seeking confirmation of the contact to be removed:_ 
+_**FIRST CATEGORY**: For shortlisting the contact to be removed and seeking confirmation of the contact to be removed: 
 
 
 * **Alternative 1 (current choice)**: To use the same command word (i.e. `remove` - `remove NAME` and `remove INDEX`)
@@ -353,25 +371,25 @@ to perform the shortlisting of contacts with matching names, as well as the conf
 command to perform the deletion
 * Pros: Separates the shortlisting and confirmation processes
   * This reduces ambiguity in the command execution process for future developers
-* Cons: Require 2 different commands for deletion 
+* Cons: Require 2 different commands for deletion
   * Increasing the number of commands required to perform the removal process, makes it less intuitive for users to
-      approach the removal process. Furthermore, when it comes to **removing contacts**, users might find it a lot more 
-        intuitive (as it is self-explanatory) to use a`delete`/`remove` command instead of having to use `find` first, 
+      approach the removal process. Furthermore, when it comes to **removing contacts**, users might find it a lot more
+        intuitive (as it is self-explanatory) to use a`delete`/`remove` command instead of having to use `find` first,
         where in a natural logical context, most users would only use `find` if they are simply looking for a contact.
 
 
-**Decision**: 
-Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1** due to the enhanced 
-user experience it provides, making the removal process more intuitive and user-friendly. 
+**Decision**:
+Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1** due to the enhanced
+user experience it provides, making the removal process more intuitive and user-friendly.
 
 **Other considerations**:
-1. **Single Responsibility Principle**: The `RemoveCommand` class is designed to handle both the shortlisting and 
-confirmation processes. It is natural for concerns to arise regarding adhering to the Single Responsibility Principle. 
+1. **Single Responsibility Principle**: The `RemoveCommand` class is designed to handle both the shortlisting and
+confirmation processes. It is natural for concerns to arise regarding adhering to the Single Responsibility Principle.
 However, this class is focused on the single task of preparation for deletion, without handling the actual deletion.
-There is still a clear separation of concerns, with `RemoveCommand` class handling the preparation (shortlisting and 
+There is still a clear separation of concerns, with `RemoveCommand` class handling the preparation (shortlisting and
 prompting of confirmation), and `RemoveConfirmation`, `RemoveSuccess`, `RemoveAbortion` classes handling the actual
 deletion. Thus, the Single Responsibility Principle is still adhered to.
-2. **Re-branding of `delete` to `remove`**: Given most people will use the original `delete` directly in `delete INDEX`, 
+2. **Re-branding of `delete` to `remove`**: Given most people will use the original `delete` directly in `delete INDEX`
 we have decided to re-brand the double-purpose command as `remove` to avoid confusion. Using a replacement word that 
 is explanatory and intuitive in the context of the contact deletion process, while subtle, adds to the overall user 
 experience.
@@ -420,10 +438,13 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="250"/>
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
 4. `LevenshteinDistance`: An implementation of the DistanceFunction interface using the Levenshtein distance algorithm
+<br/>
+<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
 
 Our implementation follows the SOLID principle closely. We have designed interfaces to promote flexibility, especially
 complying with the Open-Close Principle. This design decision makes it easy to extend various `CommandMatchers` or
@@ -443,10 +464,6 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
     and `AddressBookParser#parseCommand()` will proceed on to the `list command`.
   * When calculating the distance between 2 items, `BkTree` calls `DistanceFunction#calculateDistance()` method.
     * In this case, LevenshteinDistance class will calculate the distance.
-
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" />
-<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
-
 
 * Step 2 : User entered unsupported command `peek`
     * The `peek` command calls `FuzzyCommandParser#parseCommand())`, causing `BkTreeCommandMatcher#findClosestMatch()` to
@@ -486,14 +503,6 @@ were compared to determine the optimal algorithm for our AddressBook.
 For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algorithm` proved to be the optimal choice.
 Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
 misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
-
-### \[Future Development\] Fuzzy Input with varying distance metric
-
-Currently, the MAX_DISTANCE for the distance metric is set to 1. To enhance user-experience and accommodate longer
-commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
-to the length of the correct command string. This approach allows a more flexible and adaptable matching process,
-guaranteeing that the misspelling tolerance varies proportionately with command length. By dynamically adjusting the
-MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
 
 ### Sort feature
 
@@ -540,7 +549,7 @@ When user `add` contacts in the `AddressBook`, contacts will be sorted based on 
 
     <puml src="diagrams/SortCommandActivityDiagram.puml" alt="SortCommandActivityDiagram" />
 
-### Design consideration:
+#### Design consideration:
 `SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
 Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
 * Single Responsibility Principle
@@ -553,7 +562,7 @@ Single Responsibility Principle, Interface Segregation Principle and Open/Close 
   * Segregates behavior for sorting into distinct methods `sort` and `getCategory`, thus, allowing different sorting
   strategies to implement only the methods they need, rather than being forced to implement monolithic interface with
   unnecessary methods.
-
+<br/>
 * **Alternative 1 (current choice)** `sort` method of the `SortStrategy` to take in `AddressBook` as its parameter.
   * Pros: Straightforward design and easy to implement.
     * Sorting logic interacts directly with data structure being sorted.
@@ -577,153 +586,101 @@ Responsibility Principle.
 
 ### Add By Step
 
+#### Overview
+`addbystep` loads up a separate window, which will prompt the users for the necessary input fields for an `add` command.
+When all the fields have been successfully entered by the user, the user can copy the formatted command to their 
+clipboard.
+
 #### Implementation
 
-We design a new helper class known as AddCommandHelper. The helper class will have its own GUI that starts up when the 
-user types the `addbystep` command. At each stage, CommandHelperWindow will display a message, prompting the user
-to enter their detail, e.g. name, phone number, email address, etc. When the user enters a detail, the helper class
-will call the respective `parse` method in `ParserUtil` class (e.g. `parseEmail` will be called to check if the user
-has entered a valid email). In order to keep track of what details that have been entered into the AddCommandHelper, 
-we design a Enum `Status` that is updated in AddCommandHelper whenever a valid detail has been entered by the user.
-Once all the valid details have been entered, a new instance of `FormattedCommandPerson`will be created. When the user 
-enters the `cp`, the correctly formatted command will be added to their clipboard.
+The architecture diagram given below explains a high-level design of the `addbystep` feature.
 
 
-`FormattedCommandPerson` inherits directly from the `Person` class. In accordance to the Open-Close 
-principle, the inherited class `FormattedCommandPerson` has the method `getFormattedCommand()` which will 
-return the correctly formatted command to add a person of those specific details into LookMeUp. 
-
-
-Given below is an example of how the user can interact with the AddCommandHelper: 
+The `addbystep` feature is facilitated by the `AddCommandHelper` and the `CommandHelperWindow` class. The 
+`CommandHelperWindow` serves as the UI for the user to interact with the `AddCommandHelper`. The `AddCommandHelper` is 
+responsible for accepting and checking whether the user's input is valid or not before prompting the user for the next
+input field. 
 
 
 
-* Step 1 : The user enters the `addbystep` command, displaying the GUI for the AddCommandHelper. The GUI will display 
-a message to prompt the user to enter the name of the person they wish to add. 
+Given below is an example usage scenario and how the `AddCommandHelper` class behaves at each step. Note that while each 
+step for accepting fields may come off as repetitive, the type of invalid inputs for each field is different. Thus, we 
+wish to illustrate examples of invalid inputs for each field.
 
-* Step 2 : The user may accidentally press ENTER, causing the name to be blank. 
-   * AddCommandHelper will check its `status` attribute
-   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will invoke the `ParserUtil.ParseName`
-  method to check the validity of the name
-   * The name is found to be invalid, and a ParseException is thrown, with the error message displayed to the user, 
-  stating the constraints of the detail entered (i.e. the name cannot be blank)
-   * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid name
+* Step 1: The user enters the `addbystep` command, causing the `CommandHelperWindow` to load up. It prompts the user for 
+the name of the new contact.
 
+* Step 2: The user enters the name of the new contact.
+    * If the name entered by the user is invalid (i.e. not alphanumeric), an error message will be shown and the user
+will have to enter the name again 
+    * If the name entered by the user is valid, the user will be prompted to enter the next field (number)
 
-* Step 3 : The user enters a valid name.
-   * AddCommandHelper will check its `status` attribute
-   * Since the `status` attribute is still at `Status.GET_NAME`, AddCommandHelper will call on the 
-  `ParserUtil.ParseName()` method to check the validity of the name.
-   * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to 
-  `status.GET_NUMBER`. 
-   * The CommandHelperWindow will now display a message for the user to enter the number next
+* Step 3: The user enters the number of the new contact.
+    * If the number entered by the user is invalid (i.e. one digit), an error message will be shown and the user will
+will have to enter the number again
+    * If the number entered by the user is valid, the user will be prompted to enter the next field (email) 
 
-The following activity diagram summarizes the flow of a user when trying to enter a name into the CommandHelper:
+* Step 4: The user enters the email of the new contact.
+    * If the email entered by the user is invalid (i.e. does not have the `@` symbol) an error message will be shown 
+and the user will have to enter the email again
+    * If the email entered by the user is valid, the user will be prompted to enter the next field (address)
 
-<puml src="diagrams/processName.puml" alt="processName" />
+* Step 5: The user enters the address of the new contact.
+    * If the address entered by the user is invalid (i.e. blank), an error message will be shown and the user will have 
+to enter the address again
+    * If the address entered by the user is valid, the user will be prompted to type the copy command (`cp`)
 
-* Step 4 : The user enters only 2 digits into the field before accidentally pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the 
-  `ParserUtil.ParseNumber()` method to check the validity of the number
-    * The number is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. the number should be at least 3 digits long)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid number
+From steps 2 - 5, attached below is an activity diagram of how the user interacts with the `AddCommandHelper` when they 
+are keying in the necessary inputs. The `AddCommandHelper` continuously validates the user's input to ensure that they
+have entered all the necessary fields correctly.
 
-* Step 5 : The user enters a "83452897".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_NUMBER`, AddCommandHelper will call on the
-  `ParserUtil.ParseName()` method to check the validity of the number.
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_EMAIL`. 
-    * The CommandHelperWindow will now display a message for the user to enter the email next
+* Step 6: The user enters the `cp` command.
+    * The user can enter anything at this stage, but only the `cp` command will result in the formatted `add` command 
+to be copied to the clipboard. Other inputs will result in the same prompt message at the end of Step 5
 
-The following activity diagram summarizes the flow of a user when trying to enter a number into the CommandHelper:
-
-<puml src="diagrams/processNumber.puml" alt="processNumber" />
-
-*  Step 6 : The user enters "jack.com.sg" before accidentally pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
-      `ParserUtil.ParseEmail()` method to check the validity of the number
-    * The email is found to be invalid, and a ParseException is thrown, with the error message displayed to the user,
-      stating the constraints of the detail entered (i.e. the email should have a "@" followed by a domain name)
-    * The `status` attribute of the AddCommandHelper will not be updated, since it did not receive a valid email
-
-* Step 7 : The user enters "jack@gmail.com".
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_EMAIL`, AddCommandHelper will call on the
-      `ParserUtil.ParseEmail()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.GET_ADDRESS`
-    * The CommandHelperWindow will now display a message for the user to enter the address next
-
-The following activity diagram summarizes the flow of a user when trying to enter a email into the CommandHelper:
-
-<puml src="diagrams/processEmail.puml" alt="processEmail" />
-
-* Step 8 : The user enters "Bishan St 24" before pressing enter.
-    * AddCommandHelper will check its `status` attribute
-    * Since the `status` attribute is still at `Status.GET_ADDRESS`, AddCommandHelper will call on the
-      `ParserUtil.ParseAddress()` method to check the validity of the number
-    * The name is found to be valid, and the`status` attribute is updated. The `status` attribute is now set to
-      `status.COMPLETE`
-    * The CommandHelperWindow will now display a message for the user to type 'cp' to copy the command to the clipboard
-      
-
-The following activity diagram summarizes the flow of a user when trying to enter an email into the CommandHelper:
-
-<puml src="diagrams/processAddress.puml" alt="processAddress" />
+* Step 7: The successfully copied message will be displayed to the user, and the user can now close the
+`CommandHelperWindow` window.
+    * The user can still continue interacting with the `CommandHelperWindow`, but those interactions are
+meaningless, thus we will not go into the details of those interactions. 
 
 
-
-* Step 9 : User makes another input into the CommandHelperWindow.
-    * If the command is `cp`, the window will display a success message and inform the user that they have successfully
-copied the command to the clipboard
-    * Otherwise, the same end message is displayed, asking the user to enter the `cp` command to copy the command to
-to their clipboard.
-
-The following activity diagram summarizes the entire flow of a user when trying to use CommandHelper:
+Below is an activity diagram that summarizes the process of a user using the `addbystep` feature. 
 
 <puml src="diagrams/AddByStepActivityDiagram.puml" alt="AddByStepActivityDiagram" />
-
-    
-
 
 #### Design considerations:
 
 Aspect: How to implement assistance functions to aid users in typing their commands.
 
 * **Alternative 1 (current choice)** Create a new helper class and GUI to prompt users for the necessary details.
-* Pros:
-  * It is easy to implement a new class, and due to the high cohesion of the previous code, we are able to reuse
-    methods defined previously in `ParserUtil` to check the validity of the fields entered by the user.
-  * The CommandHelper class can be implemented separately from the rest of the classes. This results in lower coupling
-    between the newly implemented CommandHelper class and the remaining classes, resulting in easier maintenance and
-    integration
-* Cons:
-    * The startup of another GUI for the helper class may introduce lag, especially on the older computers.
+  * Pros:
+    * It is easy to implement a new class, and due to the high cohesion of the previous code, we are able to reuse
+      methods defined previously in `ParserUtil`class to check the validity of the fields entered by the user
+    * The `CommandHelper` class can be implemented separately from the rest of the classes. This results in lower coupling
+      between the newly implemented `CommandHelper` class and the remaining classes, resulting in easier maintenance and
+      integration
+  * Cons:
+      * The startup of another GUI for the helper class may introduce lag, especially on the older computers
 
 * **Alternative 2** Implement a command to display the format for users to follow.
-* Pros:
-    * It easier to implement as compared to the CommandHelper class, prompts do not actually have any form of user
-    interactions.
-* Cons:
-    * It does not benefit users as much, as they can still make mistakes when it comes to following the exact format
-  of the command.
+  * Pros:
+    * It easier to implement as compared to the `CommandHelper` class, since prompts do not actually have any form of user
+    interaction
+  * Cons:
+      * It does not benefit users as much, as they can still make mistakes when it comes to following the exact format
+    of the command
 
-* **Alternative 3** Implement a command autocomplete some commands for users.
-* Pros:
-    * It can be built directly into the original GUI for AddressBook, there is no need for separate GUI for the
-    CommandHelper class
-* Cons:
-    * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
-    tags). It cannot fill in the exact details 
-    * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
-    perform checking of the command first, before letting the user know that the entered command is invalid. 
+* **Alternative 3** Implement a function to autocomplete commands for users.
+  * Pros:
+      * It can be built directly into the original GUI for AddressBook, there is no need for a separate GUI for the
+      `CommandHelper` class
+  * Cons:
+      * Autocomplete is only able to fill in certain parts of the command for the user (i.e. the prefixes for names, 
+      tags). It cannot fill in the exact details 
+      * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
+      to perform checking of the command first, before letting the user know that the entered command is invalid.
 
-
-### \[Future Development\] Extension of Helper class to general commands
+#### \[Future Development\] Extension of Helper class to general commands
 
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
 makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
@@ -733,14 +690,10 @@ when they need help with the correct formatting of the `delete` command. The hel
 necessary details needed for that command. 
 
 Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
-fields have been entered. As of now the AddCommandHelper does not check whether the details that are keyed in 
+fields have been entered. As of now the `AddCommandHelper` does not check whether the details that are keyed in 
 by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
 of the user once all of them have been entered.
 
-### Planned Enhancements 
-
-1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a 
-an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
 
 
 ### Duplicate feature
@@ -790,6 +743,10 @@ Given below is an example usage scenario and how the feature mechanism behaves a
       `AddressBook`.
     * `overwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
+
+<puml src="diagrams/DuplicateSequenceDiagram.puml" width="450" />
+
+<puml src="diagrams/OverwriteSequenceDiagram.puml" width="450" />
   
 #### Design consideration:
 `SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
@@ -1029,8 +986,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | Student                                       | Sort the contacts alphabetically | Easily navigate the address book                                                        |
 
 
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is `LookMeUp` and the **Actor** is the `user`, unless specified otherwise)
@@ -1048,7 +1003,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -1076,7 +1031,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -1106,7 +1061,7 @@ Use case ends.
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -1130,7 +1085,7 @@ Use case ends.
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
-### Non-Functional Requirements
+## Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
@@ -1141,7 +1096,7 @@ Use case ends.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
 
-### Glossary
+## Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
@@ -1153,6 +1108,10 @@ Use case ends.
     * Liskov Substitution Principle
     * Interface Segregation Principle
     * Dependency Inversion Principle
+* **Levenshtein distance**: Measure of the difference between two strings, representing the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other.
+* **BK-Tree**: A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
+
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1182,6 +1141,19 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
+### Add By Step 
+
+Loading up the AddByStep Window
+
+1. Type `addbystep` into LookMeUp
+    * Expected output: A new window should appear, prompting you for the name of the person to enter 
+2. Leave the name blank and press the ENTER key 
+    * Expected output: An error message should appear, and you have to enter the name again 
+3. Type `John` into the GUI 
+    * Expected output: The name will be successfully accepted, and you will be prompted for the next field
+4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
+case scenario in Add By Step.
+
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1203,3 +1175,20 @@ testers are expected to do more *exploratory* testing.
 1. Dealing with missing/corrupted data files
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+
+### Planned Enhancements
+
+Our team consists of 5 members. 
+
+1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
+   an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+
+2. Fuzzy Input with varying distance metric
+   * Currently, the MAX_DISTANCE for the distance metric is set to 1. 
+   * To enhance user-experience and accommodate longer commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
+to the length of the correct command string. 
+   * This approach allows a more flexible and adaptable matching process,
+guaranteeing that the misspelling tolerance varies proportionately with command length. 
+   * By dynamically adjusting the
+MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
+
