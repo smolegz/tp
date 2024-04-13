@@ -99,9 +99,20 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 >
 > * Phone numbers should only contain numbers **(min 3 numbers)**.
 > 
-> * Name, address, email and tag inputs only support **alphanumeric characters** (with email accepting a single `@`).
->   * LookMeUp does not support non-alphanumeric characters. 
->   * LookMeUp does not support spacing for the input entered.
+> * LookMeUp only supports **alphanumeric characters** for name, address, email and tag inputs 
+>   (with email accepting a single `@`).
+
+> [!NOTE]
+> 
+> **Why are there alphanumeric restrictions on the Address, Email and Tag inputs, and how does it help YOU?**
+> 
+> All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email 
+> and the Friendly Mail guidelines. This restriction ensures additional safety that the email entered is an NUS student 
+> email, catching any accidental typos of non-alphanumeric characters. 
+> 
+> Similarly, all addresses and tags (in the context of classifying by interest groups, committees etc.) are
+> expected to be alphanumeric, thus serves as another safety net.
+
 
 
 Examples:
@@ -183,7 +194,7 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
 <img src="images/findAlexDavidResult.png" width="50%"/> <br>
 
-### Removing a person (With safe removal): `remove`
+### Removing a person (Safe Removal): `remove`
 
 Removes a person based on index, and confirms removal of the spotlighted contact before actual removal.
 
@@ -202,12 +213,10 @@ Format in 2 steps:
 
 2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>
-      <img src="images/yes-confirm.png" width="50%"/><br>
       
       Expected result: <br>
       <img src="images/yes-result.png" width="50%"/><br> 
    2. If `no`:<br>
-      <img src="images/no-confirm.png" width="50%"/><br>
    
       Expected result: <br>
       <img src="images/no-result.png" width="50%"/><br>
@@ -223,8 +232,8 @@ Format in 2 steps:
 >
 >_Some common scenarios:_ <br>
 > 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
-   simply enter `remove 1` again, a __safety check__ which tells LookMeUp that you ***still*** wish to remove the current 
-> shortlisted contact, and then proceed with `yes` / `no` confirmation
+   simply enter `remove 1` again, it serves as a __safety check__ telling LookMeUp that you ***still*** wish to remove 
+> the current shortlisted contact, and then proceed with `yes` / `no` confirmation
 > 2. **If you wish to stop the removal process and return to the default list:**<br>
    simply enter `list` to return to the default list, and then proceed with your next desired command
 
