@@ -51,16 +51,11 @@
         "storage-component": "Storage component",
         "common-classes": "Common classes",
         "implementation": "Implementation",
-        "proposed-undo-redo-feature": "[Proposed] Undo/redo feature",
-        "proposed-data-archiving": "[Proposed] Data archiving",
+        "undo-redo-feature": "Undo/redo feature",
         "safe-removal-feature": "Safe-Removal feature",
         "fuzzy-input": "Fuzzy Input",
-        "future-development-fuzzy-input-with-varying-distance-metric": "[Future Development] Fuzzy Input with varying distance metric",
         "sort-feature": "Sort feature",
-        "design-consideration": "Design consideration:",
         "add-by-step": "Add By Step",
-        "future-development-extension-of-helper-class-to-general-commands": "[Future Development] Extension of Helper class to general commands",
-        "planned-enhancements": "Planned Enhancements",
         "duplicate-feature": "Duplicate feature",
         "copy-user-info": "Copy User Info",
         "exit-window": "Exit Window",
@@ -75,8 +70,10 @@
         "glossary": "Glossary",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
+        "add-by-step-2": "Add By Step",
         "deleting-a-person": "Deleting a person",
-        "saving-data": "Saving data"
+        "saving-data": "Saving data",
+        "planned-enhancements": "Planned Enhancements"
       },
       "headingKeywords": {}
     },
@@ -129,7 +126,7 @@
         "listing-all-persons-list": "Listing all persons : list",
         "editing-a-person-edit": "Editing a person : edit",
         "locating-persons-by-name-find": "Locating persons by name: find",
-        "removing-a-person-with-safe-removal-remove": "Removing a person (With safe removal): remove",
+        "removing-a-person-safe-removal-remove": "Removing a person (Safe Removal): remove",
         "undo-previous-command-undo": "Undo Previous Command : undo",
         "redo-undid-command-redo": "Redo Undid Command : redo",
         "copies-a-person-information-to-clipboard-copy": "Copies a Person Information to Clipboard : copy",
@@ -145,6 +142,7 @@
         "known-issues": "Known issues",
         "command-summary": "Command summary",
         "glossary": "Glossary",
+        "bk-tree": "BK-Tree",
         "lexicographical": "Lexicographical"
       },
       "headingKeywords": {}
