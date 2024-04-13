@@ -222,7 +222,11 @@ Format in 2 steps:
    the current list (be it the default or filtered).
      * LookMeUp then "spotlights" (only shows) this one contact, and prompts a confirmation message to confirm removal<br>
        <img src="images/confirmation.png" width="50%"/><br>
-
+     > [!NOTE]
+     > 
+     > If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter      
+       remove 3` since the current list is shortlisted to only the single contact at index 2 to prepare for safe removal.
+       You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 3` to remove.
 
 2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>
@@ -253,19 +257,14 @@ Format in 2 steps:
 
 > [!TIP] 
 > 
-> **What if you wish to remove a different contact or execute a different command, 
-> after the `remove INDEX`, before `yes` / `no` confirmation?**
-> 
-> Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
-> (e.g. `remove 1`, then when prompted for confirmation, proceed with keying in separate command `addbystep` and then 
-> execute the `add` command), it is **ADVISABLE** to enter `no` or `list` first after `remove 1`.
-> 
-> This is especially so if you intentionally wish to **leave the removal process**, since these 2 commands would bring 
-> you back to the existing default list of contacts! 
-> 
-> This will then allow list-accessing commands (e.g. `edit` or `remove` if you 
-> wish to remove a different contact) to access all existing contacts, rather than being limited to the single filtered 
-> ("spotlighted") contact (after `remove INDEX`) since that was meant for the confirmation of the safe removal.  
+> **What if you wish to execute a _different command_ after the `remove INDEX`, before `yes` / `no` confirmation?**
+>
+> You may enter another **VALID** command in between the `remove INDEX` and the `yes` / `no` confirmation 
+> (e.g. after `remove 2`, you can enter `add n/John p/98765432 e/j@gmail.com a/677405`)
+> then the `add` command will be executed, while the removal will be aborted.
+>
+> However, it is **ADVISED** to abort the removal process directly with a `no` confirmation first, as that 
+> would return you the full default list of contacts, where you may then proceed with your desired command(s).
 
 > [!TIP] 
 >
