@@ -1,0 +1,75 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":OverwriteCommandParser" as OverwriteCommandParser LOGIC_COLOR
+participant "rc:OverwriteCommand" as OverwriteCommand LOGIC_COLOR
+participant "rs:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("Overwrite 1 n/Alex Yeoh...")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("Overwrite 1 n/Alex Yeoh...")
+activate AddressBookParser
+
+create OverwriteCommandParser
+AddressBookParser -> OverwriteCommandParser
+activate OverwriteCommandParser
+
+OverwriteCommandParser --> AddressBookParser
+deactivate OverwriteCommandParser
+
+AddressBookParser -> OverwriteCommandParser : parse("1 n/Alex Yeoh ...")
+activate OverwriteCommandParser
+
+create OverwriteCommand
+OverwriteCommandParser -> OverwriteCommand
+activate OverwriteCommand
+
+OverwriteCommand --> OverwriteCommandParser :
+deactivate OverwriteCommand
+
+OverwriteCommandParser --> AddressBookParser : rc
+deactivate OverwriteCommandParser
+OverwriteCommandParser -[hidden]-> AddressBookParser
+destroy OverwriteCommandParser
+
+AddressBookParser --> LogicManager : rc
+deactivate AddressBookParser
+
+LogicManager -> OverwriteCommand : execute(m)
+activate OverwriteCommand
+
+OverwriteCommand -> Model : setDuplicatePerson(Person)
+activate Model
+
+Model --> OverwriteCommand
+deactivate Model
+
+OverwriteCommand -> Model : commitAddressBook()
+activate Model
+
+Model --> OverwriteCommand
+deactivate Model
+
+create CommandResult
+OverwriteCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> OverwriteCommand
+deactivate CommandResult
+
+OverwriteCommand --> LogicManager : rs
+deactivate OverwriteCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
