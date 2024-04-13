@@ -791,7 +791,7 @@ Given below is an example usage scenario and how the feature mechanism behaves a
     * `overwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
   
-### Design consideration:
+#### Design consideration:
 `SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
 Principle and Interface Segregation Principle.
 * Single Responsibility Principle
@@ -813,6 +813,81 @@ Alternative 1 is chosen for the following reasons:
 * Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
     * Reduce complexity and potential dependencies.
 
+### Copy User Info
+#### Implementation
+
+The `copy` command feature enhances a user experience by allowing the easy transfer of a contact's personal details directly into the clipboard of the user's operating system. The class, `CopyCommand`, is an inheritance of the `Command` class, that facilitates the process of copying essential information like a contact's name, email, and address, among other details. It offers users the flexibility to specify and copy multiple pieces of information simultaneously. The following example demonstrates how this command operates:
+
+1. A user types in `copy 1 name email` into the text field of `CommandBox`. `Logic` is subsequently called to execute the command, where [**`AddressBookParser`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/AddCommandParser.java) would parse the input and return a `CopyCommand` (kindly refer to [here](#logic-component) for Logic design).
+
+
+2. When `AddressBookParser#parseCommand()` is called, it makes use of switch statements to match the `copy` command and calls [**`CopyCommandParser#parse()`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/CopyCommandParser.java). `CopyCommandParser#parse()` is solely responsible for: (i) checking if input argument is empty; (ii) checking if index provided is non-negative; and (iii) calling [**`ParserUtil#parseFieldsToCopy()`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/ParserUtil.java) to verify that fields provided by the user are of acceptable fields. By definition, acceptable fields includes only `name`,`phone`,`email` and `address`.
+
+**Note:** `ParseException` will be thrown and an error message will be shown to user if either (i) or (iii) is violated, while `IndexOutOfBoundsException` is thrown when (ii) is violated.
+
+3. `CopyCommandParser#parse()` returns an instantiation of `CopyCommand` where its constructor takes in `Index` and a `List<String> fieldsToCopyList` as arguments. When the constructor of `CopyCommand` is called, the constructor removes any duplicated values (if any) from `fieldsToCopyList` with the use of Java Streams. Refer to code snippet below:
+
+```Java
+// Constructor
+public CopyCommand(Index targetIndex, List<String> fieldsToCopyList) {
+        requireNonNull(targetIndex);
+        this.targetIndex = targetIndex;
+        this.fieldsToCopyList = fieldsToCopyList.stream()
+                                  .distinct()
+                                  .collect(Collectors.toList());
+    }
+```
+
+
+4. When `CopyCommand#execute()` is called, the contact of interest is obtained with the aid of `Model#getPerson` and the string representation of the information to be copied is retrieved by `CopyCommand#getInfo(Person person)` that returns a `StringBuilder`. The returned `StringBuilder` is then converted to `StringSelection` where it would be set as the content of `Clipboard`. The code snippet below shows the implementation of `CopyCommand#execute()`:
+
+```Java
+    @Override
+    public CommandResult execute(Model model) throws CommandException {
+        requireNonNull(model);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        int zeroBasedIndex = targetIndex.getZeroBased();
+        int addressBookSize = model.getAddressBook().getPersonList().size();
+
+        if (zeroBasedIndex < 0 || zeroBasedIndex >= addressBookSize) { // checks if Index exceeds list of contacts
+            throw new CommandException(MESSAGE_PERSON_NOT_FOUND); 
+        }
+
+        Person person = model.getPerson(targetIndex.getZeroBased()); // retrieves Person of interest
+        StringBuilder result = getInfo(person); // retrieves a person's information
+
+        StringSelection toCopyString = new StringSelection(result.toString().trim());
+        clipboard.setContents(toCopyString, null); // sets result to clipboard content
+
+        return new CommandResult(MESSAGE_SUCCESS, false, false);
+    }
+```
+
+Below is a sequence diagram of the overall `Copy` operation:
+
+<puml src="diagrams/CopySequenceDiagram.puml" alt="CopyCommandSequenceDiagram"/>
+
+#### Design Considerations
+Several design considerations were taken into account when implementing the copy feature. Below lists a few alternatives:
+
+- Alternative 1 (current choice): User keys in command to copy a contact's information.
+  - Pros:
+    - Does not violate product requirement (i.e. for typists).
+    - Does not involve the interaction of Java FXML.
+    - Testability works well with JUnit.
+  - Cons:
+    - Much harder to implement as SOLID principles have to be upheld.
+    
+
+- Alternative 2: Utilize JavaFX to allow users to select which information to copy.
+  - Pros:
+    -  Simpler design and implementation of functionality, as compared to alternative 1.
+  - Cons:
+    - Violates product requirement (not suitable for target audience).
+    - Much harder to test, requires external API such as TextFX to test.
+
+
 ### Exit Window
 #### Implementation
 For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seeks confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
@@ -824,7 +899,7 @@ The Ui layout of `ExitWindow` is defined under [`ExitWindow.fxml`](https://githu
 2. An exit window will appear prompting for user confirmation to exit - Yes/No button.
 3. User would select either one of the 2 options.
 
-<pump src="diagrams/ExitCommandActivityDiagram.pump" alt="Flow of Exit command"/>
+<puml src="diagrams/ExitCommandActivityDiagram.puml" alt="Flow of Exit command"/>
 
 In `ExitWindow.fxml`, the `Yes` button is set as the default button such that the button receives a VK_ENTER press; the `Yes` button will always be in focus whenever `ExitWindow` is displayed. When a positive confirmation is received, `ExitWindow#yesButton()` would be called to terminate LookMeUp.
 
