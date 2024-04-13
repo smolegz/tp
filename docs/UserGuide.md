@@ -6,7 +6,13 @@
 
 # LookMeUp User Guide
 
-Welcome to LookMeUp, your one-stop desktop app that revolutionizes contacts management for NUS students in hall committees. Liking the speed and effectiveness of Command Line Interface (CLI) or visual simplicity of Graphical User Interface (GUI)? LookMeUp caters to your needs, it ensures that managing your contacts is quicker and more efficient than ever before.
+Greetings! Students from the Halls of NUS, are you tired of the hassle of managing your contacts? 
+
+Welcome to LookMeUp, your one-stop desktop app that revolutionizes contacts management for NUS students like YOU, with 
+multiple commitments and multiple groups of friends to keep track of! 
+Liking the speed and effectiveness of Command Line Interface (CLI) or visual simplicity of Graphical User 
+Interface (GUI)? LookMeUp caters to your needs, it ensures that managing your contacts is quicker and more efficient 
+than ever before.
 
 So say goodbye to traditional address book applications and say hello to the future of contact management with LookMeUp!
 
@@ -21,15 +27,19 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 1. Download the latest `LookMeUp.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases/tag/v1.3(final)).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for the LookMeUp app.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar LookMeUp.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar LookMeUp.jar` command 
+   to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    <img src="images/Ui.png" width="50%"/>
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will 
+   open the help window.<br>
 
-1. Refer to the [Command Summary](#command-summary) below for details of each command.
+1. For users who are familiar with our app, or simply wish to get a quick reference to our commands, feel free to refer  
+   to the [Command Summary](#command-summary) below! Else, you can refer to the [Features](#features) section for a
+   detailed explanation of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -67,7 +77,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 > * LookMeUp text field supports **command history** accessibility.
     >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
-> [! WARNING]
+> [!WARNING]
 > Command prefixes (n/…​ a/…​ p/…​ e/…​ t/…​) only accepts lower case characters.
 >   * Examples like N/…​ A/…​ P/…​ E/…​ T/…​ where prefixes are capital letters will not be accepted.
 
@@ -99,9 +109,20 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 >
 > * Phone numbers should only contain numbers **(min 3 numbers)**.
 > 
-> * Name, address, email and tag inputs only support **alphanumeric characters** (with email accepting a single `@`).
->   * LookMeUp does not support non-alphanumeric characters. 
->   * LookMeUp does not support spacing for the input entered.
+> * LookMeUp only supports **alphanumeric characters** for name, address, email and tag inputs 
+>   (with email accepting a single `@`).
+
+> [!NOTE]
+> 
+> **Why are there alphanumeric restrictions on the Address, Email and Tag inputs, and how does it help YOU?**
+> 
+> All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email 
+> and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student 
+> email, catching any accidental typos of non-alphanumeric characters. 
+> 
+> Similarly, all addresses and tags (in the context of classifying by interest groups, committees etc.) are
+> expected to be alphanumeric, thus serves as another safety net.
+
 
 
 Examples:
@@ -186,33 +207,79 @@ Examples:
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
 <img src="images/findAlexDavidResult.png" width="50%"/> <br>
 
-### Removing a person (With safe removal): `remove`
+### Removing a person (Safe Removal): `remove`
 
-Removes a person based on name, and confirms with the corresponding index in the filtered name list.
+Removes a person based on index, and confirms removal of the spotlighted contact before actual removal.
 
-Format in 3 steps:
+Format in 2 steps:
 
-1. **Optional**: `remove NAME`
-   *  By using the name of the contact to delete<br>
-       <img src="images/remove.png" width="50%"/><br>
-     * LookMeUp will return matching contact names in a `filtered list`.
-     * LookMeUp will prompt user a specified `INDEX` to remove.<br>
-       <img src="images/remove-index.png" width="50%"/><br>
-2. `remove INDEX`<br>
+1. `remove INDEX`<br>
+   example: `remove 3`<br>
    <img src="images/index-remove.png" width="50%"/><br>
-   * Removes the person in the filtered results by the specified index.
+   * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
-   * The index must be a `positive integer` 1, 2, 3, …​
-   * If **STEP 1** was skipped. the contact at the specified index based on the default list of all contacts will be retrieved
-     * LookMeUp will prompt a confirmation message to confirm removal
-4. Confirmation: `yes/no`<br>
-   <img src="images/confirmation.png" width="50%"/><br>
+   * The index must be a `positive integer` 1, 2, 3, … and can only be as large as the index of the last contact in 
+   the current list (be it the default or filtered).
+     * LookMeUp then "spotlights" (only shows) this one contact, and prompts a confirmation message to confirm removal<br>
+       <img src="images/confirmation.png" width="50%"/><br>
+
+
+2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>
-      <img src="images/yes-confirm.png" width="50%"/><br>
-      <img src="images/yes-result.png" width="50%"/><br>
+      
+      Expected result: <br>
+      <img src="images/yes-result.png" width="50%"/><br> 
    2. If `no`:<br>
-      <img src="images/no-confirm.png" width="50%"/><br>
+   
+      Expected result: <br>
       <img src="images/no-result.png" width="50%"/><br>
+
+> [!IMPORTANT] 
+> 
+> **How to deal with wrong/unknown command(s) entered in between the workflow of `remove INDEX` and `yes`/`no` 
+> confirmation?**
+> 
+> > **NOTE:**
+> > LookMeUp will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
+>    user wishes to continue with removal process or change to perform another command!
+>
+>_Some common scenarios:_ <br>
+> 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
+   simply enter `remove 1` again, it serves as a __safety check__ telling LookMeUp that you ***still*** wish to remove 
+> the current shortlisted contact, and then proceed with `yes` / `no` confirmation
+> 2. **If you wish to stop the removal process and return to the default list:**<br>
+   simply enter `list` to return to the default list, and then proceed with your next desired command
+
+
+> [!TIP] 
+> 
+> **What if you wish to remove a different contact or execute a different command, 
+> after the `remove INDEX`, before `yes` / `no` confirmation?**
+> 
+> Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
+> (e.g. `remove 1`, then when prompted for confirmation, proceed with keying in separate command `addbystep` and then 
+> execute the `add` command), it is **ADVISABLE** to enter `no` or `list` first after `remove 1`.
+> 
+> This is especially so if you intentionally wish to **leave the removal process**, since these 2 commands would bring 
+> you back to the existing default list of contacts! 
+> 
+> This will then allow list-accessing commands (e.g. `edit` or `remove` if you 
+> wish to remove a different contact) to access all existing contacts, rather than being limited to the single filtered 
+> ("spotlighted") contact (after `remove INDEX`) since that was meant for the confirmation of the safe removal.  
+
+> [!TIP] 
+>
+> **How to potentially _SPEED UP_ the contact removal process, especially when LookMeUp gets populated with MANY 
+> contacts?**
+> 
+> Make use of the contact filtering feature of `find` and use it together with the `remove` commands! 
+> 
+> For example: `find rachel` (which shortlists all contact(s) matching "rachel") followed by `remove 1` will prompt a 
+> confirmation message to confirm the removal of the 1st contact in the filtered results of the `find` command. 
+> 
+> This is especially useful if you wish to remove a contact without having to scroll for its index, or if you have
+> multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "rachel"s first before deciding which
+> to remove by the index of the filtered list. 
 
 ### Undo Previous Command : `undo`
 
@@ -283,11 +350,17 @@ Format: `sort KEYWORD`
     * `Name`: Sorts the entries based on lexicographical order of names.
     * `Tag`: Sorts the entries based on lexicographical order of tags.
 
-> [! NOTE]
+> [!IMPORTANT]
+> * `Fuzzy input` does not support `KEYWORD`
+    >   * e.g. `sort NAMEE` will result in an error.
+> * Only **1 keyword** can be entered after `sort`
+    >   * e.g. `sort NAME OTHERS` will result in an error.
+
+> [!NOTE]
 > When `sort tag` is executed, LookMeUp sorts tags by 
 > **numbering**, followed by contacts **without tags**, and finally **alphabetically**
 > 
->    <img src="images/savetag.png" width="50%"/><br>
+>    <img src="images/savetag.png" height="50%"/><br>
 
 ### Filtering by Tag : `filter`
 
@@ -382,7 +455,7 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 |------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `list`                                         | List all contacts                                                                                                                                                                                                                        |
 | `add n/…​ p/…​ e/…​ a/…​ [t/TAG]…​`            | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
-| `remove NAME`<br/>`remove INDEX`<br/>`yes/no`  | Removes a contact with multiple prompts that first shortlist contacts with matching names, then confirms the contact to remove based on the index keyed in.                                                                              |
+| `remove INDEX`<br/>`yes/no`                    | Safe removal of contact based on the index of the contact keyed in, followed by confirmation step before actual removal.                                                                                                                 |
 | `undo`                                         | Undo the previous command entered.                                                                                                                                                                                                       |
 | `redo`                                         | Reverses the previous `undo` command.                                                                                                                                                                                                    |
 | `copy INDEX FIELD(s)`                          | Copies a contact's information e.g. name, phone, email and address into OS clipboard.                                                                                                                                                    |
