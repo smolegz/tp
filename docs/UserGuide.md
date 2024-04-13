@@ -67,7 +67,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 > * LookMeUp text field supports **command history** accessibility.
     >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 
-> [! WARNING]
+> [!WARNING]
 > Command prefixes (n/…​ a/…​ p/…​ e/…​ t/…​) only accepts lower case characters.
 >   * Examples like N/…​ A/…​ P/…​ E/…​ T/…​ where prefixes are capital letters will not be accepted.
 
@@ -217,9 +217,8 @@ Format in 2 steps:
 > **How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
 > confirmation?**
 > 
-> > [!NOTE] 
-> >
-> > System will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
+> > **NOTE:**
+> > LookMeUp will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
 >    user wishes to continue with removal process or change to perform another command!
 >
 >_Some common scenarios:_ <br>
@@ -314,11 +313,11 @@ Format: `sort KEYWORD`
 > * Only **1 keyword** can be entered after `sort`
     >   * e.g. `sort NAME OTHERS` will result in an error.
 
-> [! NOTE]
+> [!NOTE]
 > When `sort tag` is executed, LookMeUp sorts tags by 
 > **numbering**, followed by contacts **without tags**, and finally **alphabetically**
 > 
->    <img src="images/savetag.png" width="50%"/><br>
+>    <img src="images/savetag.png" width="50% height="50%"/><br>
 
 ### Filtering by Tag : `filter`
 
