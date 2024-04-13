@@ -212,9 +212,13 @@ Format in 2 steps:
       Expected result: <br>
       <img src="images/no-result.png" width="50%"/><br>
 
-> [!IMPORTANT] How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
+> [!IMPORTANT] 
+> 
+> How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
 > confirmation? 
-> * [!NOTE] System will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
+> 
+> > [!NOTE] 
+> > System will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
 >    user wishes to continue with removal process or change to perform another command!
 >
 >_TO TACKLE SOME COMMON SCENARIOS:_ <br>
@@ -223,7 +227,8 @@ Format in 2 steps:
 > shortlisted contact, and then proceed with `yes` / `no` confirmation
 > 2. **If you wish to stop the removal process and return to the default list:**<br>
    simply enter `list` to return to the default list, and then proceed with your next desired command
->
+
+
 > [!TIP] 
 > Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
 > (e.g. `remove 1`, then `add` and proceed with adding), it is advisable to enter `no` or `list` first after `remove 1` 
