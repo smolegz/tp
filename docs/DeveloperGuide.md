@@ -778,7 +778,7 @@ The Ui layout of `ExitWindow` is defined under [`ExitWindow.fxml`](https://githu
 2. An exit window will appear prompting for user confirmation to exit - Yes/No button.
 3. User would select either one of the 2 options.
 
-<puml src="diagrams/ExitCommandActivityDiagram.pump" alt="Flow of Exit command"/>
+<puml src="diagrams/ExitCommandActivityDiagram.puml" alt="Flow of Exit command"/>
 
 In `ExitWindow.fxml`, the `Yes` button is set as the default button such that the button receives a VK_ENTER press; the `Yes` button will always be in focus whenever `ExitWindow` is displayed. When a positive confirmation is received, `ExitWindow#yesButton()` would be called to terminate LookMeUp.
 
