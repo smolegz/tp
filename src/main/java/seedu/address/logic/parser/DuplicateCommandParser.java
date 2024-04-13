@@ -9,8 +9,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.DuplicateCommand;
+import seedu.address.logic.LogicManager;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -23,6 +26,8 @@ import seedu.address.model.tag.Tag;
  * Parses input arguments and creates a new DuplicateCommand object
  */
 public class DuplicateCommandParser implements Parser<DuplicateCommand> {
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
     /**
      * Parses the given {@code String} of arguments in the context of the DuplicateCommand
@@ -48,6 +53,7 @@ public class DuplicateCommandParser implements Parser<DuplicateCommand> {
 
         Person person = new Person(name, phone, email, address, tagList);
 
+        logger.info("Person to be duplicated: " + person.toString());
         return new DuplicateCommand(person);
     }
 }
