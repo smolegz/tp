@@ -213,21 +213,19 @@ Format in 3 steps:
 
 ### Undo Previous Command : `undo`
 
-For any command that changes the universal list of contacts _e.g. `add`, `remove`, `clear`, `overwrite`, `duplicate` and `edit`_,
-the `undo` command will revert the state of the contact list prior to the execution of a command. 
-
-> [!NOTE]
-> LookMeUp supports up to 3 consecutive `undo`
->   * You are able to backtrack your actions up to 3 times. 
+For any command that changes the universal list of contacts _e.g. `add`, `remove`, `clear`, `overwrite`, `duplicate` 
+and `edit`_, the `undo` command will revert the state of the contact list prior to the execution of a command.
 
 Format: `undo`
-For example, referring to the previous command, assuming you have `removed` a contact, you can type `undo` to recover the removed contact:<br>
+For example, referring to the previous command, assuming you have removed a contact, you can type `undo` to recover the 
+removed contact:<br>
 <img src="images/undo.png" width="50%"/><br>
 
 The removed contact will then be restored, **even to its original index**.<br>
 <img src="images/recovered.png" width="50%"/><br>
 
-Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact was added.
+Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact 
+was added.
 
 > [!IMPORTANT]
 > Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
