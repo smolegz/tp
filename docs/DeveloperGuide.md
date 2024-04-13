@@ -161,47 +161,59 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo/redo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, 
+stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following 
+operations:
 
 * `VersionedAddressBook#commit()` — Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and 
+`Model#redoAddressBook()` respectively.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the 
+initial address book state, and the `currentStatePointer` pointing to that single address book state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
+confirmation. The confirmation command calls `Model#commitAddressBook()`, causing the modified state of the address book 
+after the `remove 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
+shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls 
+`Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
 <box type="info" seamless>
 
-**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+**Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state 
+will not be saved into the `addressBookStateList`.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the 
+`undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once 
+to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+**Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no 
+previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the 
+case. If so, it will return an error to the user rather than attempting to perform the undo.
 
 </box>
 
@@ -211,7 +223,8 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the 
+lifeline reaches the end of diagram.
 
 </box>
 
@@ -219,19 +232,27 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` 
+once to the right, pointing to the previously undone state, and restores the address book to that state.
 
 <box type="info" seamless>
 
-**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+**Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address 
+book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` 
+to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as 
+`list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. 
+Thus, the `addressBookStateList` remains unchanged.
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not 
+pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be 
+purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern 
+desktop applications follow.
 
 <puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
@@ -249,14 +270,8 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
+  * Pros: Will use less memory (e.g. for `remove`, just save the person being deleted).
+  * Cons: Need to ensure that the implementation of each individual command are correct.
 
 ### Safe-Removal feature
 
@@ -423,10 +438,13 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="250"/>
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
 4. `LevenshteinDistance`: An implementation of the DistanceFunction interface using the Levenshtein distance algorithm
+<br/>
+<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
 
 Our implementation follows the SOLID principle closely. We have designed interfaces to promote flexibility, especially
 complying with the Open-Close Principle. This design decision makes it easy to extend various `CommandMatchers` or
@@ -446,10 +464,6 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
     and `AddressBookParser#parseCommand()` will proceed on to the `list command`.
   * When calculating the distance between 2 items, `BkTree` calls `DistanceFunction#calculateDistance()` method.
     * In this case, LevenshteinDistance class will calculate the distance.
-
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" />
-<puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
-
 
 * Step 2 : User entered unsupported command `peek`
     * The `peek` command calls `FuzzyCommandParser#parseCommand())`, causing `BkTreeCommandMatcher#findClosestMatch()` to
@@ -489,14 +503,6 @@ were compared to determine the optimal algorithm for our AddressBook.
 For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algorithm` proved to be the optimal choice.
 Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
 misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
-
-#### \[Future Development\] Fuzzy Input with varying distance metric
-
-Currently, the MAX_DISTANCE for the distance metric is set to 1. To enhance user-experience and accommodate longer
-commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
-to the length of the correct command string. This approach allows a more flexible and adaptable matching process,
-guaranteeing that the misspelling tolerance varies proportionately with command length. By dynamically adjusting the
-MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
 
 ### Sort feature
 
@@ -543,7 +549,7 @@ When user `add` contacts in the `AddressBook`, contacts will be sorted based on 
 
     <puml src="diagrams/SortCommandActivityDiagram.puml" alt="SortCommandActivityDiagram" />
 
-### Design consideration:
+#### Design consideration:
 `SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
 Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
 * Single Responsibility Principle
@@ -556,7 +562,7 @@ Single Responsibility Principle, Interface Segregation Principle and Open/Close 
   * Segregates behavior for sorting into distinct methods `sort` and `getCategory`, thus, allowing different sorting
   strategies to implement only the methods they need, rather than being forced to implement monolithic interface with
   unnecessary methods.
-
+<br/>
 * **Alternative 1 (current choice)** `sort` method of the `SortStrategy` to take in `AddressBook` as its parameter.
   * Pros: Straightforward design and easy to implement.
     * Sorting logic interacts directly with data structure being sorted.
@@ -641,13 +647,6 @@ meaningless, thus we will not go into the details of those interactions.
 Below is an activity diagram that summarizes the process of a user using the `addbystep` feature. 
 
 <puml src="diagrams/AddByStepActivityDiagram.puml" alt="AddByStepActivityDiagram" />
-
-
-
-
-
-    
-
 
 #### Design considerations:
 
@@ -745,11 +744,11 @@ Given below is an example usage scenario and how the feature mechanism behaves a
     * `overwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
 
-<puml src="diagrams/DuplicateSequenceDiagram.puml" width="450" />
+<puml src="diagrams/DuplicateSequenceDiagram.puml" />
 
-<puml src="diagrams/OverwriteSequenceDiagram.puml" width="450" />
+<puml src="diagrams/OverwriteSequenceDiagram.puml" />
   
-### Design consideration:
+#### Design consideration:
 `SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
 Principle and Interface Segregation Principle.
 * Single Responsibility Principle
@@ -770,6 +769,81 @@ Alternative 1 is chosen for the following reasons:
   Responsibility Principle.
 * Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
     * Reduce complexity and potential dependencies.
+
+### Copy User Info
+#### Implementation
+
+The `copy` command feature enhances a user experience by allowing the easy transfer of a contact's personal details directly into the clipboard of the user's operating system. The class, `CopyCommand`, is an inheritance of the `Command` class, that facilitates the process of copying essential information like a contact's name, email, and address, among other details. It offers users the flexibility to specify and copy multiple pieces of information simultaneously. The following example demonstrates how this command operates:
+
+1. A user types in `copy 1 name email` into the text field of `CommandBox`. `Logic` is subsequently called to execute the command, where [**`AddressBookParser`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/AddCommandParser.java) would parse the input and return a `CopyCommand` (kindly refer to [here](#logic-component) for Logic design).
+
+
+2. When `AddressBookParser#parseCommand()` is called, it makes use of switch statements to match the `copy` command and calls [**`CopyCommandParser#parse()`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/CopyCommandParser.java). `CopyCommandParser#parse()` is solely responsible for: (i) checking if input argument is empty; (ii) checking if index provided is non-negative; and (iii) calling [**`ParserUtil#parseFieldsToCopy()`**](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/logic/parser/ParserUtil.java) to verify that fields provided by the user are of acceptable fields. By definition, acceptable fields includes only `name`,`phone`,`email` and `address`.
+
+**Note:** `ParseException` will be thrown and an error message will be shown to user if either (i) or (iii) is violated, while `IndexOutOfBoundsException` is thrown when (ii) is violated.
+
+3. `CopyCommandParser#parse()` returns an instantiation of `CopyCommand` where its constructor takes in `Index` and a `List<String> fieldsToCopyList` as arguments. When the constructor of `CopyCommand` is called, the constructor removes any duplicated values (if any) from `fieldsToCopyList` with the use of Java Streams. Refer to code snippet below:
+
+```Java
+// Constructor
+public CopyCommand(Index targetIndex, List<String> fieldsToCopyList) {
+        requireNonNull(targetIndex);
+        this.targetIndex = targetIndex;
+        this.fieldsToCopyList = fieldsToCopyList.stream()
+                                  .distinct()
+                                  .collect(Collectors.toList());
+    }
+```
+
+
+4. When `CopyCommand#execute()` is called, the contact of interest is obtained with the aid of `Model#getPerson` and the string representation of the information to be copied is retrieved by `CopyCommand#getInfo(Person person)` that returns a `StringBuilder`. The returned `StringBuilder` is then converted to `StringSelection` where it would be set as the content of `Clipboard`. The code snippet below shows the implementation of `CopyCommand#execute()`:
+
+```Java
+    @Override
+    public CommandResult execute(Model model) throws CommandException {
+        requireNonNull(model);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        int zeroBasedIndex = targetIndex.getZeroBased();
+        int addressBookSize = model.getAddressBook().getPersonList().size();
+
+        if (zeroBasedIndex < 0 || zeroBasedIndex >= addressBookSize) { // checks if Index exceeds list of contacts
+            throw new CommandException(MESSAGE_PERSON_NOT_FOUND); 
+        }
+
+        Person person = model.getPerson(targetIndex.getZeroBased()); // retrieves Person of interest
+        StringBuilder result = getInfo(person); // retrieves a person's information
+
+        StringSelection toCopyString = new StringSelection(result.toString().trim());
+        clipboard.setContents(toCopyString, null); // sets result to clipboard content
+
+        return new CommandResult(MESSAGE_SUCCESS, false, false);
+    }
+```
+
+Below is a sequence diagram of the overall `Copy` operation:
+
+<puml src="diagrams/CopySequenceDiagram.puml" alt="CopyCommandSequenceDiagram"/>
+
+#### Design Considerations
+Several design considerations were taken into account when implementing the copy feature. Below lists a few alternatives:
+
+- Alternative 1 (current choice): User keys in command to copy a contact's information.
+  - Pros:
+    - Does not violate product requirement (i.e. for typists).
+    - Does not involve the interaction of Java FXML.
+    - Testability works well with JUnit.
+  - Cons:
+    - Much harder to implement as SOLID principles have to be upheld.
+    
+
+- Alternative 2: Utilize JavaFX to allow users to select which information to copy.
+  - Pros:
+    -  Simpler design and implementation of functionality, as compared to alternative 1.
+  - Cons:
+    - Violates product requirement (not suitable for target audience).
+    - Much harder to test, requires external API such as TextFX to test.
+
 
 ### Exit Window
 #### Implementation
@@ -912,8 +986,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | Student                                       | Sort the contacts alphabetically | Easily navigate the address book                                                        |
 
 
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is `LookMeUp` and the **Actor** is the `user`, unless specified otherwise)
@@ -931,7 +1003,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -959,7 +1031,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -989,7 +1061,7 @@ Use case ends.
 
 **Extensions**
 * 1a. User typed an invalid command
-    * 1a1. LookMeUp displays the error and shows a list of commands it supports.
+    * 1a1. LookMeUp displays the error.
     * 1a2. User enters the correct command.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
@@ -1013,7 +1085,7 @@ Use case ends.
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
-### Non-Functional Requirements
+## Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
@@ -1024,7 +1096,7 @@ Use case ends.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
 
-### Glossary
+## Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
@@ -1036,6 +1108,10 @@ Use case ends.
     * Liskov Substitution Principle
     * Interface Segregation Principle
     * Dependency Inversion Principle
+* **Levenshtein distance**: Measure of the difference between two strings, representing the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other.
+* **BK-Tree**: A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
+
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1106,4 +1182,13 @@ Our team consists of 5 members.
 
 1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
    an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+
+2. Fuzzy Input with varying distance metric
+   * Currently, the MAX_DISTANCE for the distance metric is set to 1. 
+   * To enhance user-experience and accommodate longer commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
+to the length of the correct command string. 
+   * This approach allows a more flexible and adaptable matching process,
+guaranteeing that the misspelling tolerance varies proportionately with command length. 
+   * By dynamically adjusting the
+MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
 
