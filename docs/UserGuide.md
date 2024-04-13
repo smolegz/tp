@@ -185,24 +185,17 @@ Examples:
 
 ### Removing a person (With safe removal): `remove`
 
-Removes a person based on name, and confirms with the corresponding index in the filtered name list.
+Removes a person based on index, and confirms removal of the spotlighted contact before actual removal.
 
-Format in 3 steps:
+Format in 2 steps:
 
-1. **Optional**: `remove NAME`
-   *  By using the name of the contact to delete<br>
-       <img src="images/remove.png" width="50%"/><br>
-     * LookMeUp will return matching contact names in a `filtered list`.
-     * LookMeUp will prompt user a specified `INDEX` to remove.<br>
-       <img src="images/remove-index.png" width="50%"/><br>
-2. `remove INDEX`<br>
+1. `remove INDEX`<br>
    <img src="images/index-remove.png" width="50%"/><br>
-   * Removes the person in the filtered results by the specified index.
+   * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
    * The index must be a `positive integer` 1, 2, 3, …​
-   * If **STEP 1** was skipped. the contact at the specified index based on the default list of all contacts will be retrieved
-     * LookMeUp will prompt a confirmation message to confirm removal
-4. Confirmation: `yes/no`<br>
+     * LookMeUp then "spotlights" this one contact, and prompts a confirmation message to confirm removal
+2. Confirmation: `yes/no`<br>
    <img src="images/confirmation.png" width="50%"/><br>
    1. If `yes`:<br>
       <img src="images/yes-confirm.png" width="50%"/><br>
@@ -210,6 +203,28 @@ Format in 3 steps:
    2. If `no`:<br>
       <img src="images/no-confirm.png" width="50%"/><br>
       <img src="images/no-result.png" width="50%"/><br>
+
+> [!IMPORTANT] How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
+> confirmation? 
+> 
+> [!NOTE] System will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether  
+> user wishes to continue with removal process or change to perform another command!
+>
+>_TO TACKLE SOME COMMON SCENARIOS:_ <br>
+> 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
+   simply enter `remove 1` again, a __safety check__ which tells LookMeUp that you ***still*** wish to remove the current 
+> shortlisted contact, and then proceed with `yes` / `no` confirmation
+> 2. **If you wish to stop the removal process and return to the default list:**<br>
+   simply enter `list` to return to the default list, and then proceed with your next desired command
+>
+> [!TIP] 
+> Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
+> (e.g. `remove 1`, then `add` and proceed with adding), it is advisable to enter `no` or `list` first after `remove 1` 
+> if you intentionally wish to leave the removal process, since these 2 commands would bring you back to
+> the existing default list of contacts! This will then allow list-accessing commands (e.g. `edit` or `remove` if you 
+> wish to remove a different contact) to access all existing contacts, rather than being limited to the single filtered 
+> ("spotlighted") contact (after `remove INDEX`) since that was meant for the confirmation of the safe removal.  
+
 
 ### Undo Previous Command : `undo`
 
