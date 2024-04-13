@@ -231,12 +231,23 @@ Format in 2 steps:
 
 > [!TIP] 
 > Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
-> (e.g. `remove 1`, then `add` and proceed with adding), it is advisable to enter `no` or `list` first after `remove 1` 
-> if you intentionally wish to leave the removal process, since these 2 commands would bring you back to
-> the existing default list of contacts! This will then allow list-accessing commands (e.g. `edit` or `remove` if you 
+> (e.g. `remove 1`, then when prompted for confirmation, proceed with keying in separate command `addbystep` and then 
+> execute the `add` command), it is **ADVISABLE** to enter `no` or `list` first after `remove 1`.
+> 
+> This is especially so if you intentionally wish to **leave the removal process**, since these 2 commands would bring 
+> you back to the existing default list of contacts! 
+> 
+> This will then allow list-accessing commands (e.g. `edit` or `remove` if you 
 > wish to remove a different contact) to access all existing contacts, rather than being limited to the single filtered 
 > ("spotlighted") contact (after `remove INDEX`) since that was meant for the confirmation of the safe removal.  
 
+> [!TIP] 
+> When the contact list gets populated, `find rudy` followed by `remove 1` will prompt a confirmation message to 
+> confirm the removal of the 1st contact in the filtered results of the `find` command. 
+> 
+> This is especially useful if you wish to remove a contact without having to scroll for its index, or if you have
+> multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "Rachel"s first before deciding which
+> to remove by the index of the filtered list.
 
 ### Undo Previous Command : `undo`
 
@@ -317,7 +328,7 @@ Format: `sort KEYWORD`
 > When `sort tag` is executed, LookMeUp sorts tags by 
 > **numbering**, followed by contacts **without tags**, and finally **alphabetically**
 > 
->    <img src="images/savetag.png" width="50% height="50%"/><br>
+>    <img src="images/savetag.png" height="50%"/><br>
 
 ### Filtering by Tag : `filter`
 
