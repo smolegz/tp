@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CopyCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 
 /**
@@ -19,6 +22,10 @@ public class CopyCommandParser implements Parser<CopyCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public CopyCommand parse(String args) throws ParseException {
+
+        if (args.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CopyCommand.MESSAGE_USAGE));
+        }
         String[] argsList = args.trim().split(" ");
         Index index = ParserUtil.parseIndex(argsList[0]);
 
