@@ -222,9 +222,10 @@ Format in 2 steps:
 
 1. `remove INDEX`<br>
    example: `remove 3`<br>
-   <p align = "center">
-    <img src="images/index-remove.png" width="50%"/><br>
-   </p>
+    <p align = "center">
+        <img src="images/index-remove.png" width="50%"/><br>
+    </p>
+
    * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
    * The index must be a `positive integer` 1, 2, 3, … and can only be as large as the index of the last contact in 
@@ -233,6 +234,7 @@ Format in 2 steps:
         <p align = "center">
             <img src="images/confirmation.png" width="50%"/><br>
         </p>
+   
      > [!NOTE]
      > 
      > If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter      
@@ -298,7 +300,7 @@ Format in 2 steps:
 ### Undo Previous Command : `undo`
 
 For any command that changes the universal list of contacts _e.g. `add`, `remove`, `clear`, `overwrite`, `duplicate` 
-and `edit`_, the `undo` command will revert the state of the contact list prior to the execution of a command.
+and `edit`_, the `undo` command will revert the state of the contact list prior to the execution of a command.<br>
 
 Format: `undo`
 For example, referring to the previous command, assuming you have removed a contact, you can type `undo` to recover the 
@@ -372,7 +374,7 @@ Format: `sort KEYWORD`
 > When `sort tag` is executed, LookMeUp sorts tags by 
 > **numbering**, followed by contacts **without tags**, and finally **alphabetically**
 > 
->    <img src="images/savetag.png" height="50%"/><br>
+>    <img src="images/savetag.png" height="380"/><br>
 
 ### Filtering by Tag : `filter`
 
@@ -382,7 +384,7 @@ Format: `filter TAGNAME`
 
 Example: `filter 13`
 <p align = "center">
-    <img src="images/filtered.png" width="50%"/><br>
+    <img src="images/filtered.png" height="260" width="238"/><br>
 </p>
 
 ### Adding a Contact with Duplicate Identity : `duplicate`
