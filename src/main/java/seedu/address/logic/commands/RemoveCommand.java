@@ -9,7 +9,6 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
 /**
@@ -20,31 +19,13 @@ public class RemoveCommand extends Command {
     public static final String COMMAND_WORD = "remove";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Remove the person identified by the matching name or index in the contacts list.\n"
-            + "Parameters: EXISTING_CONTACT_NAME\n"
-            + "Example: " + COMMAND_WORD + " John Doe";
-
-    public static final String MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND = "No contacts found with the given name!";
-
-    public static final String MESSAGE_PERSONS_TO_REMOVE_FOUND = "%1$d contact(s) found with the given name. "
-            + "Please specify the index of the contact to remove.\n"
+            + ": Remove the person identified by the matching index in the contacts list.\n"
+            + "Parameters: INDEX\n"
             + "Example: " + COMMAND_WORD + " 1";
 
     private static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
 
-    private final NameContainsKeywordsPredicate predicate;
-
     private final Index targetIndex;
-
-    /**
-     * Constructs the first RemoveCommand with the given predicate.
-     *
-     * @param predicate Keyword to filter out the contacts that match the given name, for safe deletion.
-     */
-    public RemoveCommand(NameContainsKeywordsPredicate predicate) {
-        this.predicate = predicate;
-        this.targetIndex = null;
-    }
 
     /**
      * Constructs the second RemoveCommand with the given index of the contact.
@@ -53,7 +34,6 @@ public class RemoveCommand extends Command {
      */
     public RemoveCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
-        this.predicate = null;
     }
 
     /**
@@ -66,45 +46,18 @@ public class RemoveCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (isFirstConstructor()) {
-            return firstExecuteHelper(model);
-        } else if (isSecondConstructor()) {
-            return secondExecuteHelper(model);
+        if (isValidRemoveExecution()) {
+            return removeExecutionHelper(model);
         } else {
             throw new CommandException(Messages.MESSAGE_INVALID_COMMAND_FORMAT);
         }
     }
 
     /**
-     * Checks if the first RemoveCommand constructor is used.
-     */
-    public boolean isFirstConstructor() {
-        return predicate != null && targetIndex == null;
-    }
-
-    /**
-     * Executes the first part of the RemoveCommand function.
-     * Returns a CommandResult that shortlists the matching contacts for safe removal.
-     *
-     * @param model {@code Model} which the command should operate on.
-     * @return A command result reflecting the first type of RemoveCommand.
-     * @throws CommandException If there are no matching contacts found.
-     */
-    public CommandResult firstExecuteHelper(Model model) throws CommandException {
-        model.updateFilteredPersonList(predicate);
-        if (model.getFilteredPersonList().size() == 0) {
-            throw new CommandException(MESSAGE_PERSONS_TO_REMOVE_NOT_FOUND);
-        } else {
-            return new CommandResult(
-                    String.format(MESSAGE_PERSONS_TO_REMOVE_FOUND, model.getFilteredPersonList().size()));
-        }
-    }
-
-    /**
      * Checks if the second RemoveCommand constructor is used.
      */
-    public boolean isSecondConstructor() {
-        return targetIndex != null && predicate == null;
+    public boolean isValidRemoveExecution() {
+        return targetIndex != null;
     }
 
     /**
@@ -115,7 +68,7 @@ public class RemoveCommand extends Command {
      * @return A command result reflecting the second type of RemoveCommand.
      * @throws CommandException If the index is invalid for removal.
      */
-    public CommandResult secondExecuteHelper(Model model) throws CommandException {
+    public CommandResult removeExecutionHelper(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
         if (!isValidRemovalIndex(targetIndex, lastShownList)) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -151,25 +104,15 @@ public class RemoveCommand extends Command {
 
         RemoveCommand otherRemoveCommand = (RemoveCommand) other;
 
-        if (predicate != null && targetIndex == null) {
-            return predicate.equals(otherRemoveCommand.predicate);
-        } else {
-            assert targetIndex != null;
-            return targetIndex.equals(otherRemoveCommand.targetIndex);
-        }
+        assert targetIndex != null;
+        return targetIndex.equals(otherRemoveCommand.targetIndex);
     }
 
     @Override
     public String toString() {
-        if (predicate != null && targetIndex == null) {
-            return new ToStringBuilder(this)
-                    .add("predicate", predicate)
-                    .toString();
-        } else {
-            return new ToStringBuilder(this)
-                    .add("targetIndex", targetIndex)
-                    .toString();
-        }
+        return new ToStringBuilder(this)
+                .add("targetIndex", targetIndex)
+                .toString();
     }
 
 }
