@@ -7,11 +7,15 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.LogicManager;
+import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+
+import java.util.logging.Logger;
 
 /**
  * Adds a duplicate identity i.e. person to the address book.
@@ -41,6 +45,8 @@ public class DuplicateCommand extends Command {
             + "address book. Please try again with another person.";
     private final Person toAdd;
 
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
+
     /**
      * Creates an DuplicateCommand to add the specified {@code Person}
      */
@@ -53,6 +59,7 @@ public class DuplicateCommand extends Command {
         requireNonNull(model);
 
         if (!model.hasPerson(toAdd)) {
+            logger.info("Failed to add person, doesn't currently exist");
             throw new CommandException(MESSAGE_NO_EXISTING_PERSON);
         }
 
