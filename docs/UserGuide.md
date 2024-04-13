@@ -347,12 +347,6 @@ Format: `sort KEYWORD`
     * `Name`: Sorts the entries based on lexicographical order of names.
     * `Tag`: Sorts the entries based on lexicographical order of tags.
 
-> [!IMPORTANT]
-> * `Fuzzy input` does not support `KEYWORD`
-    >   * e.g. `sort NAMEE` will result in an error.
-> * Only **1 keyword** can be entered after `sort`
-    >   * e.g. `sort NAME OTHERS` will result in an error.
-
 > [!NOTE]
 > When `sort tag` is executed, LookMeUp sorts tags by 
 > **numbering**, followed by contacts **without tags**, and finally **alphabetically**
@@ -466,6 +460,9 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 --------------------------------------------------------------------------------------------------------------------
 
 ## Glossary
+
+### BK-Tree
+* A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
 
 ### Lexicographical
 * Order of words based on the alphabetical order of their letters.
