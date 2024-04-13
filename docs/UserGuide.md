@@ -214,7 +214,7 @@ Format in 2 steps:
 
 > [!IMPORTANT] 
 > 
-> **How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
+> **How to deal with wrong/unknown command(s) entered in between the workflow of `remove INDEX` and `yes`/`no` 
 > confirmation?**
 > 
 > > **NOTE:**
@@ -230,6 +230,10 @@ Format in 2 steps:
 
 
 > [!TIP] 
+> 
+> **What if you wish to remove a different contact or execute a different command, 
+> after the `remove INDEX`, before `yes` / `no` confirmation?**
+> 
 > Although you are ALLOWED to enter other valid commands in between the `remove INDEX` and the `yes` / `no` confirmation 
 > (e.g. `remove 1`, then when prompted for confirmation, proceed with keying in separate command `addbystep` and then 
 > execute the `add` command), it is **ADVISABLE** to enter `no` or `list` first after `remove 1`.
@@ -242,12 +246,18 @@ Format in 2 steps:
 > ("spotlighted") contact (after `remove INDEX`) since that was meant for the confirmation of the safe removal.  
 
 > [!TIP] 
-> When the contact list gets populated, `find rudy` followed by `remove 1` will prompt a confirmation message to 
-> confirm the removal of the 1st contact in the filtered results of the `find` command. 
+>
+> **How to potentially _SPEED UP_ the contact removal process, especially when LookMeUp gets populated with MANY 
+> contacts?**
+> 
+> Make use of the contact filtering feature of `find` and use it together with the `remove` commands! 
+> 
+> For example: `find rachel` (which shortlists all contact(s) matching "rachel") followed by `remove 1` will prompt a 
+> confirmation message to confirm the removal of the 1st contact in the filtered results of the `find` command. 
 > 
 > This is especially useful if you wish to remove a contact without having to scroll for its index, or if you have
-> multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "Rachel"s first before deciding which
-> to remove by the index of the filtered list.
+> multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "rachel"s first before deciding which
+> to remove by the index of the filtered list. 
 
 ### Undo Previous Command : `undo`
 
