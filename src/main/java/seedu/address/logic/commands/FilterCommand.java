@@ -2,10 +2,15 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.LogicManager;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.TagContainsKeywordsPredicate;
+
 
 /**
  * Lists all persons in the address book with the matching filtered tags
@@ -23,6 +28,8 @@ public class FilterCommand extends Command {
 
     private final TagContainsKeywordsPredicate predicate;
 
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
+
     public FilterCommand(TagContainsKeywordsPredicate predicate) {
         this.predicate = predicate;
     }
@@ -30,6 +37,7 @@ public class FilterCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        logger.info("Filtering by predicate " + predicate.toString());
         model.updateFilteredPersonList(predicate);
         return new CommandResult(MESSAGE_SUCCESS);
     }
