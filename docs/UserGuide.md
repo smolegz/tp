@@ -407,6 +407,15 @@ Format: `clear`
 
 A pop-up would be shown that prompts you for **confirmation** to exit the address book.
 
+> [!NOTE]
+>
+> Windows users, you may press ENTER/SPACE to confirm your choice.
+> 
+> MacOS users, please press only SPACE to confirm your choice.
+> 
+> For more info, kindly refer to [here](https://openjfx.io/javadoc/11/javafx.controls/javafx/scene/control/Button.html).
+
+
 Format: `exit`
 
 ### Saving the data

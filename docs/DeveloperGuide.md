@@ -744,9 +744,9 @@ Given below is an example usage scenario and how the feature mechanism behaves a
     * `overwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
        to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
 
-<puml src="diagrams/DuplicateSequenceDiagram.puml" width="450" />
+<puml src="diagrams/DuplicateSequenceDiagram.puml" />
 
-<puml src="diagrams/OverwriteSequenceDiagram.puml" width="450" />
+<puml src="diagrams/OverwriteSequenceDiagram.puml" />
   
 #### Design consideration:
 `SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 

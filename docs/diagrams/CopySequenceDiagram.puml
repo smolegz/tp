@@ -60,10 +60,10 @@ activate CopyCommand
 CopyCommand -> Model : getPerson(1)
 activate Model
 
-Model --> CopyCommand
+Model --> CopyCommand : p
 deactivate Model
 
-CopyCommand -> CopyCommand : getInfo()
+CopyCommand -> CopyCommand : getInfo(p)
 
 create CommandResult
 CopyCommand -> CommandResult
