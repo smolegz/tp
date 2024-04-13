@@ -8,6 +8,6 @@ with(this){return _c('div',{attrs:{"id":"app"}},[_c('header',{attrs:{"sticky":""
 with(this){return _c('div',{attrs:{"id":"content-wrapper"}},[_c('h1',{attrs:{"id":"koo-zhuo-hui"}},[_v("Koo Zhuo Hui"),_c('a',{staticClass:"fa fa-anchor",attrs:{"href":"#koo-zhuo-hui","onclick":"event.stopPropagation()"}})]),_v(" "),_c('h2',{attrs:{"id":"about-myself"}},[_v("About Myself"),_c('a',{staticClass:"fa fa-anchor",attrs:{"href":"#about-myself","onclick":"event.stopPropagation()"}})]),_v(" "),_c('p',[_v("I am a Year 2 Computer Science student! My favourite food includes\nMala,pasta and bubbletea!")])])}
 },function anonymous(
 ) {
-with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.4.0")]),_v(", generated on Sat, 13 Apr 2024, 21:14:36 GMT+8]")])])])}
+with(this){return _c('footer',[_c('div',{staticClass:"text-center"},[_c('small',[_v("["),_c('span',[_c('strong',[_v("Powered by")])]),_v(" "),_c('img',{attrs:{"src":"https://markbind.org/favicon.ico","width":"30"}}),_v(" "),_c('a',{attrs:{"href":"https://markbind.org/"}},[_v("MarkBind 5.4.0")]),_v(", generated on Sat, 13 Apr 2024, 21:15:37 GMT+8]")])])])}
 }];
   
