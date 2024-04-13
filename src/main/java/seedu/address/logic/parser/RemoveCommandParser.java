@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -12,7 +11,6 @@ import seedu.address.logic.LogicManager;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
 /**
@@ -35,12 +33,8 @@ public class RemoveCommandParser {
 
         String[] identifiers = argsToArray(args);
 
-        if (isIndexArg(identifiers)) {
-            index = ParserUtil.parseIndex(identifiers[0]);
-            return new RemoveCommand(index);
-        } else {
-            return new RemoveCommand(new NameContainsKeywordsPredicate(Arrays.asList(identifiers)));
-        }
+        index = ParserUtil.parseIndex(identifiers[0]);
+        return new RemoveCommand(index);
     }
 
     /**
@@ -57,16 +51,6 @@ public class RemoveCommandParser {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveCommand.MESSAGE_USAGE));
         }
         return trimmedArgs.split("\\s+");
-    }
-
-    /**
-     * Returns true if the array only contains a single argument, and that single argument is an integer.
-     *
-     * @param args The arguments that user has keyed in.
-     * @return True if the argument is a single index.
-     */
-    public boolean isIndexArg(String[] args) {
-        return args.length == 1 && isInteger(args[0]);
     }
 
     /**
