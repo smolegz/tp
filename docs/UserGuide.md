@@ -190,18 +190,26 @@ Removes a person based on index, and confirms removal of the spotlighted contact
 Format in 2 steps:
 
 1. `remove INDEX`<br>
+   example: `remove 3`<br>
    <img src="images/index-remove.png" width="50%"/><br>
    * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
-   * The index must be a `positive integer` 1, 2, 3, …​
-     * LookMeUp then "spotlights" this one contact, and prompts a confirmation message to confirm removal
+   * The index must be a `positive integer` 1, 2, 3, … and can only be as large as the index of the last contact in 
+   the current list (be it the default or filtered).
+     * LookMeUp then "spotlights" (only shows) this one contact, and prompts a confirmation message to confirm removal<br>
+       <img src="images/confirmation.png" width="50%"/><br>
+
+
 2. Confirmation: `yes/no`<br>
-   <img src="images/confirmation.png" width="50%"/><br>
    1. If `yes`:<br>
       <img src="images/yes-confirm.png" width="50%"/><br>
-      <img src="images/yes-result.png" width="50%"/><br>
+      
+      Expected result: <br>
+      <img src="images/yes-result.png" width="50%"/><br> 
    2. If `no`:<br>
       <img src="images/no-confirm.png" width="50%"/><br>
+   
+      Expected result: <br>
       <img src="images/no-result.png" width="50%"/><br>
 
 > [!IMPORTANT] How to deal with wrong/unknown command entered in between the workflow of “remove INDEX” and “yes/no” 
