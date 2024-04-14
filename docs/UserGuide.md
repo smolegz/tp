@@ -139,7 +139,9 @@ e.g. John Doe is treated differently from John doe
 
 <img src="images/AddByStep.png" width="40%"/>
 
-Adds a person to the address book but prompts will be provided for each field required as per the `add` command.
+To streamline the cumbersome process of adding contacts, our addbystep command offers a user-friendly interface that 
+prompts you for each required field in the address book entry. Once you have entered all the necessary fields, you may 
+copy the formatted `add` command to your clipboard by entering `cp`.
 
 Format: `addbystep`
 
@@ -152,6 +154,8 @@ will be ignored, and `addbystep` window will still launch as per normal.
 > * `addbystep` Only helps you to format the command correctly, it does not help to check if the person that you are 
 adding is a duplicate. You have to copy the command to your clipboard and paste it into LookMeUp to verify if the 
 person is non-duplicate.
+> * If you enter an invalid input for one of the fields (e.g. you left the name blank), an error message will be 
+displayed, and you will have to enter the same field again.
 
 
 ### Listing all persons : `list`

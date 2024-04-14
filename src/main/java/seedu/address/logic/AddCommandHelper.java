@@ -2,9 +2,11 @@ package seedu.address.logic;
 
 
 import java.util.HashSet;
+import java.util.logging.Logger;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.parser.ParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
@@ -22,18 +24,19 @@ import seedu.address.ui.Status;
  * over to LookMeUp.
  */
 public class AddCommandHelper {
-
     private static final String COPY_COMMAND = "cp";
-
-    private static final String SUCCESS_MESSAGE = "You have successfully entered ";
-
-    private static final String NEXT_PROMPT = ". Next, please enter ";
 
     private static final String COMPLETE_COMMAND_MESSAGE = "You have entered all the fields! "
             + "Please enter \"cp\" to copy the command to your clipboard.";
 
     private static final String COPY_SUCCESSS_MESSAGE = "You have copied the command to your clipboard! "
             + "Type \"cp\" if you wish to copy again. You may close the window to go back to LookMeUp";
+
+    private static final String NEXT_PROMPT = ". Next, please enter ";
+
+    private static final String SUCCESS_MESSAGE = "You have successfully entered ";
+
+    private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
 
     private Status status;
@@ -71,30 +74,32 @@ public class AddCommandHelper {
 
         switch (this.status) {
         case GET_NAME:
-            processName(input);
+            checkNameIsValid(input);
             break;
         case GET_NUMBER:
-            processNumber(input);
+            checkNumberIsValid(input);
             break;
         case GET_EMAIL:
-            processEmail(input);
+            checkEmailIsValid(input);
             break;
         case GET_ADDRESS:
-            processAddress(input);
+            checkAddressIsValid(input);
             break;
         case COMPLETE:
-            processCommand(input);
+            checkCommandIsCopy(input);
             break;
         case COPY:
             break;
         default:
             assert false : "The status should only be those values";
         }
-        String output = getSuccessMessage(oldStatus, status);
+        Status newStatus = this.status;
+        String output = getSuccessMessage(oldStatus, newStatus);
 
         return output;
     }
-    private void setStatus(Status status) {
+    private void updateStatus(Status status) {
+        Status oldStatus = this.status;
         switch (this.status) {
         case GET_NAME:
             this.status = Status.GET_NUMBER;
@@ -116,43 +121,80 @@ public class AddCommandHelper {
         default:
             assert false : "The status should only be those values";
         }
+        Status newStatus = this.status;
+        logger.info("Status has been changed from " + oldStatus + " to " + newStatus + ". ");
     }
 
-    private void processName(String name) throws ParseException {
+    /**
+     * Checks whether the name entered by the user is valid.
+     * If the name is valid, the status will be updated.
+     * If the name is invalid, ParseException is thrown.
+     *
+     * @param name String representing the name entered by the user.
+     * @throws ParseException if the name entered by the user is invalid.
+     */
+    private void checkNameIsValid(String name) throws ParseException {
         Name processedName = ParserUtil.parseName(name);
         this.name = processedName;
-        setStatus(this.status);
+        logger.info("Name that finished processing is: " + name + ".");
+        updateStatus(this.status);
     }
 
-    private void processNumber(String num) throws ParseException {
-        Phone processedNum = ParserUtil.parsePhone(num);
-        this.phone = processedNum;
-        setStatus(this.status);
+    /**
+     * Checks whether the number entered by the user is valid.
+     * If the number is valid, the status will be updated.
+     * If the number is invalid, ParseException is thrown.
+     *
+     * @param number String representing the number entered by the user.
+     * @throws ParseException if the number entered by the user is invalid.
+     */
+    private void checkNumberIsValid(String number) throws ParseException {
+        Phone processedNumber = ParserUtil.parsePhone(number);
+        this.phone = processedNumber;
+        logger.info("Number that finished processing is: " + number + ".");
+        updateStatus(this.status);
     }
 
-    private void processEmail(String email) throws ParseException {
+    /**
+     * Checks whether the email entered by the user is valid.
+     * If the email is valid, the status will be updated.
+     * If the email is invalid, ParseException is thrown.
+     *
+     * @param email String representing the email entered by the user.
+     * @throws ParseException if the email entered by the user is invalid.
+     */
+    private void checkEmailIsValid(String email) throws ParseException {
         Email processedEmail = ParserUtil.parseEmail(email);
         this.email = processedEmail;
-        setStatus(this.status);
+        logger.info("Email that finished processing is: " + email + ".");
+        updateStatus(this.status);
     }
 
-    private void processAddress(String address) throws ParseException {
+    /**
+     * Checks whether the address entered by the user is valid.
+     * If the address is valid, the status will be updated.
+     * If the address is invalid, ParseException is thrown.
+     *
+     * @param address String representing the address entered by the user.
+     * @throws ParseException if the address entered by the user is invalid.
+     */
+    private void checkAddressIsValid(String address) throws ParseException {
         Address processedAddress = ParserUtil.parseAddress(address);
         this.address = processedAddress;
-        setStatus(this.status);
+        logger.info("Address that finished processing is: " + address + ".");
+        updateStatus(this.status);
     }
 
 
-
-    private void processCommand(String cmd) {
+    private void checkCommandIsCopy(String cmd) {
         if (cmd.equals(COPY_COMMAND)) {
             copyCommand();
-            setStatus(this.status);
+            updateStatus(this.status);
         }
     }
 
     private String formattedCommand() {
-        assert this.status == Status.COMPLETE : "Command should have been completed "
+        assert this.status.equals(Status.COMPLETE) : "Command should have been completed "
                 + "before this function is called.";
         FormattedCommandPerson p = new FormattedCommandPerson(name, phone, email, address, new HashSet<>());
         return "add " + p.getFormattedCommand();

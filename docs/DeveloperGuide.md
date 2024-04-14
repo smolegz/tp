@@ -72,9 +72,13 @@ The sections below give more details of each component.
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
+The diagram below represents a partial implementation of the UI components of LookMeUp
+
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+
+The `CommandHelperWindow` has a different implementation from the rest of the UI components, which will be explained in detail at the Add By Step feature. This is to avoid cluttering the architecture diagram.
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -587,7 +591,13 @@ clipboard.
 
 #### Implementation
 
-The architecture diagram given below explains a high-level design of the `addbystep` feature.
+The architecture diagram given below explains the implementation for the UI for CommandHelperWindow
+
+<puml src="diagrams/CommandHelperWindowClassDiagram.puml" alt="CommandHelperWindowClassDiagram" />
+
+The functionality and purpose of the UI remains unchanged even though the implementation used for the UI is different. 
+
+
 
 
 The `addbystep` feature is facilitated by the `AddCommandHelper` and the `CommandHelperWindow` class. The 
@@ -627,6 +637,9 @@ to enter the address again
 From steps 2 - 5, attached below is an activity diagram of how the user interacts with the `AddCommandHelper` when they 
 are keying in the necessary inputs. The `AddCommandHelper` continuously validates the user's input to ensure that they
 have entered all the necessary fields correctly.
+
+<puml src="diagrams/ProcessUserInputActivityDiagram.puml" alt="ProcessUserInputActivityDiagram" />
+
 
 * Step 6: The user enters the `cp` command.
     * The user can enter anything at this stage, but only the `cp` command will result in the formatted `add` command 
