@@ -936,6 +936,10 @@ How the `InputHistory` index-pointer works:
 
 - During a Down key press, the index-pointer is incremented by one (i.e. it is point towards a later command in the history).
 
+Below is a sequence diagram when an **Up key** is pressed:
+
+<puml src="diagrams/InputHistorySequenceDiagram.puml" alt="UpKeySequenceDiagram"/>
+
 #### Design Considerations
 - Single Responsibility Principle 
   - `CommandBox` and `InputHistory` are gathered together as the two classes share the responsibilities of receiving and retrieving user inputs within the text field, hence increasing the overall cohesion of Ui components.

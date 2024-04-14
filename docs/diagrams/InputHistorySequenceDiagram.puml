@@ -1,0 +1,47 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Ui UI_COLOR_T1
+participant ":CommandBox" as CommandBox UI_COLOR
+participant ":InputHistory" as InputHistory UI_COLOR
+participant ":TextField" as TextField UI_COLOR_T4
+
+end box
+
+
+
+[-> CommandBox : handleArrowKey(upKeyPress)
+activate CommandBox
+
+CommandBox -> InputHistory : decrementIndex()
+activate InputHistory
+
+InputHistory --> CommandBox
+deactivate InputHistory
+
+
+CommandBox -> CommandBox : setTextField()
+activate CommandBox
+
+CommandBox -> InputHistory : getCommand()
+activate InputHistory
+
+InputHistory --> CommandBox : string
+deactivate InputHistory
+
+CommandBox -> TextField : setText(string)
+activate TextField
+
+TextField --> CommandBox
+deactivate TextField
+
+CommandBox --> CommandBox
+deactivate CommandBox
+
+[<--CommandBox
+deactivate CommandBox
+
+
+
+@enduml
