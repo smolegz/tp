@@ -190,7 +190,7 @@ initial address book state, and the `currentStatePointer` pointing to that singl
 
 Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
 confirmation. The confirmation command calls `Model#commitAddressBook()`, causing the modified state of the address book 
-after the `remove 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
+after the removal execution to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
 shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
@@ -298,6 +298,8 @@ The safe-removal mechanism consists of several components:
    the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
    the success or failure of the removal process.
 
+[//]: # add RemoveConfirmationSequenceDiagram
+
 Our implementation follows Liskov's Substitution Principle closely. `RemoveConfirmation` was designed to be an abstract
 class to allow for extension of the 2 confirmation methods via the `RemoveSuccess` and `RemoveAbortion` classes. This
 decision makes it easier to group similar methods and messages together for better code extendability and
@@ -346,6 +348,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
         * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
       will provide feedback on the abortion of the removal process.
 
+
 * **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
     * The user will be prompted with an error message:  
     > Unknown Command
@@ -361,7 +364,7 @@ Here is an activity diagram that summarizes the process of removing a contact fr
 
 Several design considerations were taken into account when implementing the safe-removal feature.
 
-**FIRST CATEGORY**: Mechanism to perform the actual deletion upon confirmation_
+**Aspect 1**: Mechanism to perform the actual deletion upon confirmation_
 
 Given the key purpose of this feature is for **SAFE** deletion, this step is crucial to ensure that there is a safety
 net for users before the actual removal of the contact.
@@ -393,7 +396,7 @@ the `RemoveConfirmation` class solely handles the confirmation process itself an
 
 
 
-**SECOND CATEGORY**: For enhancing the removal process by first **shortlisting the contact to be removed** before 
+**Aspect 2**: For enhancing the removal process by first **shortlisting the contact to be removed** before 
 proceeding with `remove INDEX`, potentially reducing the amount of scrolling to find the contact to be removed.
 
 
