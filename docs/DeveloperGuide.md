@@ -17,7 +17,9 @@ LookMeUp  is a brownfield software project based off AddressBook Level-3, taken 
 at National University of Singapore.
 
 1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
-2. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
+2. `Fuzzy Input` was adapted from [geeksforgeeks](https://www.geeksforgeeks.org/bk-tree-introduction-implementation/).
+3. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1179,7 +1181,7 @@ case scenario in Add By Step.
 
 ### Deleting a person
 
-1. Deleting a person while all persons are being shown
+Deleting a person while all persons are being shown
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
@@ -1192,6 +1194,26 @@ case scenario in Add By Step.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+### Fuzzy Input
+
+Handling a command with a single misspelled letter.
+
+  1. Test case: `lort name`
+     Expected: `sort name` command will still be executed and contact list will be sorted alphabetically based on person's name
+  2. Test case: `lst`
+     Expected: `list` command will still be executed and all the contacts will be listed in the contact list. 
+  3. Other misspelled command to try: `fwlter TAG`, `adbystep`, `...`
+     Expected: Correctly spelled commands will still be executed as intended.
+
+### Sorting contact list
+
+Sort contact list based on the keywords input.
+
+  1. Test case: `sort name`
+     Expected: Contact list will be sorted lexicographically based on person's name.
+
+  2. Test case: `sort tag`
+     Expected: Contact list will be sorted lexicographically based on person's tags.
 
 ### Saving data
 
