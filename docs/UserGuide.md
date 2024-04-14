@@ -72,19 +72,21 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 <box type="tip" seamless>
 
-> **TIP:** 
-> * LookMeUp supports **fuzzy commands** with a maximum allowance of 1 misspelled letter,
+**TIP:** 
+* LookMeUp supports **fuzzy commands** with a maximum allowance of 1 misspelled letter,
     preventing users from needing to retype the entire command due to a single spelling mistake.
-  >   * Examples:
-  >     * `swot` will be interpreted as `sort`
->     * `addystep` will be interpreted as `addbystep`
-> * LookMeUp text field supports **command history** accessibility.
-    >   * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
+     * Examples:
+       * `swot` will be interpreted as `sort`
+    * `addystep` will be interpreted as `addbystep`
+ * LookMeUp text field supports **command history** accessibility.
+       * You can make use of your `Up` and `Down` arrow keys to navigate through the commands that you have previously entered.
 </box>
 
 <box type="warning" seamless>
-> **Warning:** Command prefixes (n/…​ a/…​ p/…​ e/…​ t/…​) only accepts lower case characters.
->   * Examples like N/…​ A/…​ P/…​ E/…​ T/…​ where prefixes are capital letters will not be accepted.
+  
+**WARNING:**
+ * Command prefixes (n/…​ a/…​ p/…​ e/…​ t/…​) only accepts lower case characters.
+   * Examples like N/…​ A/…​ P/…​ E/…​ T/…​ where prefixes are capital letters will not be accepted.
 </box>
 
 
@@ -112,36 +114,45 @@ Examples:
 * `add n/Taylor Sheesh p/98765432 e/taytay@taylor.com a/Rhode Island`
 * `add n/Ariana Grenade t/friend e/Arianator@ari.com a/Washington D.C. p/88883333 t/EternalSunshine`
 
-> **Tip:**
-> * Suffix need not be in order.
-> * A person can have any number of tags **(including 0)**.
->
-> * There are no character limit restrictions for each input. 
-> * However, it is advisable to keep each field under **100 characters** to ensure compatibility with your device's resolution.
+<box type="tip" seamless>
+  
+**Tip:**
+* Suffix need not be in order.
+* A person can have any number of tags **(including 0)**.
+* There are no character limit restrictions for each input. 
+* However, it is advisable to keep each field under **100 characters** to ensure compatibility with your device's resolution.
+</box>
 
-> **Important:**
->
-> * Phone numbers should only contain numbers **(min 3 numbers)**.
->
-> * LookMeUp only supports **alphanumeric characters** for name, email and tag inputs
->   * (with email accepting a single `@`).
+<box type="important" seamless>
 
-> **Note:**
->
-> **Why are there alphanumeric restrictions on the Email and Tag inputs, and how does it help YOU?**
->
-> All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email
-> and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student
-> email, catching any accidental typos of non-alphanumeric characters.
->
-> Similarly, tags (in the context of classifying by interest groups, committees etc.) are
-> expected to be alphanumeric, thus serves as another safety net.
+**Important:**
+* Phone numbers should only contain numbers **(min 3 numbers)**.
+* LookMeUp only supports **alphanumeric characters** for name, email and tag inputs
+   * (with email accepting a single `@`).
+</box>
 
-> **Warning:**
-> * Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
+<box type="info" seamless>
+
+**Note:**
+
+**Why are there alphanumeric restrictions on the Email and Tag inputs, and how does it help YOU?**
+
+All NUS student emails are restricted to alphanumeric characters as with both the default NUSNET email
+and the FriendlyMail guidelines. This restriction ensures additional safety that the email entered is an NUS student
+email, catching any accidental typos of non-alphanumeric characters.
+
+Similarly, tags (in the context of classifying by interest groups, committees etc.) are
+expected to be alphanumeric, thus serves as another safety net.
+</box>
+
+<box type="warning" seamless>
+
+**Warning:**
+* Do be careful when you are adding a new contact, as extra spacing could lead to a similar or identical name
 being recognized as a new, unique name. e.g. John Doe is not the same as JohnDoe
-> * Similarly, names are also case-sensitive, so do be careful when entering your contact's name as well. 
+* Similarly, names are also case-sensitive, so do be careful when entering your contact's name as well. 
 e.g. John Doe is treated differently from John doe
+</box>
 
 ### Adding a Person (With System Prompts): `addbystep`
 
