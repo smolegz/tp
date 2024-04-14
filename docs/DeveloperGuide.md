@@ -17,6 +17,7 @@ LookMeUp  is a brownfield software project based off AddressBook Level-3, taken 
 at National University of Singapore.
 
 1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
+2. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
 
 --------------------------------------------------------------------------------------------------------------------
 
