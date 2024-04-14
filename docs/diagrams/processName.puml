@@ -1,9 +1,0 @@
-@startuml
-'https://plantuml.com/activity-diagram-beta
-
-
-repeat :User enters name;
-  :process name;
-repeat while (Name is valid?) is (no)
-
-@enduml

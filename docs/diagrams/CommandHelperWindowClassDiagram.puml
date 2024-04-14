@@ -1,0 +1,21 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor UI_COLOR_T4
+skinparam classBackgroundColor UI_COLOR
+
+
+Class HiddenOutside #FFFFFF
+
+
+CommandHelperWindow -right-|> AnchorPane
+CommandHelperWindow *-down-> "1" ScrollPane
+CommandHelperWindow *--down-> "1" TextField
+CommandHelperWindow *----down-> "1" Button
+ScrollPane *--down-> "1" Vbox
+Vbox *--down-> "0...*" DialogBox
+DialogBox -right-|> HBox
+
+
+@enduml
+

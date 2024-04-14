@@ -157,6 +157,8 @@ Format: `addbystep`
 > * `addbystep` only helps you to format the command correctly, it does not help to check if the person that you are 
 adding is a duplicate. You have to copy the command to your clipboard and paste it into LookMeUp to verify if the 
 person is non-duplicate.
+> * If you enter an invalid input for one of the fields (e.g. you left the name blank), an error message will be 
+displayed, and you will have to enter the same field again.
 
 
 ### Listing all Persons : `list`

@@ -38,7 +38,7 @@ MainWindow *-down-> "1" PersonListPanel
 MainWindow *-down-> "1" StatusBarFooter
 MainWindow --> "0..1" HelpWindow
 MainWindow --> "0..1" ExitWindow
-MainWindow --> "0..1" CommandHelperWindow
+MainWindow *--> "0..1" CommandHelperWindow
 
 PersonListPanel -down-> "*" PersonCard
 
