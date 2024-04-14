@@ -167,15 +167,19 @@ While this simplifies the data entry process, you will still need to manually co
 
 Format: `addbystep`
 
-> **Note:**
-> * Currently, `addbystep` does not support the filling of tags when adding a new contact.
-> * Once you have added all the details, you have to close the window and paste the result in the command box to create an `add` command.
-> * Since this is an accessory window, **maximising of the window is not supported**.
-> * `addbystep` only helps you to format the command correctly, it does not help to check if the person that you are 
+<box type="info" seamless>
+
+**Note:**
+
+* Currently, `addbystep` does not support the filling of tags when adding a new contact.
+* Once you have added all the details, you have to close the window and paste the result in the command box to create an `add` command.
+* Since this is an accessory window, **maximising of the window is not supported**.
+* `addbystep` only helps you to format the command correctly, it does not help to check if the person that you are 
 adding is a duplicate. You have to copy the command to your clipboard and paste it into LookMeUp to verify if the 
 person is non-duplicate.
-> * If you enter an invalid input for one of the fields (e.g. you left the name blank), an error message will be 
+* If you enter an invalid input for one of the fields (e.g. you left the name blank), an error message will be 
 displayed, and you will have to enter the same field again.
+</box>
 
 
 ### Listing all Persons : `list`
@@ -202,13 +206,16 @@ Examples:
 *  `edit 1 p/83838383 e/Arianana@nana.com` Edits the phone number and email address of the 1st person to be `83838383` and `Arianana@nana.com` respectively.
 *  `edit 2 n/Billie Eyelashes t/` Edits the name of the 2nd person to be `Billie Eyelashes` and clears all existing tags.
 
-> **Note:**
-> 
-> Editing a contact with the same value will still be considered a successful edit, and LookMeUp will prompt a "successful" message.
-> 
-> LookMeUp will display the entire contact fields in the "successful" message (shown below).
-> 
-> <img src="images/successEdit.png" width="100%"/>
+<box type="info" seamless>
+  
+**Note:**
+ 
+Editing a contact with the same value will still be considered a successful edit, and LookMeUp will prompt a "successful" message.
+ 
+LookMeUp will display the entire contact fields in the "successful" message (shown below).
+ 
+<img src="images/successEdit.png" width="100%"/>
+</box>
 
 
 ### Locating Persons by Name: `find`
@@ -251,13 +258,14 @@ Format in 2 steps:
         <p align = "center">
             <img src="images/confirmation.png" width="50%"/><br>
         </p>
-   
-     > **Note:**
-     > 
-     > If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter
+    <box type="info" seamless>
+     
+      **Note:**
+      
+     If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter
    `remove 3` since the current list is shortlisted to only the single contact at index 2 to prepare for safe removal. 
    You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 3` to remove.
-
+    </box>
 2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>
       
@@ -271,48 +279,57 @@ Format in 2 steps:
       <p align = "center">
          <img src="images/no-result.png" width="50%"/><br>
       </p>
+<box type="important" seamless>
 
-> **Important:** 
-> 
-> **How to deal with wrong/unknown command(s) entered in between the workflow of `remove INDEX` and `yes`/`no` 
-> confirmation?**
-> 
-> > **NOTE:**
-> > LookMeUp will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
->    user wishes to continue with removal process or change to perform another command!
->
->_Some common scenarios:_ <br>
-> 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
+  **Important:** 
+
+ **How to deal with wrong/unknown command(s) entered in between the workflow of `remove INDEX` and `yes`/`no` 
+ confirmation?**
+ 
+<box type="info" seamless> 
+ 
+  **NOTE:**
+  LookMeUp will **NOT** return to the default list upon this invalid command entry, due to uncertainty of whether
+    user wishes to continue with removal process or change to perform another command!
+
+_Some common scenarios:_ <br>
+ 1. **If it was a mere mistake, and you still wish to continue on with the contact removal process:**<br>
    simply enter `remove 1` again, it serves as a __safety check__ telling LookMeUp that you ***still*** wish to remove 
-> the current shortlisted contact, and then proceed with `yes` / `no` confirmation
-> 2. **If you wish to stop the removal process and return to the default list:**<br>
+ the current shortlisted contact, and then proceed with `yes` / `no` confirmation
+ 2. **If you wish to stop the removal process and return to the default list:**<br>
    simply enter `list` to return to the default list, and then proceed with your next desired command
+</box>
 
+<box type="tip" seamless>
+  
+**Tip:** 
+ 
+ **What if you wish to execute a _different command_ after the `remove INDEX`, before `yes` / `no` confirmation?**
 
-> **Tip:** 
-> 
-> **What if you wish to execute a _different command_ after the `remove INDEX`, before `yes` / `no` confirmation?**
->
-> You may enter another **VALID** command in between the `remove INDEX` and the `yes` / `no` confirmation 
-> (e.g. after `remove 2`, you can enter `add n/John p/98765432 e/j@gmail.com a/677405`)
-> then the `add` command will be executed, while the removal will be aborted.
->
-> However, it is **ADVISED** to abort the removal process directly with a `no` confirmation first, as that 
-> would return you the full default list of contacts, where you may then proceed with your desired command(s).
+ You may enter another **VALID** command in between the `remove INDEX` and the `yes` / `no` confirmation 
+ (e.g. after `remove 2`, you can enter `add n/John p/98765432 e/j@gmail.com a/677405`)
+ then the `add` command will be executed, while the removal will be aborted.
 
-> **Tip:**
->
-> **How to potentially _SPEED UP_ the contact removal process, especially when LookMeUp gets populated with MANY 
-> contacts?**
-> 
-> Make use of the contact filtering feature of `find` and use it together with the `remove` commands! 
-> 
-> For example: `find rachel` (which shortlists all contact(s) matching "rachel") followed by `remove 1` will prompt a 
-> confirmation message to confirm the removal of the 1st contact in the filtered results of the `find` command. 
-> 
-> This is especially useful if you wish to remove a contact without having to scroll for its index, or if you have
-> multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "rachel"s first before deciding which
-> to remove by the index of the filtered list. 
+ However, it is **ADVISED** to abort the removal process directly with a `no` confirmation first, as that 
+ would return you the full default list of contacts, where you may then proceed with your desired command(s).
+</box>
+
+<box type="tip" seamless>
+  
+**Tip:**
+
+ **How to potentially _SPEED UP_ the contact removal process, especially when LookMeUp gets populated with MANY 
+ contacts?**
+ 
+ Make use of the contact filtering feature of `find` and use it together with the `remove` commands! 
+ 
+ For example: `find rachel` (which shortlists all contact(s) matching "rachel") followed by `remove 1` will prompt a 
+ confirmation message to confirm the removal of the 1st contact in the filtered results of the `find` command. 
+ 
+ This is especially useful if you wish to remove a contact without having to scroll for its index, or if you have
+ multiple contacts with the same part(s) of a name and wish to shortlist e.g. all "rachel"s first before deciding which
+ to remove by the index of the filtered list. 
+</box>
 
 ### Undo Previous Command : `undo`
 
