@@ -17,6 +17,7 @@ LookMeUp  is a brownfield software project based off AddressBook Level-3, taken 
 at National University of Singapore.
 
 1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
+2. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -189,7 +190,7 @@ initial address book state, and the `currentStatePointer` pointing to that singl
 
 Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
 confirmation. The confirmation command calls `Model#commitAddressBook()`, causing the modified state of the address book 
-after the `remove 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
+after the removal execution to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
 shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
@@ -284,20 +285,27 @@ The following activity diagram summarizes what happens when a user executes a ne
 The feature to remove contacts from the address book is facilitated by `RemoveCommand` and `RemoveConfirmation`.
 
 The safe-removal mechanism consists of several components:
-1. `RemoveCommand`: The main command class that performs the preparation of removal in 2 main parts: shortlisting the
-target person to be removed by matching contact name, and seeking confirmation of the removal process.
-2. `RemoveCommandParser`: A class that parses the user input to determine the target person to be removed. The class
-   parses the `Predicate` input when users key in `remove NAME`, to aid in the shortlisting process. The class also parses
-   the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual contact to
-   be removed.
+1. `RemoveCommand`: A class that takes in the `Index` of a contact in the list, and "spotlights" this contact through 
+  `Model#getFilteredPersonList()` to then prompt the user to confirm the removal of the target person. This class 
+   does not perform the actual removal of the contact.
+2. `RemoveCommandParser`: A class that parses the user input to determine the target person to be removed. The class 
+   parses the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual 
+   contact to be removed.
+
+[//]: # add RemoveSequenceDiagram
+
 3. `RemoveConfirmation`, `RemoveSuccess` and `RemoveAbortion`: Classes that prompt the user to confirm the removal of
    the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
    the success or failure of the removal process.
+
+[//]: # add RemoveConfirmationSequenceDiagram
 
 Our implementation follows Liskov's Substitution Principle closely. `RemoveConfirmation` was designed to be an abstract
 class to allow for extension of the 2 confirmation methods via the `RemoveSuccess` and `RemoveAbortion` classes. This
 decision makes it easier to group similar methods and messages together for better code extendability and
 maintainability when it comes to enhancing the confirmation process.
+
+<puml src="diagrams/RemoveConfirmationClassDiagram.puml" alt="RemoveConfirmationClassDiagram" />
 
 Given below is an example usage scenario and how the safe-removal mechanism behaves at each step.
 > Assuming existing contacts in the address book (shown in a simplified list for ease of understanding):
@@ -306,21 +314,8 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 > 3. Dylan Walker
 > 4. Paul Cooper
 
-* **Step 1**: The user executes `remove Paul` command.
-    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
-  in response.
-    * `RemoveCommand` will shortlist the target person to be removed by matching the contact name with the input.
-        * The input will be parsed by `RemoveCommandParser` to obtain the intended `Predicate`, in this case, `Paul`.
-    > Matching contacts:
-  > 1. Paul Walker
-  > 2. Paul Cooper
 
-    * `RemoveCommand` will then prompt the user to key in the index of the contact to remove. e.g. `remove 1`
-  > **_NOTE:_** This step can be foregone if the user is very sure of the INDEX of the contact to be removed from the
-    > original list in the address book. The user can key in `remove INDEX` and proceed with Step 2 directly.
-
-
-* **Step 2**: The user executes `remove 1` command.
+* **Step 1**: The user executes `remove 4` command.
     * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
     * `RemoveCommand` will proceed with the confirmation process of the actual contact to be removed.
         * The input will be parsed by `RemoveCommandParser` to obtain the intended `Index` to be removed.
@@ -329,13 +324,12 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
   > Are you sure you want to remove the following contact? (yes/no):
     > 1. Paul Walker
 
-
-
-* **Step 3a**: The user confirms the removal of the contact by executing `yes` command.
+  
+* **Step 2a**: The user confirms the removal of the contact by executing `yes` command.
     * The `yes` command calls `RemoveSuccess#execute()` to confirm the removal process.
     * The confirmation process will be handled by `RemoveSuccess` and its parent class `RemoveConfirmation`.
         * `RemoveSuccess#execute()` checks if the `yes` input is valid, calling `RemoveConfirmation#isValidInput()`
-        * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
+        * `RemoveConfirmation#isValidInput()` returns `true` if the input is valid, and `false` otherwise.
             * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal  confirmation process.
     * If the user confirms the removal with `yes`, `RemoveSuccess` will proceed with the removal process.
@@ -343,94 +337,106 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
       the removal process.
 
 
-* **Step 3b**: The user aborts the removal of the contact by executing `no` command.
+* **Step 2b**: The user aborts the removal of the contact by executing `no` command.
     * The `no` command calls `RemoveAbortion#execute()` to abort the removal process.
     * The abortion process will be handled by `RemoveAbortion` and its parent class `RemoveConfirmation`.
         * `RemoveAbortion#execute()` checks if the `no` input is valid, calling `RemoveConfirmation#isValidInput()`
         * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
             * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal abortion process.
-  * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
-      * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
-    will provide feedback on the abortion of the removal process.
+    * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
+        * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
+      will provide feedback on the abortion of the removal process.
+
+
+* **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
+    * The user will be prompted with an error message:  
+    > Unknown Command
+    * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
+    to be prompted with the confirmation process again.
+
+Here is an activity diagram that summarizes the process of removing a contact from the address book:
+
+[//]: # (<puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />)
 
 
 #### Design considerations:
 
 Several design considerations were taken into account when implementing the safe-removal feature.
 
-_**FIRST CATEGORY**: For shortlisting the contact to be removed and seeking confirmation of the contact to be removed: 
-
-
-* **Alternative 1 (current choice)**: To use the same command word (i.e. `remove` - `remove NAME` and `remove INDEX`)
-to perform the shortlisting of contacts with matching names, as well as the confirmation of the contact to be removed.
-  * Pros: Simplifies the command structure, more intuitive for users to approach removal process
-    * Using the same command word `remove` for both shortlisting and confirmation processes reduces the cognitive load,
-    allowing the process to be more user-friendly
-  * Cons: May lead to ambiguity in the command execution process to new developers who are used to the conventions set
-  by other commands, as this command structure makes use of an overloaded `RemoveCommand` constructor
-
-
-* **Alternative 2**: To use the existing `find` command to shortlist the contact to be removed, then use the `delete`
-command to perform the deletion
-* Pros: Separates the shortlisting and confirmation processes
-  * This reduces ambiguity in the command execution process for future developers
-* Cons: Require 2 different commands for deletion
-  * Increasing the number of commands required to perform the removal process, makes it less intuitive for users to
-      approach the removal process. Furthermore, when it comes to **removing contacts**, users might find it a lot more
-        intuitive (as it is self-explanatory) to use a`delete`/`remove` command instead of having to use `find` first,
-        where in a natural logical context, most users would only use `find` if they are simply looking for a contact.
-
-
-**Decision**:
-Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1** due to the enhanced
-user experience it provides, making the removal process more intuitive and user-friendly.
-
-**Other considerations**:
-1. **Single Responsibility Principle**: The `RemoveCommand` class is designed to handle both the shortlisting and
-confirmation processes. It is natural for concerns to arise regarding adhering to the Single Responsibility Principle.
-However, this class is focused on the single task of preparation for deletion, without handling the actual deletion.
-There is still a clear separation of concerns, with `RemoveCommand` class handling the preparation (shortlisting and
-prompting of confirmation), and `RemoveConfirmation`, `RemoveSuccess`, `RemoveAbortion` classes handling the actual
-deletion. Thus, the Single Responsibility Principle is still adhered to.
-2. **Re-branding of `delete` to `remove`**: Given most people will use the original `delete` directly in `delete INDEX`
-we have decided to re-brand the double-purpose command as `remove` to avoid confusion. Using a replacement word that 
-is explanatory and intuitive in the context of the contact deletion process, while subtle, adds to the overall user 
-experience.
-
-
-_**SECOND CATEGORY**: Mechanism to perform the actual deletion upon confirmation_
+**Aspect 1**: Mechanism to perform the actual deletion upon confirmation_
 
 Given the key purpose of this feature is for **SAFE** deletion, this step is crucial to ensure that there is a safety
 net for users before the actual removal of the contact.
 
 
-* **Alternative 1 (current choice)**: To prompt the users for confirmation via a `yes`/`no`, then proceed with 
-parsing the `yes`/`no` user input as independent commands in `AddressBookParser`
+* **Alternative 1 (current choice)**: To prompt the users for confirmation via a `yes`/`no`, then proceed with
+  parsing the `yes`/`no` user input as independent commands in `AddressBookParser`
   * Pros: Maintains a similar command structure/workflow as all other commands (to go through `AddressBookParser`)
-  * Cons: Requires backward reference of previous command to check if the input was a valid `remove INDEX` input, 
-  currently implemented in `RemoveConfirmation#isValidInput()`
-    * This leads to a more complex implementation, as details of the previous command might be accidentally exposed if 
-    not implemented carefully.
+  * Cons: Requires backward reference of previous command to check if the input was a valid `remove INDEX` input,
+    currently implemented in `RemoveConfirmation#isValidInput()`, leading to a more complex implementation.
 
 
 * **Alternative 2**: To create functions that directly handle the confirmation process within `RemoveCommand`
-  * Pros: Removes the need to access the previous command and assess its validity 
-  * Cons: Changes the command structure/workflow, making it less intuitive for users to approach the removal process
-    * This alternative would require a more complex implementation, as the confirmation process would be directly 
-    handled within `RemoveCommand`, leading to a more monolithic class structure. This would make it harder to 
-    maintain and extend the code in the future, as the class would be responsible for the preparation (shortlisting and 
-    confirmation) processes **AND** the actual process of deleting the contact, violating the Single Responsibility 
-    Principle.
-  
+  * Pros: Removes the need to access the previous command and assess its validity
+  * Cons: Changes the command structure/workflow
+    * This alternative would require a more complex implementation, as the confirmation process would be directly
+      handled within `RemoveCommand`, leading to a more monolithic class structure. This would make it harder to
+      maintain and extend the code in the future, as the class would be responsible for the confirmation processes 
+      **AND** the actual process of deleting the contact, violating the Single Responsibility Principle.
 
-**Decision**: 
+
+**Decision**:
 Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1**
 
-Addressing the cons of Alternative 1, our current implementation is such that details of previous command are retrieved 
-from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method. This avoids exposure of the 
-`remove INDEX` command details, ensuring Separation of Concerns and adhering to the Single Responsibility Principle as 
+Addressing the cons of Alternative 1, our current implementation is such that details of previous command are retrieved
+from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method. This avoids exposure of the
+`remove INDEX` command details, ensuring Separation of Concerns and adhering to the Single Responsibility Principle as
 the `RemoveConfirmation` class solely handles the confirmation process itself and checks directly related to it.
+
+
+
+**Aspect 2**: For enhancing the removal process by first **shortlisting the contact to be removed** before 
+proceeding with `remove INDEX`, potentially reducing the amount of scrolling to find the contact to be removed.
+
+
+* **Alternative 1**: To use the same command word (i.e. `remove` - `remove NAME` then `remove INDEX`)
+to perform the shortlisting of contacts with matching names, then identifying the specific contact to be removed by its 
+index.
+  * Pros: More intuitive for users to approach removal process
+    * Using the same command word `remove` for both shortlisting and confirmation processes reduces the cognitive load,
+    allowing the process to be more user-friendly
+  * Cons: More complex execution process
+    * This leads to ambiguity in the command execution process to new developers who are used to the conventions set
+    by other commands, as this command structure would make use of an **overloaded** `RemoveCommand` constructor. 
+    * This also introduces unnecessary complexity since the `RemoveCommandParser` will have to handle cases where 
+    contact names contain numbers, and users seek to shortlist contacts with the numbers in the name, to avoid invoking 
+    `remove INDEX` instead. 
+
+
+* **Alternative 2 (current choice)**: To encourage users to use the existing `find` command to shortlist the contact(s)  
+to be removed, then use the `remove INDEX` to identify the contact from a shorter list, proceeding with safe-removal.
+* Pros: Separates the shortlisting and confirmation processes to two distinct commands
+  * This reduces ambiguity in the command execution process for future developers
+* Cons: Require 2 different commands for deletion, which may come as a slight inconvenience to users.
+
+**Decision**:
+Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 2** due to the clarity of 
+separation between the shortlisting and confirmation processes. Since this workflow is simply an enhancement to the 
+removal process, and given how `find` is relatively intuitive to use, we believe that the maintaining the separation of 
+shortlisting and removal using the existing `find` command would ultimately provide a more straightforward and intuitive 
+experience to users.
+
+**Other considerations**:
+**Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
+processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
+and intuitive for future developer. This design decision promotes better code maintainability and extensibility, 
+as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
+are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
+the `RemoveCommand` class adheres to the Single Responsibility Principle, as it is solely responsible for the 
+confirmation process of the contact to be removed.
+
+
 
 
 ### Fuzzy Input
