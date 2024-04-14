@@ -299,6 +299,7 @@ _Some common scenarios:_ <br>
  2. **If you wish to stop the removal process and return to the default list:**<br>
    simply enter `list` to return to the default list, and then proceed with your next desired command
 </box>
+</box>
 
 <box type="tip" seamless>
   
@@ -351,9 +352,12 @@ The removed contact will then be restored, **even to its original index**.<br>
 Similarly, `undoing` after adding a contact would mean reverting the contact list's state back to before the contact 
 was added.
 
-> **Important:**
-> Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
->   * That is, when you launch the app again, you will not be able to undo any commands from the previous time you launched it.
+<box type="important" seamless>
+  
+**Important:**
+ Once you closed the application, all your changes will be saved and all your past command history will be **erased**.
+   * That is, when you launch the app again, you will not be able to undo any commands from the previous time you launched it.
+</box>
 
 ###  Redo Undid Command : `redo`
 
@@ -363,9 +367,12 @@ Format: `redo`
 
 For example, entering `redo` after previous `undo` example will revert the contacts to before `undo` was being executed.
 
-> **Important:**
-> `redo` only works when `undo` was called.
-> If there were no commands undone, entering `redo` will prompt an **error**.
+<box type="important" seamless>
+  
+**Important:**
+ `redo` only works when `undo` was called.
+ If there were no commands undone, entering `redo` will prompt an **error**.
+</box>
 
 ### Copies a Person Information to Clipboard : `copy`
 
@@ -373,9 +380,12 @@ Copies a person’s information such as name, phone number, address and email in
 This feature allows you to copy **more than one** piece of a contact’s information, and allows you to specify the order of a person’s information to be copied. 
 If multiple fields are provided, results are separated by a single whitespace.
 
-> **Note:**
-> Duplicated fields that are specified are safely process and copied 
-> * Refer to the table below 
+<box type="info" seamless>
+
+**Note:**
+ Duplicated fields that are specified are safely process and copied 
+ * Refer to the table below
+</box>
 
 Format: `copy INDEX FIELD(s)`
 
@@ -483,14 +493,16 @@ Format: `clear`
 
 A pop-up would be shown that prompts you for **confirmation** to exit the address book.
 
-> **Note:**
->
-> Windows users, you may press ENTER/SPACE to confirm your choice.
-> 
-> MacOS users, please press only SPACE to confirm your choice.
-> 
-> For more info, kindly refer to [here](https://openjfx.io/javadoc/11/javafx.controls/javafx/scene/control/Button.html).
+<box type="info" seamless>
 
+**Note:**
+
+Windows users, you may press ENTER/SPACE to confirm your choice.
+ 
+MacOS users, please press only SPACE to confirm your choice.
+ 
+For more info, kindly refer to [here](https://openjfx.io/javadoc/11/javafx.controls/javafx/scene/control/Button.html).
+</box>
 
 Format: `exit`
 
