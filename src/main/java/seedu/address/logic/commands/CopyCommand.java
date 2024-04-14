@@ -39,6 +39,9 @@ public class CopyCommand extends Command {
      */
     public CopyCommand(Index targetIndex, List<String> fieldsToCopyList) {
         requireNonNull(targetIndex);
+
+        assert !fieldsToCopyList.isEmpty() : "fieldsToCopyList should not be empty!";
+
         this.targetIndex = targetIndex;
         this.fieldsToCopyList = fieldsToCopyList.stream()
                                   .distinct()
