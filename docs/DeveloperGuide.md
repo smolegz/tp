@@ -408,23 +408,24 @@ index.
     allowing the process to be more user-friendly
   * Cons: More complex execution process
     * This leads to ambiguity in the command execution process to new developers who are used to the conventions set
-    by other commands, as this command structure makes use of an **overloaded** `RemoveCommand` constructor. 
+    by other commands, as this command structure would make use of an **overloaded** `RemoveCommand` constructor. 
     * This also introduces unnecessary complexity since the `RemoveCommandParser` will have to handle cases where 
     contact names contain numbers, and users seek to shortlist contacts with the numbers in the name, to avoid invoking 
     `remove INDEX` instead. 
 
 
 * **Alternative 2 (current choice)**: To encourage users to use the existing `find` command to shortlist the contact(s)  
-to be removed, then use the `remove` command to perform the deletion.
-* Pros: Separates the shortlisting and confirmation processes
+to be removed, then use the `remove INDEX` to identify the contact from a shorter list, proceeding with safe-removal.
+* Pros: Separates the shortlisting and confirmation processes to two distinct commands
   * This reduces ambiguity in the command execution process for future developers
-* Cons: Require 2 different commands for deletion, which may be slightly less intuitive.
+* Cons: Require 2 different commands for deletion, which may come as a slight inconvenience to users.
 
 **Decision**:
 Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 2** due to the clarity of 
 separation between the shortlisting and confirmation processes. Since this workflow is simply an enhancement to the 
 removal process, and given how `find` is relatively intuitive to use, we believe that the maintaining the separation of 
-shortlisting and removal using the existing `find` command provides a more straightforward and intuitive user experience.
+shortlisting and removal using the existing `find` command would ultimately provide a more straightforward and intuitive 
+experience to users.
 
 **Other considerations**:
 **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
