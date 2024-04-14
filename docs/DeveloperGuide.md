@@ -442,7 +442,7 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="250"/><br>
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="400" height="400"/><br>
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
