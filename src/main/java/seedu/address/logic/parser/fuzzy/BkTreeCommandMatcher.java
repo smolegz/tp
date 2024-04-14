@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
 
+// Solution below adapted from https://www.geeksforgeeks.org/bk-tree-introduction-implementation/
 /**
  * BkTree is a data structure used for fuzzy input
  * @param <T> type of elements stored in BkTree

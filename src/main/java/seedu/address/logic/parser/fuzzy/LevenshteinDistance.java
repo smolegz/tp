@@ -5,6 +5,9 @@ package seedu.address.logic.parser.fuzzy;
  * Calculates minimum number of single-character edits required to change one string into another
  * @param <T> type of items distance is calculated
  */
+// @author geeksforgeeks-reused
+// Reused from  https://www.geeksforgeeks.org/bk-tree-introduction-implementation/
+// with minor modifications
 public class LevenshteinDistance<T> implements DistanceFunction<T> {
     @Override
     public int calculateDistance(T item1, T item2) {
