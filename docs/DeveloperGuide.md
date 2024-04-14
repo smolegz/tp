@@ -291,6 +291,9 @@ The safe-removal mechanism consists of several components:
 2. `RemoveCommandParser`: A class that parses the user input to determine the target person to be removed. The class 
    parses the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual 
    contact to be removed.
+
+[//]: # add RemoveSequenceDiagram
+
 3. `RemoveConfirmation`, `RemoveSuccess` and `RemoveAbortion`: Classes that prompt the user to confirm the removal of
    the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
    the success or failure of the removal process.
@@ -300,6 +303,8 @@ class to allow for extension of the 2 confirmation methods via the `RemoveSucces
 decision makes it easier to group similar methods and messages together for better code extendability and
 maintainability when it comes to enhancing the confirmation process.
 
+<puml src="diagrams/RemoveConfirmationClassDiagram.puml" alt="RemoveConfirmationClassDiagram" />
+
 Given below is an example usage scenario and how the safe-removal mechanism behaves at each step.
 > Assuming existing contacts in the address book (shown in a simplified list for ease of understanding):
 > 1. Paul Walker
@@ -307,21 +312,8 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 > 3. Dylan Walker
 > 4. Paul Cooper
 
-* **Step 1**: The user executes `remove Paul` command.
-    * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
-  in response.
-    * `RemoveCommand` will shortlist the target person to be removed by matching the contact name with the input.
-        * The input will be parsed by `RemoveCommandParser` to obtain the intended `Predicate`, in this case, `Paul`.
-    > Matching contacts:
-  > 1. Paul Walker
-  > 2. Paul Cooper
 
-    * `RemoveCommand` will then prompt the user to key in the index of the contact to remove. e.g. `remove 1`
-  > **_NOTE:_** This step can be foregone if the user is very sure of the INDEX of the contact to be removed from the
-    > original list in the address book. The user can key in `remove INDEX` and proceed with Step 2 directly.
-
-
-* **Step 2**: The user executes `remove 1` command.
+* **Step 1**: The user executes `remove 4` command.
     * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
     * `RemoveCommand` will proceed with the confirmation process of the actual contact to be removed.
         * The input will be parsed by `RemoveCommandParser` to obtain the intended `Index` to be removed.
@@ -330,13 +322,12 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
   > Are you sure you want to remove the following contact? (yes/no):
     > 1. Paul Walker
 
-
-
-* **Step 3a**: The user confirms the removal of the contact by executing `yes` command.
+  
+* **Step 2a**: The user confirms the removal of the contact by executing `yes` command.
     * The `yes` command calls `RemoveSuccess#execute()` to confirm the removal process.
     * The confirmation process will be handled by `RemoveSuccess` and its parent class `RemoveConfirmation`.
         * `RemoveSuccess#execute()` checks if the `yes` input is valid, calling `RemoveConfirmation#isValidInput()`
-        * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
+        * `RemoveConfirmation#isValidInput()` returns `true` if the input is valid, and `false` otherwise.
             * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal  confirmation process.
     * If the user confirms the removal with `yes`, `RemoveSuccess` will proceed with the removal process.
@@ -344,20 +335,26 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
       the removal process.
 
 
-* **Step 3b**: The user aborts the removal of the contact by executing `no` command.
+* **Step 2b**: The user aborts the removal of the contact by executing `no` command.
     * The `no` command calls `RemoveAbortion#execute()` to abort the removal process.
     * The abortion process will be handled by `RemoveAbortion` and its parent class `RemoveConfirmation`.
         * `RemoveAbortion#execute()` checks if the `no` input is valid, calling `RemoveConfirmation#isValidInput()`
         * `RemoveConfirmation#isValidInput()` will return `true` if the input is valid, and `false` otherwise.
             * Validity of input is determined by the previous command executed by the user - a valid `remove INDEX`
           command, that serves as a precursor to the removal abortion process.
-  * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
-      * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
-    will provide feedback on the abortion of the removal process.
+    * If the user aborts the removal with `no`, `RemoveCommand` will abort the removal process.
+        * The default list of contacts will be shown with the text input of the `CommandBox` cleared, and `RemoveAbortion`
+      will provide feedback on the abortion of the removal process.
+
+* **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
+    * The user will be prompted with an error message:  
+    > Unknown Command
+    * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
+    to be prompted with the confirmation process again.
 
 Here is an activity diagram that summarizes the process of removing a contact from the address book:
 
-<puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />
+[//]: # (<puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />)
 
 
 #### Design considerations:
