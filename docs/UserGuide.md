@@ -414,11 +414,14 @@ Format: `sort KEYWORD`
     * `Name`: Sorts the entries based on lexicographical order of names.
     * `Tag`: Sorts the entries based on lexicographical order of tags.
 
-> **Note:**
-> When `sort tag` is executed, LookMeUp sorts tags by 
-> **numbering**, followed by contacts **without tags**, and finally **alphabetically**
-> 
->    <img src="images/savetag.png" height="380"/><br>
+<box type="info" seamless>
+
+**Note:**
+ When `sort tag` is executed, LookMeUp sorts tags by 
+**numbering**, followed by contacts **without tags**, and finally **alphabetically**
+ 
+<img src="images/savetag.png" height="380"/><br>
+</box>
 
 ### Filtering by Tag : `filter`
 
