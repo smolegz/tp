@@ -11,7 +11,7 @@ start
             repeat
             :User executes next command;
             repeat while () is ([Invalid/Unknown Command]) not ([Valid Command])
-            if () then ([User executes "remove 1"*])
+            if () then ([User executes "remove 1"])
             else ([User executes other commands])
                 :Handle other commands;
             endif
