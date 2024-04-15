@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.RemoveCommand;
 
 /**
- * Contains unit tests for the RemoveCommandParser class
+ * Contains unit tests for the RemoveCommandParser class.
  */
 public class RemoveCommandParserTest {
     private RemoveCommandParser parser = new RemoveCommandParser();

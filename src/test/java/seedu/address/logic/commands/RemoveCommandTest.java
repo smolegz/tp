@@ -20,7 +20,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 
 /**
- * Contains integration tests (interaction with the Model) and unit tests for {@code RemoveCommand}
+ * Contains integration tests (interaction with the Model) and unit tests for {@code RemoveCommand}.
  */
 public class RemoveCommandTest {
 

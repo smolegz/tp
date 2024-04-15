@@ -27,7 +27,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 
 /**
- * Contains integration tests and unit tests for EditCommand.
+ * Contains integration tests and unit tests for CopyCommand.
  */
 public class CopyCommandTest {
 

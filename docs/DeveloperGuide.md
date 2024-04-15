@@ -342,7 +342,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
         * User will then be prompted to confirm the removal of the contact with "yes"/"no"
         * The user will then key in `yes` or `no` to confirm or abort the removal process.
   > Are you sure you want to remove the following contact? (yes/no):
-    > 1. Paul Walker
+    > 1. Paul Cooper
 
   
 * Step 2a: The user confirms the removal of the contact by executing `yes` command.
@@ -372,7 +372,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 * Step 2c: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
     * The user will be prompted with an error message:  
     > Unknown Command
-    * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
+    * Since the current GUI remains with the spotlighted contact "Paul Cooper", users will need to type `remove 1`
     to be prompted with the confirmation process again, or type `list` to return to the default list
 
 Here is an activity diagram that summarizes the process of removing a contact from the address book:
@@ -390,7 +390,7 @@ but due to the constraints of PlantUML, it has been simplified to point directly
 
 Several design considerations were taken into account when implementing the safe-removal feature.
 
-**Aspect 1**: Mechanism to perform the actual deletion upon confirmation_
+**Aspect 1**: Mechanism to perform the actual deletion upon confirmation
 
 Given the key purpose of this feature is for **SAFE** deletion, this step is crucial to ensure that there is a safety
 net for users before the actual removal of the contact.
@@ -413,7 +413,7 @@ net for users before the actual removal of the contact.
 
 **Decision**:
 
-Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1**
+Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1**.
 
 Addressing the cons of Alternative 1, our current implementation is such that details of previous command are retrieved
 from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method. This avoids exposure of the
@@ -421,7 +421,7 @@ from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method
 the `RemoveConfirmation` class solely handles the confirmation process itself and checks directly related to it.<br><br>
 
 
-**Aspect 2**: For enhancing the removal process by first **shortlisting the contact to be removed** before 
+**Aspect 2**: Potential safe-removal enhancement by first **shortlisting the contact to be removed** before 
 proceeding with `remove INDEX`, potentially reducing the amount of scrolling to find the contact to be removed.
 
 * **Alternative 1**: To use the same command word (i.e. `remove` - `remove NAME` then `remove INDEX`)
@@ -442,7 +442,7 @@ index.
 to be removed, then use the `remove INDEX` to identify the contact from a shorter list, proceeding with safe-removal.
   * Pros: Separates the shortlisting and confirmation processes to two distinct commands
     * This reduces ambiguity in the command execution process for future developers
-  * Cons: Require 2 different commands for deletion, which may come as a slight inconvenience to users.
+  * Cons: Require 2 different commands for this enhanced safe-removal, which may come as a slight inconvenience to users.
 
 **Decision**:
 
@@ -455,8 +455,8 @@ experience to users.
 **Other considerations**:
 
 * **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
-processes (as opposed to overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
-and intuitive for future developer. This design decision promotes better code maintainability and extensibility, 
+processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
+and intuitive for future developers. This design decision promotes better code maintainability and extensibility, 
 as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
 are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
 the `RemoveCommand` class adheres to the Single Responsibility Principle, as it is solely responsible for the 
@@ -1172,7 +1172,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case resumes from step 2.
 
 **Use case:** UC2 - Remove a contact\
-**Person that can play this role:** Student in a lot of committees
+**Person that can play this role:** Student who need a safety net to prevent accidental contact deletion
 
 **MSS**
 
@@ -1527,7 +1527,7 @@ Overwrites a person that has an **identical** name to a contact in your existing
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: With a list of at least 2 contacts, enter `remove 2`<br>
-      Expected: Third contact is spotlighted from the list. Prompt to confirm removal with `yes`/`no`.
+      Expected: Second contact is spotlighted from the list. Prompt to confirm removal with `yes`/`no`.
       * If `yes`, the contact will be removed. A success message and details of the removed contact will be shown in the status message. Timestamp in the status bar is updated.
       * If `no`, the contact will not be removed. Status message will show the removal is aborted. Status bar remains the same.
 
@@ -1535,7 +1535,7 @@ Overwrites a person that has an **identical** name to a contact in your existing
       Expected: No person is removed. Error details shown in the status message. Status bar remains the same.
 
    1. Other incorrect remove commands to try: `remove`, `remove x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+      Expected: Respective error messages. Similar to previous.
 
 ### Fuzzy Input
 
@@ -1587,15 +1587,15 @@ For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t1
 
 1. Enter `add n/Jia wei p/97743772 e/jw@gmail.com a/Block E 02-22 t/friend` in the command box.
 
-Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
+   Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
 
 2. Enter `undo` in the command box.
 
-Expected output: The contact list will revert back to its state before the contact was added in Step 1.
+   Expected output: The contact list will revert back to its state before the contact was added in Step 1.
 
 3. Enter `redo` in the command box.
 
-Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
+   Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
 
 4. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
 **directly followed by** `undo`, and expect to be able to run `undo` **n consecutive times** as well. 
