@@ -342,7 +342,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
         * User will then be prompted to confirm the removal of the contact with "yes"/"no"
         * The user will then key in `yes` or `no` to confirm or abort the removal process.
   > Are you sure you want to remove the following contact? (yes/no):
-    > 1. Paul Walker
+    > 1. Paul Cooper
 
   
 * Step 2a: The user confirms the removal of the contact by executing `yes` command.
@@ -372,7 +372,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 * **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
     * The user will be prompted with an error message:  
     > Unknown Command
-    * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
+    * Since the current GUI remains with the spotlighted contact "Paul Cooper", users will need to type `remove 1`
     to be prompted with the confirmation process again, or type `list` to return to the default list
 
 Here is an activity diagram that summarizes the process of removing a contact from the address book:
