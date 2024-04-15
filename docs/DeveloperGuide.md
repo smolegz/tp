@@ -1240,7 +1240,7 @@ Use case ends.
 2. LookMeUp prompts for details
 3. User enters the requested details
 4. LookMeUp will display the success message, and will prompt the user to type the copy command (`cp`)
-5. User types the copy Command\
+5. User types the Copy command\
     Use case ends.
 
 **Extensions**
