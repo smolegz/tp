@@ -6,7 +6,7 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":OverwriteCommandParser" as OverwriteCommandParser LOGIC_COLOR
-participant "rc:OverwriteCommand" as OverwriteCommand LOGIC_COLOR
+participant "oc:OverwriteCommand" as OverwriteCommand LOGIC_COLOR
 participant "rs:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
@@ -37,12 +37,12 @@ activate OverwriteCommand
 OverwriteCommand --> OverwriteCommandParser :
 deactivate OverwriteCommand
 
-OverwriteCommandParser --> AddressBookParser : rc
+OverwriteCommandParser --> AddressBookParser : oc
 deactivate OverwriteCommandParser
 OverwriteCommandParser -[hidden]-> AddressBookParser
 destroy OverwriteCommandParser
 
-AddressBookParser --> LogicManager : rc
+AddressBookParser --> LogicManager : oc
 deactivate AddressBookParser
 
 LogicManager -> OverwriteCommand : execute(m)
