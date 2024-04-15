@@ -1097,59 +1097,40 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User type add contact command.
-2. LookMeUp prompts for details.
-3. User enters the requested details.
-4. LookMeUp add the contact and displays the new contact in the database.\
+1. User types `add` command.
+2. LookMeUp adds the contact and displays the new contact in the database.\
     Use case ends.
 
 **Extensions**
-* 1a. User typed an invalid command
+* 1a. User typed the `add` command with an invalid format or field
     * 1a1. LookMeUp displays the error.
-    * 1a2. User enters the correct command.
+    * 1a2. User enters the `add` command again
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
-
-* 3a. LookMeUp detects an error in the entered data.
-  * 3a1. LookMeUp displays the error and requests for the correct data.
-  * 3a2. User enters the new data.
-
-  Steps 3a1-3a2 are repeated until the data entered are correct.\
-  Use case resumes from step 4.
 
 **Use case:** UC2 - Remove a contact\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
 
-1. User type remove contact command
-2. LookMeUp prompts for details
-3. User enters the requested details
-4. LookMeUp requests for confirmation.
-5. LookMeUp removes the contact and displays an execution success message.\
+1. User types `remove` command
+2. LookMeUp requests for confirmation.
+3. LookMeUp removes the contact and displays an execution success message.\
    Use case ends.
 
 
 **Extensions**
-* 1a. User typed an invalid command
+* 1a. User typed the `remove` command with an invalid format or field
     * 1a1. LookMeUp displays the error.
-    * 1a2. User enters the correct command.
+    * 1a2. User enters the `remove` command again
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
 
-* 3a. LookMeUp detects an error in the entered data.
-    * 3a1. LookMeUp displays the error and requests for the correct data.
-    * 3a2. User enters the new data.
-
-  Steps 3a1-3a2 are repeated until the data entered are correct.\
-  Use case resumes from step 4.
-
-
-* 4a. User declines the removal of contact.
-    * 4a1, LookMeUp confirms user's selection.\
+* 3a. User declines the removal of contact.
+    * 3a1, LookMeUp confirms user's selection.\
       Use case ends.
 
 **Use case:** UC3 - Filter contacts by tags\
@@ -1186,6 +1167,137 @@ Use case ends.
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
+
+
+**Use case:** UC5 - Formatting an Add Command with system prompts\
+**Person that can play this role:** Student who is unfamiliar with the format of the Add command
+
+**MSS**
+
+1. User type addbystep command
+2. LookMeUp prompts for details
+3. User enters the requested details
+4. LookMeUp will display the success message, and will prompt the user to type the copy command (`cp`)
+5. User types the copy Comand\
+    Use case ends.
+
+**Extensions**
+* 2a. User types an invalid detail.
+    * 2a1. LookMeUp displays the error.
+    * 2a2. User enters the detail again. 
+
+  Steps 2a1-2a2 are repeated until the command entered is correct.\
+  Use case resumes from step 3.
+
+* 4a. User types a input that is not the copy command.
+    * 4a1. LookMeUp will prompt the user to type the copy command.
+    * 4a2. User enters another input. 
+
+  Steps 4a1-4a2 are repeated until the copy command is entered.\
+
+**Use case:** UC6 - Editing a command\
+**Person that can play this role:** Student who wishes to update the contact details of a contact
+
+**MSS**
+
+1. User types the `edit` command.
+2. LookMeUp edits the details of the contact and displays the new contact in the database.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `edit` command with an invalid format or field
+    * 1a1. LookMeUp displays the error.
+    * 1a2. User enters the `edit` command again
+
+  Steps 1a1-1a2 are repeated until the command entered is correct.\
+  Use case resumes from step 2.
+
+
+**Use case:** UC7 - Copying a contact's details\
+**Person that can play this role:** Student who wishes to copy the contact details of a contact
+
+**MSS**
+
+1. User types the `copy` command.
+2. LookMeUp copies the details of the contact specified by the user and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `copy` command with an invalid format or field
+    * 1a1. LookMeUp displays the error.
+    * 1a2. User enters the `copy` command again
+
+  Steps 1a1-1a2 are repeated until the command entered is correct.\
+  Use case resumes from step 2.
+
+
+**Use case:** UC8 - Undoing the last command\
+**Person that can play this role:** Student who entered a wrong command and wishes to revert his previous command
+
+**MSS**
+
+1. User types the `undo` command.
+2. LookMeUp reverts the command entered by the user and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `undo` command with no previous state-changing commands
+    * 1a1. LookMeUp displays the error.\
+  Use case ends.
+
+**Use case:** UC9 - Redoing an undo command\
+**Person that can play this role:** Student who wishes to redo the previous undo command
+
+**MSS**
+
+1. User types the `redo` command.
+2. LookMeUp reverts the latest undo command and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `redo` command with no previous undo command.
+    * 1a1. LookMeUp displays the error.\
+  Use case ends.
+
+**Use case:** UC10 - Clearing all the contacts in LookMeUp\
+**Person that can play this role:** Student who wants to delete all the contacts in LookMeUp
+
+**MSS**
+
+1. User types the `clear` command.
+2. LookMeUp edits clears all the contacts and displays the success message to the user.\
+    Use case ends.
+
+**Use case:** UC11 - Exiting the application\
+**Person that can play this role:** Student who wishes to exit the application.
+
+**MSS**
+
+1. User types the `exit` command.
+2. LookMeUp displays a the Exit window
+3. User clicks "yes"
+4. LookMeUp closes\
+   Use case ends.
+
+
+**Extensions**
+
+* 3a. User clicks "no".
+    * 3a1, LookMeUp confirms user's selection.\
+      Use case ends.
+
+    
+
+
+
+
+
+
+
+  
+
+
+
 
 ## Non-Functional Requirements
 
