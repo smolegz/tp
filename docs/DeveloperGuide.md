@@ -948,7 +948,7 @@ Several design considerations were taken into account when implementing the copy
 
 ### Exit Window
 #### Implementation
-For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seeks confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
+For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seek confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
