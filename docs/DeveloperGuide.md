@@ -850,19 +850,20 @@ Single Responsibility Principle, Interface Segregation Principle and Open/Close 
 * Single Responsibility Principle
   * The class maintains single responsibility by defining the list of all tags that the user input, as well as testing for tag matches
     without burdening implementations with unrelated methods
+  <br>
 * Interface Segregation Principle
   * Segregates behavior for filtering into the method `test`, thus, allowing different filtering strategies to implement only the methods they need.
-    <br/>
+    <br>
 * **Alternative 1 (current choice)** `FilterCommand` constructor to take in `predicate` as its parameter.
   * Pros: Straightforward design and easy to implement.
     * Filtering logic interacts directly with creation of new `TagContainsKeywordsPredicate`, before passing it directly to the `FilterCommand`
     for execution.
-
+  <br>
 * **Alternative 2** `FilterCommand` constructor to take in user input string as its parameter.
   * Pros: Filtering strategies can be applied to different data structures without modification
     * Promoting code reuse and scalability.
-  * Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
-
+* Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
+  <br>
 Alternative 1 is chosen for the following reasons:
 * Simplicity: keeps filtering logic simple and focused by directly interacting with the data structure, list in this case.
 * Clear Responsibility: Filtering logic is closely tied to the data structure and class it operates on, adhering to the Single
