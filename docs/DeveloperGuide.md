@@ -1214,28 +1214,30 @@ case scenario in Add By Step.
 
 Our team consists of 5 members. 
 
-1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
-   an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+1. **Add an `exit` command to `AddCommandHelper` to enhance AddByStep process**
+   * Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. 
+   * We plan to add an exit command to `AddCommandHelper` such that you can close the window simply by typing the 
+   `exit` command
 
 
-2. Fuzzy Input with varying distance metric
+2. **Vary Distance Metric for Fuzzy Input**
    * Currently, the MAX_DISTANCE for the distance metric is set to 1. 
    * To enhance user-experience and accommodate longer commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
 to the length of the correct command string. 
    * This approach allows a more flexible and adaptable matching process,
 guaranteeing that the misspelling tolerance varies proportionately with command length. 
-   * By dynamically adjusting the
-MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
+   * By dynamically adjusting the MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately \
+   identified. 
 
 
-3. Safe-Removal Confirmation Step - Invalid Input Error-Handling (2 Enhancements)
+3. **Enhance Invalid Input Error-Handling for Safe-Removal Confirmation Step**
    * Currently, when a user is prompted for confirmation, to enter either a `yes` or `no` input, if they enter any other 
    (invalid) input e.g. `abc`, they will be prompted with an `Unknown Command` error message, which is too general.
    * With the `Unknown Command` prompt, though the GUI still shows the spotlighted contact for removal, the user is 
    unable to directly type `yes`/`no` to proceed with the confirmation as the system does not recognise that the user is
    still in the process of removing the contact, which brings slight inconvenience though there is a simple step to
    get around it by typing `remove 1` then `yes`/`no` to proceed with the confirmation.
-   * 2 Enhancements:
+   * **2 Enhancements**:
         * We plan to improve the `Unknown Command` error message to be more specific, such as `Invalid Input, please 
         enter 'yes' if you wish to proceed with the removal, and 'no' if you wish to abort the removal process`.
         * Together with this, we are also planning to change the internal validity checking process of 
@@ -1243,3 +1245,10 @@ MAX_DISTANCE, longer and more complex input command like `addbystep` can be accu
         instead of simply checking the **last input** (which currently makes the system prone to keeping track of the 
         invalid input and assuming the user is no longer doing a removal). This would remove the inconvenience of having 
         to type `remove 1`. 
+
+4. **Improve Name Validation for Name Field**
+   * Currently, names can only contain alphanumeric characters and spaces. Legal names such as `Joseph King Jr.`, 
+   `Shaquille O'Neal`, `Mary-Anne Tan` or `Ravichandram S/O Ramesh` are considered invalid. 
+   * We plan to update the validation regex to enable special characters such as `'`, `-`, `/`, and `.` to be recognised
+   * This allows LookMeUp to accommodate to more users, and to be more inclusive.
+
