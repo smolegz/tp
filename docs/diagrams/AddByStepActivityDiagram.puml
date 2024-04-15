@@ -16,7 +16,7 @@ skinparam ArrowFontSize 12
 start
 :User executes "addbystep" command;
 :Get all the necessary inputs from user<$rake>;
-:User types the the "cp" command;
+:User types the "cp" command;
 :Command is copied to the clipboard of the user;
 :User closes the window;
 
