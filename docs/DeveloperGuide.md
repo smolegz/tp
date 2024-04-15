@@ -1268,9 +1268,10 @@ Edit contact based on the details provided. eg. Name, email, address etc.
 
    Expected: Contact at index 1's name has been edited to Alex Yeoh.
 
-3. Test case: `overwrite 2 n/Bernice Yu p/91725373`
+3. Test case: `edit 2 n/Bernice Yu p/91725373`
 
    Expected: Contact at index 2's name and number have been edited to Bernice Yu, 91725373 respectively.
+
 ### Filter contact list
 
 Filter contact list based on the tag(s) provided.
@@ -1296,6 +1297,10 @@ Add a person that has an **identical** name to a contact in your existing LookMe
 
    Expected: Contact with above details (Name as Bernice Yu, Phone as 91234568...) is added
 
+4. Test case: `duplicate n`
+
+   Expected: No contact is added. Error details are shown in the status message.
+
 ### Overwrite
 
 Overwrites a person that has an **identical** name to a contact in your existing LookMeUp contacts.
@@ -1313,7 +1318,7 @@ Overwrites a person that has an **identical** name to a contact in your existing
 
 4. Test case: `overwrite 1`
 
-   Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
+   Expected: No contact is overwritten. Error details are shown in the status message.
 
 ### Safe Removal of a Person
 
