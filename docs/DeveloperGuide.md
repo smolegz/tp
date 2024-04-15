@@ -56,7 +56,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `remove 1`.
 
 <puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
@@ -106,14 +106,14 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+**Note:** The lifeline for `RemoveCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `RemoveCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `RemoveCommand`) which is executed by the `LogicManager`.
+1. The command can communicate with the `Model` when it is executed (e.g. to remove a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
@@ -123,7 +123,7 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `RemoveCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 <puml src="diagrams/AddByStepClass.puml" width="400"/>
 
@@ -281,7 +281,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `remove`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `remove`, just save the person being removed).
   * Cons: Need to ensure that the implementation of each individual command are correct.
 
 ### Safe-Removal feature
@@ -409,7 +409,7 @@ net for users before the actual removal of the contact.
     * This alternative would require a more complex implementation, as the confirmation process would be directly
       handled within `RemoveCommand`, leading to a more monolithic class structure. This would make it harder to
       maintain and extend the code in the future, as the class would be responsible for the confirmation processes 
-      **AND** the actual process of deleting the contact, violating the Single Responsibility Principle.
+      **AND** the actual process of removing the contact, violating the Single Responsibility Principle.
 
 **Decision**:
 
@@ -472,12 +472,15 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="400" height="400"/><br>
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" />
+
+<br>
+
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
 4. `LevenshteinDistance`: An implementation of the DistanceFunction interface using the Levenshtein distance algorithm
-<br/>
+<br>
 <puml src="diagrams/FuzzyInputObjectDiagram.puml" alt="FuzzyInputObjectDiagram" />
 
 Our implementation follows the SOLID principle closely. We have designed interfaces to promote flexibility, especially
@@ -487,11 +490,11 @@ complying with the Open-Close Principle. This design decision makes it easy to e
 Given below is an example usage scenario and how the fuzzy input mechanism behaves:
 
 * Step 1 : User misspelled listing command `lust` instead of `list`. 
-  * The `lust` command calls `FuzzyCommandParser#parseCommand())`, causing `BkTreeCommandMatcher#findClosestMatch()` to
+  * The `lust` command calls `FuzzyCommandParser#parseCommand()`, causing `BkTreeCommandMatcher#findClosestMatch()` to
   get called in response.
   * The `BkTree` would be already initialised with the list of commands before the call.
     * During the initialisation, `BkTree` calculates the distances between items and constructs the tree accordingly.
-  * When `findCLosestMatch()` is called, it initiates a search within the `BkTree` constructed.
+  * When `findClosestMatch()` is called, it initiates a search within the `BkTree` constructed.
     * Starting from root node, Bk-Tree traverses through nodes based on the distance between the target item `lust` 
     and items stored in each `BkTreeNode`.
     * The closest match found based on the specified distance metric (1 misspell) will be returned, in this case `list`
@@ -500,13 +503,13 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
     * In this case, LevenshteinDistance class will calculate the distance.
 
 * Step 2 : User entered unsupported command `peek`
-    * The `peek` command calls `FuzzyCommandParser#parseCommand())`, causing `BkTreeCommandMatcher#findClosestMatch()` to
+    * The `peek` command calls `FuzzyCommandParser#parseCommand()`, causing `BkTreeCommandMatcher#findClosestMatch()` to
       get called in response.
     * Initialisation works the same as Step 1
     * `findClosestMatch()` does the same operation as Step 1
       * However, based on the LevenshteinDistance algorithm, the distance between `peek` and any items stored in
       `BkTreeNode` will be greater than 1 which is greater than the specified distance metric
-      * `FuzzyCommandParser#parseCommand())` will return `null` string to `AddressBookParser#parseCommand()`
+      * `FuzzyCommandParser#parseCommand()` will return `null` string to `AddressBookParser#parseCommand()`
       * Since `null` is not a recognised command, `ParseException` will be thrown.
 
     
@@ -728,8 +731,8 @@ Aspect: How to implement assistance functions to aid users in typing their comma
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
 makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
 format. To a new user who is unfamiliar with the other commands, we can add more types of assistance to the helper 
-class. The general helper class can prompt the user for the command they need help with. The user may enter "delete"
-when they need help with the correct formatting of the `delete` command. The helper class can then prompt users for the 
+class. The general helper class can prompt the user for the command they need help with. The user may enter "remove"
+when they need help with the correct formatting of the `remove` command. The helper class can then prompt users for the 
 necessary details needed for that command. 
 
 Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
@@ -1097,59 +1100,40 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User type add contact command.
-2. LookMeUp prompts for details.
-3. User enters the requested details.
-4. LookMeUp add the contact and displays the new contact in the database.\
+1. User types `add` command.
+2. LookMeUp adds the contact and displays the new contact in the database.\
     Use case ends.
 
 **Extensions**
-* 1a. User typed an invalid command
+* 1a. User typed the `add` command with an invalid format or field
     * 1a1. LookMeUp displays the error.
-    * 1a2. User enters the correct command.
+    * 1a2. User enters the `add` command again
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
-
-* 3a. LookMeUp detects an error in the entered data.
-  * 3a1. LookMeUp displays the error and requests for the correct data.
-  * 3a2. User enters the new data.
-
-  Steps 3a1-3a2 are repeated until the data entered are correct.\
-  Use case resumes from step 4.
 
 **Use case:** UC2 - Remove a contact\
 **Person that can play this role:** Student in a lot of committees
 
 **MSS**
 
-1. User type remove contact command
-2. LookMeUp prompts for details
-3. User enters the requested details
-4. LookMeUp requests for confirmation.
-5. LookMeUp removes the contact and displays an execution success message.\
+1. User types `remove` command
+2. LookMeUp requests for confirmation.
+3. LookMeUp removes the contact and displays an execution success message.\
    Use case ends.
 
 
 **Extensions**
-* 1a. User typed an invalid command
+* 1a. User typed the `remove` command with an invalid format or field
     * 1a1. LookMeUp displays the error.
-    * 1a2. User enters the correct command.
+    * 1a2. User enters the `remove` command again
 
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
 
-* 3a. LookMeUp detects an error in the entered data.
-    * 3a1. LookMeUp displays the error and requests for the correct data.
-    * 3a2. User enters the new data.
-
-  Steps 3a1-3a2 are repeated until the data entered are correct.\
-  Use case resumes from step 4.
-
-
-* 4a. User declines the removal of contact.
-    * 4a1, LookMeUp confirms user's selection.\
+* 3a. User declines the removal of contact.
+    * 3a1, LookMeUp confirms user's selection.\
       Use case ends.
 
 **Use case:** UC3 - Filter contacts by tags\
@@ -1187,13 +1171,144 @@ Use case ends.
   Steps 1a1-1a2 are repeated until the command entered is correct.\
   Use case resumes from step 2.
 
+
+**Use case:** UC5 - Formatting an Add Command with system prompts\
+**Person that can play this role:** Student who is unfamiliar with the format of the Add command
+
+**MSS**
+
+1. User type addbystep command
+2. LookMeUp prompts for details
+3. User enters the requested details
+4. LookMeUp will display the success message, and will prompt the user to type the copy command (`cp`)
+5. User types the copy Comand\
+    Use case ends.
+
+**Extensions**
+* 2a. User types an invalid detail.
+    * 2a1. LookMeUp displays the error.
+    * 2a2. User enters the detail again. 
+
+  Steps 2a1-2a2 are repeated until the command entered is correct.\
+  Use case resumes from step 3.
+
+* 4a. User types a input that is not the copy command.
+    * 4a1. LookMeUp will prompt the user to type the copy command.
+    * 4a2. User enters another input. 
+
+  Steps 4a1-4a2 are repeated until the copy command is entered.\
+
+**Use case:** UC6 - Editing a command\
+**Person that can play this role:** Student who wishes to update the contact details of a contact
+
+**MSS**
+
+1. User types the `edit` command.
+2. LookMeUp edits the details of the contact and displays the new contact in the database.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `edit` command with an invalid format or field
+    * 1a1. LookMeUp displays the error.
+    * 1a2. User enters the `edit` command again
+
+  Steps 1a1-1a2 are repeated until the command entered is correct.\
+  Use case resumes from step 2.
+
+
+**Use case:** UC7 - Copying a contact's details\
+**Person that can play this role:** Student who wishes to copy the contact details of a contact
+
+**MSS**
+
+1. User types the `copy` command.
+2. LookMeUp copies the details of the contact specified by the user and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `copy` command with an invalid format or field
+    * 1a1. LookMeUp displays the error.
+    * 1a2. User enters the `copy` command again
+
+  Steps 1a1-1a2 are repeated until the command entered is correct.\
+  Use case resumes from step 2.
+
+
+**Use case:** UC8 - Undoing the last command\
+**Person that can play this role:** Student who entered a wrong command and wishes to revert his previous command
+
+**MSS**
+
+1. User types the `undo` command.
+2. LookMeUp reverts the command entered by the user and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `undo` command with no previous state-changing commands
+    * 1a1. LookMeUp displays the error.\
+  Use case ends.
+
+**Use case:** UC9 - Redoing an undo command\
+**Person that can play this role:** Student who wishes to redo the previous undo command
+
+**MSS**
+
+1. User types the `redo` command.
+2. LookMeUp reverts the latest undo command and displays the success message.\
+    Use case ends.
+
+**Extensions**
+* 1a. User typed the `redo` command with no previous undo command.
+    * 1a1. LookMeUp displays the error.\
+  Use case ends.
+
+**Use case:** UC10 - Clearing all the contacts in LookMeUp\
+**Person that can play this role:** Student who wants to delete all the contacts in LookMeUp
+
+**MSS**
+
+1. User types the `clear` command.
+2. LookMeUp edits clears all the contacts and displays the success message to the user.\
+    Use case ends.
+
+**Use case:** UC11 - Exiting the application\
+**Person that can play this role:** Student who wishes to exit the application.
+
+**MSS**
+
+1. User types the `exit` command.
+2. LookMeUp displays a the Exit window
+3. User clicks "yes"
+4. LookMeUp closes\
+   Use case ends.
+
+
+**Extensions**
+
+* 3a. User clicks "no".
+    * 3a1, LookMeUp confirms user's selection.\
+      Use case ends.
+
+    
+
+
+
+
+
+
+
+  
+
+
+
+
 ## Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.  A user should be able to add contacts even if they are not IT-savvy.
-5.  Any operation executed on the app (list, delete, add, etc) should not take more than 10 minutes to process.
+5.  Any operation executed on the app (list, remove, add, etc) should not take more than 10 minutes to process.
 6.  The startup time for the application should not take more than 10 minutes.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
@@ -1256,19 +1371,85 @@ Loading up the AddByStep Window
 4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
 case scenario in Add By Step.
 
-### Deleting a person
+### Edit contact
 
-Deleting a person while all persons are being shown
+Edit contact based on the details provided. eg. Name, email, address etc.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty.
+
+   (Details of name, address etc. are a placeholder for the following test cases)
+
+2. Test case: `edit 1 n/Alex Yeoh`
+
+   Expected: Contact at index 1's name has been edited to Alex Yeoh.
+
+3. Test case: `edit 2 n/Bernice Yu p/91725373`
+
+   Expected: Contact at index 2's name and number have been edited to Bernice Yu, 91725373 respectively.
+
+### Filter contact list
+
+Filter contact list based on the tag(s) provided.
+
+1. Test case: `filter friends`
+    Expected: Only contacts that have the tag `friends` will be shown in the contact list
+
+2. Test case: `filter Neighbours`
+   Expected: Only contacts that have the tag `Neighbours` will be shown in the contact list
+
+### Duplicate 
+
+Add a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty. 
+
+    (Details of name, address etc. are a placeholder for the following test cases) 
+2. Test case: `duplicate n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact with above details (Name as Alex Yeoh, Phone as 91234567...) is added
+
+3. Test case: `duplicate n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact with above details (Name as Bernice Yu, Phone as 91234568...) is added
+
+4. Test case: `duplicate n`
+
+   Expected: No contact is added. Error details are shown in the status message.
+
+### Overwrite
+
+Overwrites a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty.
+
+   (Details of name, address etc. are a placeholder for the following test cases)
+2. Test case: `overwrite 1 n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact at index 1, and with above details (Name as Alex Yeoh, Phone as 91234567...) is overwritten
+
+3. Test case: `overwrite 2 n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
+
+4. Test case: `overwrite 1`
+
+   Expected: No contact is overwritten. Error details are shown in the status message.
+
+### Safe Removal of a Person
+
+1. Removing a person while all persons are being shown
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: With a list of at least 2 contacts, enter `remove 2`<br>
+      Expected: Third contact is spotlighted from the list. Prompt to confirm removal with `yes`/`no`.
+      * If `yes`, the contact will be removed. A success message and details of the removed contact will be shown in the status message. Timestamp in the status bar is updated.
+      * If `no`, the contact will not be removed. Status message will show the removal is aborted. Status bar remains the same.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `remove 0`<br>
+      Expected: No person is removed. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Other incorrect remove commands to try: `remove`, `remove x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 ### Fuzzy Input
@@ -1291,6 +1472,54 @@ Sort contact list based on the keywords input.
 
   2. Test case: `sort tag`
      Expected: Contact list will be sorted lexicographically based on person's tags.
+
+### Copy Contact Information
+
+Retrieve a contact's information into system clipboard.
+
+Given this example:<br>
+<p align = "center">
+    <img src="images/example.png" width="50%"/><br>
+</p>
+
+Below shows a list of possible commands:
+
+| Sample Commands   | Details                               | Results                                   |
+|-------------------|---------------------------------------|-------------------------------------------|
+| `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
+| `copy 4 tag`      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
+| `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
+| `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
+
+For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
+
+### Undo / Redo 
+
+1. Enter `add n/Jia wei p/97743772 e/jw@gmail.com a/Block E 02-22 t/friend` in the command box.
+
+2. Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
+
+3. Enter `undo` in the command box.
+
+4. Expected output: The contact list will revert back to its state before the contact was added in Step 1.
+
+5. Enter `redo` in the command box.
+
+6. Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
+
+7. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
+**directly followed by** `undo`, and expect to be able to run `undo` **n consecutive times** as well. 
+Similarly, with **x** consecutive `undo` commands, you should be able to run `redo` consecutively **x** times as well.
+
+<box type="info" seamless>
+
+**Note:** Examples of commands that are NOT state-changing include: `filter`, `list` and hence if you try to `undo`, 
+there will be an error message that there is no command to undo. 
+
+Do also note that the `redo` command must be immediately preceded with `undo`, failing which (false example: 
+`add n/...` , `undo`, `remove 1`, then `redo`) there will be an error message that there is no command to redo. 
+
+</box>
 
 ### Saving data
 
