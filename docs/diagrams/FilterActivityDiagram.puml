@@ -1,0 +1,13 @@
+@startuml
+
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+start
+:User executes "Filter" command;
+:Get all the necessary inputs / tag(s) from user;
+:User presses enter;
+:Window displays filtered list of contacts;
+
+stop
+@enduml

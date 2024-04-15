@@ -305,7 +305,7 @@ Below is the sequence diagram outlining the execution of `RemoveCommand`.
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `RemoveCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the
+**Note:** The lifeline for `RemoveCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the
 lifeline reaches the end of diagram.
 
 </box>
@@ -369,7 +369,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
       will provide feedback on the abortion of the removal process.
 
 
-* **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
+* Step 2c: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
     * The user will be prompted with an error message:  
     > Unknown Command
     * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
@@ -455,7 +455,7 @@ experience to users.
 **Other considerations**:
 
 * **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
-processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
+processes (as opposed to overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
 and intuitive for future developer. This design decision promotes better code maintainability and extensibility, 
 as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
 are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
@@ -493,13 +493,13 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
   * The `lust` command calls `FuzzyCommandParser#parseCommand()`, causing `BkTreeCommandMatcher#findClosestMatch()` to
   get called in response.
   * The `BkTree` would be already initialised with the list of commands before the call.
-    * During the initialisation, `BkTree` calculates the distances between items and constructs the tree accordingly.
+    * During the initialisation, `BkTree` calculates the distances between the commands and constructs the tree accordingly.
   * When `findClosestMatch()` is called, it initiates a search within the `BkTree` constructed.
-    * Starting from root node, Bk-Tree traverses through nodes based on the distance between the target item `lust` 
-    and items stored in each `BkTreeNode`.
+    * Starting from root node, Bk-Tree traverses through nodes based on the distance between the target command `lust` 
+    and commands stored in each `BkTreeNode`.
     * The closest match found based on the specified distance metric (1 misspell) will be returned, in this case `list`
     and `AddressBookParser#parseCommand()` will proceed on to the `list command`.
-  * When calculating the distance between 2 items, `BkTree` calls `DistanceFunction#calculateDistance()` method.
+  * When calculating the distance between 2 commands, `BkTree` calls `DistanceFunction#calculateDistance()` method.
     * In this case, LevenshteinDistance class will calculate the distance.
 
 * Step 2 : User entered unsupported command `peek`
@@ -507,8 +507,8 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
       get called in response.
     * Initialisation works the same as Step 1
     * `findClosestMatch()` does the same operation as Step 1
-      * However, based on the LevenshteinDistance algorithm, the distance between `peek` and any items stored in
-      `BkTreeNode` will be greater than 1 which is greater than the specified distance metric
+      * However, based on the Levenshtein Distance algorithm, the distance between `peek` and any commands stored in
+      `BkTreeNode` will be greater than 1 which is greater than the specified distance metric.
       * `FuzzyCommandParser#parseCommand()` will return `null` string to `AddressBookParser#parseCommand()`
       * Since `null` is not a recognised command, `ParseException` will be thrown.
 
@@ -538,8 +538,8 @@ were compared to determine the optimal algorithm for our AddressBook.
   * Cons: Horrible run-time
 
 For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algorithm` proved to be the optimal choice.
-Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
-misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
+Its potential to extend code and efficiently handle misspelled or similar commands outweighs its memory usage and complexity of implementation. 
+This algorithm guarantees fast runtime performance and robustness in command parsing.
 
 ### Sort feature
 
@@ -583,8 +583,6 @@ When user `add` contacts in the `AddressBook`, contacts will be sorted based on 
   initialisation.
   * Since there is no condition stated, a `ParseException` will be thrown and a statement will be displayed to provide 
   the correct input and conditions to be stated.
-
-    <puml src="diagrams/SortCommandActivityDiagram.puml" alt="SortCommandActivityDiagram" />
 
 #### Design consideration:
 `SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
@@ -726,22 +724,6 @@ Aspect: How to implement assistance functions to aid users in typing their comma
       * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
       to perform checking of the command first, before letting the user know that the entered command is invalid.
 
-#### \[Future Development\] Extension of Helper class to general commands
-
-Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
-makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
-format. To a new user who is unfamiliar with the other commands, we can add more types of assistance to the helper 
-class. The general helper class can prompt the user for the command they need help with. The user may enter "remove"
-when they need help with the correct formatting of the `remove` command. The helper class can then prompt users for the 
-necessary details needed for that command. 
-
-Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
-fields have been entered. As of now the `AddCommandHelper` does not check whether the details that are keyed in 
-by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
-of the user once all of them have been entered.
-
-
-
 ### Duplicate feature
 
 #### Implementation
@@ -770,51 +752,121 @@ Given below is an example usage scenario and how the feature mechanism behaves a
 * Step 3: To continue, the user executes `add /n... /e ...` to attempt to add this new person.
 
 * Step 4: The user then receives an error in their `AddressBook` which alerts them that they already have such a person
-  in their `AddressBook`, and they have the option of overwriting the existing contact, or duplicating it.
+  in their `AddressBook`, and they have the option of creating a duplicate of this contact.
 
-* Step 5: The user picks their choice and edits the command in their current `CommandBox`, replacing `add` with either
-  `duplicate` or `overwrite INDEX`, leaving the rest of the arguments untouched.
+* Step 5: The user picks their choice and edits the command in their current `CommandBox`, replacing `add` with 
+  `duplicate`, leaving the rest of the arguments untouched.
 
-* Step 6: (1st case) The user executes `duplicate /n... /e...` command.
-    * The `duplicateCommand#` constructor will initialize with the `toAdd` variable based on the created `Person` 
+* Step 6: The user executes `duplicate /n... /e...` command.
+    * The `DuplicateCommand#` constructor will initialize with the `toAdd` variable based on the created `Person` 
         object in `DuplicateCommandParser`.
-    * `duplicateCommand#execute` will pass the `toAdd` to the `model#addDuplicatePerson`, where `UniquePersonsList`
+    * `DuplicateCommand#execute` will pass the `toAdd` to the `model#addDuplicatePerson`, where `UniquePersonsList`
         is updated with the duplicated person.
     * After duplicating, the model will be updated to reflect the newly sorted contacts list, 
         alongside a return statement to provide confirmation to the user.
-  
-* Step 6.1: (2nd case) The user executes `overwrite INDEX /n... /e...` command.
-    * The `overwriteCommand#` constructor will initialize with the `toAdd` variable based on the created `Person`
-      object in `OverwriteCommandParser`, as well as the user's inputted index of person to be edited in the 
-      `AddressBook`.
-    * `overwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
-       to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
 
 <puml src="diagrams/DuplicateSequenceDiagram.puml" />
 
-<puml src="diagrams/OverwriteSequenceDiagram.puml" />
-  
 #### Design consideration:
-`SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
+`DuplicateCommandParser` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
 Principle and Interface Segregation Principle.
 * Single Responsibility Principle
-    * The class maintains single responsibility by defining methods for duplicating person strategies without burdening
+    * The class maintains single responsibility by defining methods for duplicating persons without burdening
       implementations with unrelated methods
+      <br>
 * Interface Segregation Principle
-    * Segregates behavior for sorting into distinct methods `addDuplicatePerson`, `setDuplicatePerson`, `getPerson`, 
-      thus, allowing different sorting strategies to implement only the methods they need, rather than being forced to 
+    * Segregates behavior for duplicating into distinct methods `addDuplicatePerson` and `getPerson`, 
+      thus, allowing `DuplicateCommand` to implement only the methods they need, rather than being forced to 
       implement monolithic interface with unnecessary methods.
-
+      <br>
 * **Alternative 1** `DuplicateCommand` constructor of the `DuplicateCommand` to take in `toAdd` as its parameter.
     * Pros: Straightforward design and easy to implement.
         * Duplication logic interacts directly with data structure being sorted.
+      <br>
+* **Alternative 2** `DuplicateCommand` constructor to take in all parameters of newly inserted person (name, address etc.)
+  * Pros: Duplicating can be applied to different data structures without modification
+    * Promoting code reuse and scalability.
+  * Cons: Unnecessary complexity burden on `DuplicateCommand` to parse the user inputs into a `Person` and then execute the command.
+    <br>
 
 Alternative 1 is chosen for the following reasons:
-* Simplicity: keeps duplicating logic simple and focused by directly interacting with the data structure being sorted.
+* Simplicity: keeps duplicating logic simple and focused by directly interacting with the data structure(s) required.
 * Clear Responsibility: Duplication logic is closely tied to the data structure it operates on, adhering to the Single
   Responsibility Principle.
-* Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
+* Ease of implementation: No need to pass unnecessary parameters to the `DuplicateCommandParser` method.
     * Reduce complexity and potential dependencies.
+
+### Overwrite feature
+
+#### Implementation
+
+The feature to be able to overwrite a contact in the address book is facilitated by the use of the
+`OverwriteCommand`, given that the target contact's name already exists in LookMeUp. 
+It implements the following operations:
+* `OverwriteCommand#`: Constructor class which is instantiated and stores the necessary `toAdd` person object
+  based on user input.
+* `OverwriteCommand#Executes`: Executes the necessary `setDuplicatePerson` method and updates the model.
+
+The sorting mechanism consists of several components:
+1. `setDuplicatePerson`: A method bound by the `Person`, `ModelManager`, `AddressBook` classes that each contain
+   similar logic to support a SLAP form of implementation for the end execution point i.e. `execute` in
+   `OverwriteCommand`.
+2. `OverwriteCommand`: Initiates the overwriting by parsing user input to determine the identity of the person to add.
+   After overwriting, it then updates the list of persons in the model.
+
+Given below is an example usage scenario and how the feature mechanism behaves at each step.
+
+* Step 1: The user launches the application for the first time, no contacts will be present in the `AddressBook`.
+  When user `add` contacts in the `AddressBook`, contacts will be sorted based on their timestamp.
+
+* Step 2: The user reaches a point where they encounter the need to overwrite an existing contact, but has forgotten that they already have
+contact in their `AddressBook`, just with some differing details like address or email.
+
+* Step 3: To continue, the user executes `add /n... /e ...` to attempt to add this seemingly new person.
+
+* Step 4: The user then receives an error in their `AddressBook` which alerts them that they already have such a person
+  in their `AddressBook`, and they have the option of overwriting the existing contact.
+
+* Step 5: The user picks their choice and edits the command in their current `CommandBox`, replacing `add` with `overwrite INDEX`, 
+leaving the rest of the arguments untouched.
+
+* Step 6: The user executes `overwrite INDEX /n... /e...` command.
+  * The `OverwriteCommand#` constructor will initialize with the `toAdd` variable based on the created `Person`
+    object in `OverwriteCommandParser`, as well as the user's inputted index of person to be edited in the
+    `AddressBook`.
+  * `OverwriteCommand#execute` will pass the `indexOfTarget` to the `model#getPerson`, and will also pass the `toAdd`
+    to the `model#setDuplicatePerson`, where `UniquePersonsList` is updated with the duplicated person.
+
+<puml src="diagrams/OverwriteSequenceDiagram.puml" />
+
+#### Design consideration:
+`OverwriteCommandParser` class was implemented to adhere to SOLID principles, particularly the Single Responsibility
+Principle and Interface Segregation Principle.
+* Single Responsibility Principle
+  * The class maintains single responsibility by defining methods for overwriting persons without burdening
+    implementations with unrelated methods
+    <br>
+* Interface Segregation Principle
+  * Segregates behavior for overwriting into distinct methods `setDuplicatePerson` and `getPerson`,
+    thus, allowing `OverwriteCommand` to implement only the methods they need, rather than being forced to
+    implement monolithic interface with unnecessary methods.
+    <br>
+* **Alternative 1** `OverwriteCommand` constructor of the `OverwriteCommand` to take in `toAdd` as its parameter.
+  * Pros: Straightforward design and easy to implement.
+    * Overwriting logic interacts directly with data structure being sorted.
+      <br>
+* **Alternative 2** `OverwriteCommand` constructor to take in all parameters of newly inserted person (name, address etc.)
+  * Pros: Overwriting strategy can be applied to different data structures without modification
+    * Promoting code reuse and scalability.
+  * Cons: Unnecessary complexity burden on `OverwriteCommand` to parse the user inputs into a `Person` and then execute the command.
+    <br>
+
+Alternative 1 is chosen for the following reasons:
+* Simplicity: keeps overwriting logic simple and focused by directly interacting with the data structure(s) requ ired.
+* Clear Responsibility: Overwriting logic is closely tied to the data structure it operates on, adhering to the Single
+  Responsibility Principle.
+* Ease of implementation: No need to pass unnecessary parameters to the `OverwriteCommandParser` method.
+  * Reduce complexity and potential dependencies.
 
 ### Filter feature
 
@@ -842,7 +894,9 @@ Given below is an example usage scenario and how the filter mechanism behaves at
   * After filtering, the model will be updated to reflect the newly filtered contacts list, alongside a return statement
     to provide confirmation to the user.
 
-    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram"/>
+    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram" />
+  
+    <puml src="diagrams/FilterActivityDiagram.puml" alt="FilterActivityDiagram" />
 
 #### Design consideration:
 `TagContainsKeywordsPredicate` class was implemented for filtering functionality to adhere to SOLID principles, particularly the
@@ -850,19 +904,20 @@ Single Responsibility Principle, Interface Segregation Principle and Open/Close 
 * Single Responsibility Principle
   * The class maintains single responsibility by defining the list of all tags that the user input, as well as testing for tag matches
     without burdening implementations with unrelated methods
+  <br>
 * Interface Segregation Principle
   * Segregates behavior for filtering into the method `test`, thus, allowing different filtering strategies to implement only the methods they need.
-    <br/>
+    <br>
 * **Alternative 1 (current choice)** `FilterCommand` constructor to take in `predicate` as its parameter.
   * Pros: Straightforward design and easy to implement.
     * Filtering logic interacts directly with creation of new `TagContainsKeywordsPredicate`, before passing it directly to the `FilterCommand`
     for execution.
-
+  <br>
 * **Alternative 2** `FilterCommand` constructor to take in user input string as its parameter.
   * Pros: Filtering strategies can be applied to different data structures without modification
     * Promoting code reuse and scalability.
-  * Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
-
+* Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
+  <br>
 Alternative 1 is chosen for the following reasons:
 * Simplicity: keeps filtering logic simple and focused by directly interacting with the data structure, list in this case.
 * Clear Responsibility: Filtering logic is closely tied to the data structure and class it operates on, adhering to the Single
@@ -945,10 +1000,14 @@ Several design considerations were taken into account when implementing the copy
     - Violates product requirement (not suitable for target audience).
     - Much harder to test, requires external API such as TextFX to test.
 
+<br>
+
+From the two alternatives, alternative 1 was ultimately conceived as it does not violate our product's requirements. 
+We believe that this design choice would benefit typists who wish to utilise input commands to retrieve contact information.
 
 ### Exit Window
 #### Implementation
-For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seeks confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
+For this feature, an exit window [`ExitWindow`](https://github.com/AY2324S2-CS2103T-T12-2/tp/blob/master/src/main/java/seedu/address/ui/ExitWindow.java) is created to seek confirmation from user to terminate LookMeUp. `ExitWindow` is packaged under `UI` , along with other various parts of Ui components e.g. `CommandBox`, `ResultDisplay`, and `PersonList` etc. Similar to other Ui components, `ExitWindow` inherits from `UiPart` which captures the commonalities between classes that represent the different part of the entire GUI.
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
@@ -1298,9 +1357,7 @@ Use case ends.
 
 
   
-
-
-
+      
 
 ## Non-Functional Requirements
 
@@ -1319,6 +1376,7 @@ Use case ends.
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **IT-savvy**: The user is not familiar with the exact format of the add command.
 * **Side pop-up window**: Additional windows that can be opened by the user during usage of the software(e.g. the help window).
+* **SLAP**: The Single Level of Abstraction Principle states that all the code inside a method should be at the same level of abstraction.
 * **SOLID principle**: The SOLID principle is a set of five design principles used in object-oriented programming to make software designs more understandable, flexible, and maintainable. The acronym SOLID stands for:
     * Single Responsibility Principle
     * Open/Closed Principle
@@ -1457,10 +1515,13 @@ Overwrites a person that has an **identical** name to a contact in your existing
 Handling a command with a single misspelled letter.
 
   1. Test case: `lort name`
+      <br>
      Expected: `sort name` command will still be executed and contact list will be sorted alphabetically based on person's name
   2. Test case: `lst`
+     <br>
      Expected: `list` command will still be executed and all the contacts will be listed in the contact list. 
   3. Other misspelled command to try: `fwlter TAG`, `adbystep`, `...`
+     <br>
      Expected: Correctly spelled commands will still be executed as intended.
 
 ### Sorting contact list
@@ -1468,9 +1529,11 @@ Handling a command with a single misspelled letter.
 Sort contact list based on the keywords input.
 
   1. Test case: `sort name`
+     <br>
      Expected: Contact list will be sorted lexicographically based on person's name.
 
   2. Test case: `sort tag`
+     <br>
      Expected: Contact list will be sorted lexicographically based on person's tags.
 
 ### Copy Contact Information
@@ -1484,12 +1547,12 @@ Given this example:<br>
 
 Below shows a list of possible commands:
 
-| Sample Commands   | Details                               | Results                                   |
-|-------------------|---------------------------------------|-------------------------------------------|
-| `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
-| `copy 4 tag`      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
-| `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
-| `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
+| Sample Commands                   | Details                               | Results                                   |
+|-----------------------------------|---------------------------------------|-------------------------------------------|
+| `copy -1 name`                    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
+| `copy 4 tag`                      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
+| <code> copy &nbsp; 4 name </code> | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
+| <code> copy 4 &nbsp; name </code> | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
 
 For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
 
@@ -1497,17 +1560,17 @@ For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t1
 
 1. Enter `add n/Jia wei p/97743772 e/jw@gmail.com a/Block E 02-22 t/friend` in the command box.
 
-2. Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
+Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
 
-3. Enter `undo` in the command box.
+2. Enter `undo` in the command box.
 
-4. Expected output: The contact list will revert back to its state before the contact was added in Step 1.
+Expected output: The contact list will revert back to its state before the contact was added in Step 1.
 
-5. Enter `redo` in the command box.
+3. Enter `redo` in the command box.
 
-6. Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
+Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
 
-7. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
+4. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
 **directly followed by** `undo`, and expect to be able to run `undo` **n consecutive times** as well. 
 Similarly, with **x** consecutive `undo` commands, you should be able to run `redo` consecutively **x** times as well.
 
@@ -1525,7 +1588,10 @@ Do also note that the `redo` command must be immediately preceded with `undo`, f
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Open the .json file where the details of the contact have been started
+   2. Go to the name of the first person, and remove the name (This will corrupt the data file as the name cannot be blank)
+   3. Run LookMeUp, and execute a command (any command will do)
+   4. Expected output: LookMeUp will load up blank, and after the execution of the command, the corrupted json file will be erased.\
 
 ### Planned Enhancements
 
