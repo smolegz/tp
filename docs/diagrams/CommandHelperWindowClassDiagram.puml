@@ -9,10 +9,10 @@ Class HiddenOutside #FFFFFF
 
 
 CommandHelperWindow -right-|> AnchorPane
-CommandHelperWindow *-down-> "1" ScrollPane
-CommandHelperWindow *--down-> "1" TextField
-CommandHelperWindow *----down-> "1" Button
-ScrollPane *--down-> "1" Vbox
+CommandHelperWindow -down-> "1" ScrollPane
+CommandHelperWindow --down-> "1" TextField
+CommandHelperWindow ----down-> "1" Button
+ScrollPane --down-> "1" Vbox
 Vbox *--down-> "0...*" DialogBox
 DialogBox -right-|> HBox
 
