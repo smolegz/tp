@@ -1256,6 +1256,46 @@ Loading up the AddByStep Window
 4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
 case scenario in Add By Step.
 
+### Filter contact list
+
+Filter contact list based on the tag(s) provided.
+
+1. Test case: `filter friends`
+    Expected: Only contacts that have the tag `friends` will be shown in the contact list
+
+2. Test case: `filter Neighbours`
+   Expected: Only contacts that have the tag `Neighbours` will be shown in the contact list
+
+### Duplicate 
+
+Add a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty. 
+
+    (Details of name, address etc. are a placeholder for the following test cases) 
+2. Test case: `duplicate n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact with above details (Name as Alex Yeoh, Phone as 91234567...) is added
+
+3. Test case: `duplicate n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact with above details (Name as Bernice Yu, Phone as 91234568...) is added
+
+### Overwrite
+
+Overwrites a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty.
+
+   (Details of name, address etc. are a placeholder for the following test cases)
+2. Test case: `overwrite 1 n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact at index 1, and with above details (Name as Alex Yeoh, Phone as 91234567...) is overwritten
+
+3. Test case: `overwrite 2 n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
+
 ### Deleting a person
 
 Deleting a person while all persons are being shown
