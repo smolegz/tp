@@ -455,7 +455,7 @@ experience to users.
 **Other considerations**:
 
 * **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
-processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
+processes (as opposed to overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
 and intuitive for future developer. This design decision promotes better code maintainability and extensibility, 
 as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
 are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
@@ -910,7 +910,9 @@ Given below is an example usage scenario and how the filter mechanism behaves at
   * After filtering, the model will be updated to reflect the newly filtered contacts list, alongside a return statement
     to provide confirmation to the user.
 
-    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram"/>
+    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram" />
+  
+    <puml src="diagrams/FilterActivityDiagram.puml" alt="FilterActivityDiagram" />
 
 #### Design consideration:
 `TagContainsKeywordsPredicate` class was implemented for filtering functionality to adhere to SOLID principles, particularly the
