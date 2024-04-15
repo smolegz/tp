@@ -100,9 +100,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("remove 1")` API call as an example.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<puml src="diagrams/RemoveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `remove 1` Command" />
 
 <box type="info" seamless>
 
@@ -185,19 +185,19 @@ These operations are exposed in the `Model` interface as `Model#commitAddressBoo
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the 
+* Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the 
 initial address book state, and the `currentStatePointer` pointing to that single address book state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
+* Step 2. The user executes `remove 5` command to remove the 5th person in the address book followed by a `yes` 
 confirmation. The confirmation command calls `Model#commitAddressBook()`, causing the modified state of the address book 
 after the removal execution to be saved in the `addressBookStateList`, and the `currentStatePointer` is 
 shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls 
+* Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls 
 `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
@@ -209,12 +209,11 @@ will not be saved into the `addressBookStateList`.
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the 
+* Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the 
 `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once 
 to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
 
 <box type="info" seamless>
 
@@ -250,13 +249,13 @@ to check if this is the case. If so, it will return an error to the user rather 
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as 
+* Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as 
 `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. 
 Thus, the `addressBookStateList` remains unchanged.
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not 
+* Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not 
 pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be 
 purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern 
 desktop applications follow.
@@ -294,13 +293,27 @@ The safe-removal mechanism consists of several components:
    parses the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual 
    contact to be removed.
 
-[//]: # add RemoveSequenceDiagram
+
+Below is the sequence diagram outlining the execution of `RemoveCommand`.
+
+<puml src="diagrams/RemoveSequenceDiagram.puml" alt="RemoveSequenceDiagram" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `RemoveCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the
+lifeline reaches the end of diagram.
+
+</box>
 
 3. `RemoveConfirmation`, `RemoveSuccess` and `RemoveAbortion`: Classes that prompt the user to confirm the removal of
    the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
    the success or failure of the removal process.
 
-[//]: # add RemoveConfirmationSequenceDiagram
+
+Below is the sequence diagram outlining the execution of `RemoveSuccess`, where the user confirms the removal of a contact.
+
+<puml src="diagrams/RemoveConfirmationSequenceDiagram.puml" alt="RemoveConfirmationSequenceDiagram" />
+
 
 Our implementation follows Liskov's Substitution Principle closely. `RemoveConfirmation` was designed to be an abstract
 class to allow for extension of the 2 confirmation methods via the `RemoveSuccess` and `RemoveAbortion` classes. This
@@ -317,7 +330,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
 > 4. Paul Cooper
 
 
-* **Step 1**: The user executes `remove 4` command.
+* Step 1: The user executes `remove 4` command.
     * The `remove` command calls `RemoveCommandParser#parseCommand()`, causing `RemoveCommand#execute()` to get called
     * `RemoveCommand` will proceed with the confirmation process of the actual contact to be removed.
         * The input will be parsed by `RemoveCommandParser` to obtain the intended `Index` to be removed.
@@ -327,7 +340,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
     > 1. Paul Walker
 
   
-* **Step 2a**: The user confirms the removal of the contact by executing `yes` command.
+* Step 2a: The user confirms the removal of the contact by executing `yes` command.
     * The `yes` command calls `RemoveSuccess#execute()` to confirm the removal process.
     * The confirmation process will be handled by `RemoveSuccess` and its parent class `RemoveConfirmation`.
         * `RemoveSuccess#execute()` checks if the `yes` input is valid, calling `RemoveConfirmation#isValidInput()`
@@ -339,7 +352,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
       the removal process.
 
 
-* **Step 2b**: The user aborts the removal of the contact by executing `no` command.
+* Step 2b: The user aborts the removal of the contact by executing `no` command.
     * The `no` command calls `RemoveAbortion#execute()` to abort the removal process.
     * The abortion process will be handled by `RemoveAbortion` and its parent class `RemoveConfirmation`.
         * `RemoveAbortion#execute()` checks if the `no` input is valid, calling `RemoveConfirmation#isValidInput()`
@@ -355,12 +368,18 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
     * The user will be prompted with an error message:  
     > Unknown Command
     * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
-    to be prompted with the confirmation process again.
+    to be prompted with the confirmation process again, or type `list` to return to the default list
 
 Here is an activity diagram that summarizes the process of removing a contact from the address book:
 
-[//]: # (<puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />)
+<puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />
 
+<box type="info" seamless>
+
+**Note:** The path from the guard condition `[User executes "remove 1"]` is supposed to point to `Parse index` action,
+but due to the constraints of PlantUML, it has been simplified to point directly to the merge node below.
+
+</box>
 
 #### Design considerations:
 
@@ -387,20 +406,18 @@ net for users before the actual removal of the contact.
       maintain and extend the code in the future, as the class would be responsible for the confirmation processes 
       **AND** the actual process of deleting the contact, violating the Single Responsibility Principle.
 
-
 **Decision**:
+
 Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 1**
 
 Addressing the cons of Alternative 1, our current implementation is such that details of previous command are retrieved
 from `RemoveCommandParser` within the `RemoveConfirmation#isValidInput()` method. This avoids exposure of the
 `remove INDEX` command details, ensuring Separation of Concerns and adhering to the Single Responsibility Principle as
-the `RemoveConfirmation` class solely handles the confirmation process itself and checks directly related to it.
-
+the `RemoveConfirmation` class solely handles the confirmation process itself and checks directly related to it.<br><br>
 
 
 **Aspect 2**: For enhancing the removal process by first **shortlisting the contact to be removed** before 
 proceeding with `remove INDEX`, potentially reducing the amount of scrolling to find the contact to be removed.
-
 
 * **Alternative 1**: To use the same command word (i.e. `remove` - `remove NAME` then `remove INDEX`)
 to perform the shortlisting of contacts with matching names, then identifying the specific contact to be removed by its 
@@ -416,13 +433,14 @@ index.
     `remove INDEX` instead. 
 
 
-* **Alternative 2 (current choice)**: To encourage users to use the existing `find` command to shortlist the contact(s)  
+* **Alternative 2 (current choice)**: To encourage users to use the existing `find` command to shortlist the contact(s) 
 to be removed, then use the `remove INDEX` to identify the contact from a shorter list, proceeding with safe-removal.
-* Pros: Separates the shortlisting and confirmation processes to two distinct commands
-  * This reduces ambiguity in the command execution process for future developers
-* Cons: Require 2 different commands for deletion, which may come as a slight inconvenience to users.
+  * Pros: Separates the shortlisting and confirmation processes to two distinct commands
+    * This reduces ambiguity in the command execution process for future developers
+  * Cons: Require 2 different commands for deletion, which may come as a slight inconvenience to users.
 
 **Decision**:
+
 Weighing the pros and cons of Alternatives 1 and 2, we have decided to go with **Alternative 2** due to the clarity of 
 separation between the shortlisting and confirmation processes. Since this workflow is simply an enhancement to the 
 removal process, and given how `find` is relatively intuitive to use, we believe that the maintaining the separation of 
@@ -430,17 +448,16 @@ shortlisting and removal using the existing `find` command would ultimately prov
 experience to users.
 
 **Other considerations**:
-**Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
+
+* **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
 processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
 and intuitive for future developer. This design decision promotes better code maintainability and extensibility, 
 as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
 are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
 the `RemoveCommand` class adheres to the Single Responsibility Principle, as it is solely responsible for the 
-confirmation process of the contact to be removed.
+confirmation process of the contact to be removed. <br><br>
 
-
-
-
+  
 ### Fuzzy Input
 
 #### Implementation
@@ -1225,15 +1242,41 @@ Sort contact list based on the keywords input.
 
 Our team consists of 5 members. 
 
-1. Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. We plan to add a
-   an exit command to `AddCommandHelper` such that you can close the window simply by typing the `exit` command
+1. **Add an `exit` command to `AddCommandHelper` to enhance AddByStep process**
+   * Currently, `AddCommandHelper` has to be closed manually, which is not optimised for fast typists. 
+   * We plan to add an exit command to `AddCommandHelper` such that you can close the window simply by typing the 
+   `exit` command
 
-2. Fuzzy Input with varying distance metric
+
+2. **Vary Distance Metric for Fuzzy Input**
    * Currently, the MAX_DISTANCE for the distance metric is set to 1. 
    * To enhance user-experience and accommodate longer commands with potentially more misspellings, it would be advantageous to dynamically adjust the MAX_DISTANCE according
 to the length of the correct command string. 
    * This approach allows a more flexible and adaptable matching process,
 guaranteeing that the misspelling tolerance varies proportionately with command length. 
-   * By dynamically adjusting the
-MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately identified. 
+   * By dynamically adjusting the MAX_DISTANCE, longer and more complex input command like `addbystep` can be accurately \
+   identified. 
+
+
+3. **Enhance Invalid Input Error-Handling for Safe-Removal Confirmation Step**
+   * Currently, when a user is prompted for confirmation, to enter either a `yes` or `no` input, if they enter any other 
+   (invalid) input e.g. `abc`, they will be prompted with an `Unknown Command` error message, which is too general.
+   * With the `Unknown Command` prompt, though the GUI still shows the spotlighted contact for removal, the user is 
+   unable to directly type `yes`/`no` to proceed with the confirmation as the system does not recognise that the user is
+   still in the process of removing the contact, which brings slight inconvenience though there is a simple step to
+   get around it by typing `remove 1` then `yes`/`no` to proceed with the confirmation.
+   * **2 Enhancements**:
+        * We plan to improve the `Unknown Command` error message to be more specific, such as `Invalid Input, please 
+        enter 'yes' if you wish to proceed with the removal, and 'no' if you wish to abort the removal process`.
+        * Together with this, we are also planning to change the internal validity checking process of 
+        `RemoveConfirmation#isValidInput` to check for whether the **last VALID input** is a `RemoveCommand` 
+        instead of simply checking the **last input** (which currently makes the system prone to keeping track of the 
+        invalid input and assuming the user is no longer doing a removal). This would remove the inconvenience of having 
+        to type `remove 1`. 
+
+4. **Improve Name Validation for Name Field**
+   * Currently, names can only contain alphanumeric characters and spaces. Legal names such as `Joseph King Jr.`, 
+   `Shaquille O'Neal`, `Mary-Anne Tan` or `Ravichandram S/O Ramesh` are considered invalid. 
+   * We plan to update the validation regex to enable special characters such as `'`, `-`, `/`, and `.` to be recognised
+   * This allows LookMeUp to accommodate to more users, and to be more inclusive.
 
