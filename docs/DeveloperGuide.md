@@ -372,6 +372,12 @@ Here is an activity diagram that summarizes the process of removing a contact fr
 
 <puml src="diagrams/SafeRemovalActivityDiagram.puml" alt="SafeRemovalActivityDiagram" />
 
+<box type="info" seamless>
+
+**Note:** The path from the guard condition `[User executes "remove 1"]` is supposed to point to `Parse index` action,
+but due to the constraints of PlantUML, it has been simplified to point directly to the merge node below.
+
+</box>
 
 #### Design considerations:
 
