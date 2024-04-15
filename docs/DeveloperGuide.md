@@ -305,7 +305,7 @@ Below is the sequence diagram outlining the execution of `RemoveCommand`.
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `RemoveCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the
+**Note:** The lifeline for `RemoveCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the
 lifeline reaches the end of diagram.
 
 </box>
