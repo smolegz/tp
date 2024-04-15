@@ -17,7 +17,9 @@ LookMeUp  is a brownfield software project based off AddressBook Level-3, taken 
 at National University of Singapore.
 
 1. The UI features of `AddCommandHelper` was reused with minimal changes from [Snom](https://github.com/RunjiaChen/ip).
-2. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
+2. `Fuzzy Input` was adapted from [geeksforgeeks](https://www.geeksforgeeks.org/bk-tree-introduction-implementation/).
+3. GitHub Co-Pilot was used sparingly as an autocomplete tool in the writing of some code snippets.
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -122,6 +124,11 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `RemoveCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+
+<puml src="diagrams/AddByStepClass.puml" width="400"/>
+
+How the AddCommandHelper works:
+* When the user enters an input into the CommandHelperWindow, AddCommandHelper will use the methods defined in `ParserUtil` to check whether the input by the user is valid. This will be explained in detail in the AddByStep Feature. 
 
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -465,7 +472,7 @@ close to the target word in terms of their Levenshtein distance. Each node in th
 word and its children represent words that are one edit distance away. 
 
 The fuzzy input implementation consists of several components:
-<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="250"/><br>
+<puml src="diagrams/FuzzyInputClassDiagram.puml" alt="FuzzyInputClassDiagram" width="400" height="400"/><br>
 1. `BkTreeCommandMatcher`: The main BK-Tree data structure for sorting and efficiently search for similar elements
 2. `BkTreeNode`: Internal node structure used by the Bk-Tree
 3. `FuzzyCommandParser`: A class demonstrating the usage of BK-tree for command parsing
@@ -805,6 +812,61 @@ Alternative 1 is chosen for the following reasons:
   Responsibility Principle.
 * Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
     * Reduce complexity and potential dependencies.
+
+### Filter feature
+
+#### Implementation
+
+The sorting mechanism is facilitated by `FilterCommand`. It implements the following operations:
+* `FilterCommand#`: Constructor class which is instantiated and stores the necessary `Predicate` based on user input.
+* `FilterCommand#Executes`: Updates the model based on the generated `Predicate`.
+
+The filtering mechanism consists of several components:
+1. `Predicate`: An instance of the `TagContainsKeywordsPredicate` class that stores the list of tags that a user inputs.
+2. `FilterCommand`: Initiates the sorting by parsing user input to determine the filtering criteria and 
+then updates the list of persons in the model via `model#updateFilteredPersonList`.
+
+Given below is an example usage scenario and how the filter mechanism behaves at each step.
+
+* Step 1: The user launches the application for the first time, no contacts will be present in the `AddressBook`.
+  When user `add` contacts in the `AddressBook`, contacts are originally sorted based on their timestamp. Assume that 
+  after adding contacts, the user wants to filter by contacts that are tagged as friends.
+
+* Step 2: The user executes `filter friends` command.
+  * The `filterCommand#` constructor will initialise and store the argument into `predicate`.
+  * `filterCommand#execute` will pass the `predicate` to `model#updateFilteredPersonList`, where `UniquePersonsList`
+    will be obtained and filtered by the given `predicate`
+  * After filtering, the model will be updated to reflect the newly filtered contacts list, alongside a return statement
+    to provide confirmation to the user.
+
+    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram"/>
+
+#### Design consideration:
+`TagContainsKeywordsPredicate` class was implemented for filtering functionality to adhere to SOLID principles, particularly the
+Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
+* Single Responsibility Principle
+  * The class maintains single responsibility by defining the list of all tags that the user input, as well as testing for tag matches
+    without burdening implementations with unrelated methods
+* Interface Segregation Principle
+  * Segregates behavior for filtering into the method `test`, thus, allowing different filtering strategies to implement only the methods they need.
+    <br/>
+* **Alternative 1 (current choice)** `FilterCommand` constructor to take in `predicate` as its parameter.
+  * Pros: Straightforward design and easy to implement.
+    * Filtering logic interacts directly with creation of new `TagContainsKeywordsPredicate`, before passing it directly to the `FilterCommand`
+    for execution.
+
+* **Alternative 2** `FilterCommand` constructor to take in user input string as its parameter.
+  * Pros: Filtering strategies can be applied to different data structures without modification
+    * Promoting code reuse and scalability.
+  * Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
+
+Alternative 1 is chosen for the following reasons:
+* Simplicity: keeps filtering logic simple and focused by directly interacting with the data structure, list in this case.
+* Clear Responsibility: Filtering logic is closely tied to the data structure and class it operates on, adhering to the Single
+  Responsibility Principle.
+* Ease of implementation: No need to pass unnecessary parameters to the filter method.
+  * Reduce complexity and potential dependencies.
+
 
 ### Copy User Info
 #### Implementation
@@ -1194,6 +1256,46 @@ Loading up the AddByStep Window
 4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
 case scenario in Add By Step.
 
+### Filter contact list
+
+Filter contact list based on the tag(s) provided.
+
+1. Test case: `filter friends`
+    Expected: Only contacts that have the tag `friends` will be shown in the contact list
+
+2. Test case: `filter Neighbours`
+   Expected: Only contacts that have the tag `Neighbours` will be shown in the contact list
+
+### Duplicate 
+
+Add a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty. 
+
+    (Details of name, address etc. are a placeholder for the following test cases) 
+2. Test case: `duplicate n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact with above details (Name as Alex Yeoh, Phone as 91234567...) is added
+
+3. Test case: `duplicate n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact with above details (Name as Bernice Yu, Phone as 91234568...) is added
+
+### Overwrite
+
+Overwrites a person that has an **identical** name to a contact in your existing LookMeUp contacts.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty.
+
+   (Details of name, address etc. are a placeholder for the following test cases)
+2. Test case: `overwrite 1 n/Alex Yeoh a/Serangoon Crescent Street e/alexyo@example.com p/91234567`
+
+   Expected: Contact at index 1, and with above details (Name as Alex Yeoh, Phone as 91234567...) is overwritten
+
+3. Test case: `overwrite 2 n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
+
 ### Safe Removal of a Person
 
 1. Removing a person while all persons are being shown
@@ -1211,6 +1313,46 @@ case scenario in Add By Step.
    1. Other incorrect remove commands to try: `remove`, `remove x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+### Fuzzy Input
+
+Handling a command with a single misspelled letter.
+
+  1. Test case: `lort name`
+     Expected: `sort name` command will still be executed and contact list will be sorted alphabetically based on person's name
+  2. Test case: `lst`
+     Expected: `list` command will still be executed and all the contacts will be listed in the contact list. 
+  3. Other misspelled command to try: `fwlter TAG`, `adbystep`, `...`
+     Expected: Correctly spelled commands will still be executed as intended.
+
+### Sorting contact list
+
+Sort contact list based on the keywords input.
+
+  1. Test case: `sort name`
+     Expected: Contact list will be sorted lexicographically based on person's name.
+
+  2. Test case: `sort tag`
+     Expected: Contact list will be sorted lexicographically based on person's tags.
+
+### Copy Contact Information
+
+Retrieve a contact's information into system clipboard.
+
+Given this example:<br>
+<p align = "center">
+    <img src="images/example.png" width="50%"/><br>
+</p>
+
+Below shows a list of possible commands:
+
+| Sample Commands   | Details                               | Results                                   |
+|-------------------|---------------------------------------|-------------------------------------------|
+| `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
+| `copy 4 tag`      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
+| `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
+| `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
+
+For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
 
 ### Undo / Redo 
 

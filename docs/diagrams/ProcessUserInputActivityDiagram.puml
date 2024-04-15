@@ -6,6 +6,6 @@ repeat
 backward: Error message is shown;
 repeat while () is ([Field is invalid]) not ([Else])
 backward: User is prompted to enter the next field;
-repeat while () is ([Are there more fields needed]) not ([Else])
+repeat while () is ([More fields needed]) not ([Else])
 stop
 @enduml
