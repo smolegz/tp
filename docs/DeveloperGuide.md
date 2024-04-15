@@ -1523,7 +1523,10 @@ Do also note that the `redo` command must be immediately preceded with `undo`, f
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Open the .json file where the details of the contact have been started
+   2. Go to the name of the first person, and remove the name (This will corrupt the data file as the name cannot be blank)
+   3. Run LookMeUp, and execute a command (any command will do)
+   4. Expected output: LookMeUp will load up blank, and after the execution of the command, the corrupted json file will be erased.\
 
 ### Planned Enhancements
 
