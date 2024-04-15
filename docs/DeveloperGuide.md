@@ -493,7 +493,7 @@ Given below is an example usage scenario and how the fuzzy input mechanism behav
   * The `lust` command calls `FuzzyCommandParser#parseCommand()`, causing `BkTreeCommandMatcher#findClosestMatch()` to
   get called in response.
   * The `BkTree` would be already initialised with the list of commands before the call.
-    * During the initialisation, `BkTree` calculates the distances between items and constructs the tree accordingly.
+    * During the initialisation, `BkTree` calculates the distances between the commands and constructs the tree accordingly.
   * When `findClosestMatch()` is called, it initiates a search within the `BkTree` constructed.
     * Starting from root node, Bk-Tree traverses through nodes based on the distance between the target item `lust` 
     and items stored in each `BkTreeNode`.
