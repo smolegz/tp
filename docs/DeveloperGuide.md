@@ -56,7 +56,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `remove 1`.
 
 <puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
@@ -106,14 +106,14 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 <box type="info" seamless>
 
-**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+**Note:** The lifeline for `RemoveCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `RemoveCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `RemoveCommand`) which is executed by the `LogicManager`.
+1. The command can communicate with the `Model` when it is executed (e.g. to remove a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
@@ -123,7 +123,7 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `RemoveCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 <puml src="diagrams/AddByStepClass.puml" width="400"/>
 
@@ -281,7 +281,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `remove`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `remove`, just save the person being removed).
   * Cons: Need to ensure that the implementation of each individual command are correct.
 
 ### Safe-Removal feature
@@ -409,7 +409,7 @@ net for users before the actual removal of the contact.
     * This alternative would require a more complex implementation, as the confirmation process would be directly
       handled within `RemoveCommand`, leading to a more monolithic class structure. This would make it harder to
       maintain and extend the code in the future, as the class would be responsible for the confirmation processes 
-      **AND** the actual process of deleting the contact, violating the Single Responsibility Principle.
+      **AND** the actual process of removing the contact, violating the Single Responsibility Principle.
 
 **Decision**:
 
@@ -728,8 +728,8 @@ Aspect: How to implement assistance functions to aid users in typing their comma
 Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
 makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
 format. To a new user who is unfamiliar with the other commands, we can add more types of assistance to the helper 
-class. The general helper class can prompt the user for the command they need help with. The user may enter "delete"
-when they need help with the correct formatting of the `delete` command. The helper class can then prompt users for the 
+class. The general helper class can prompt the user for the command they need help with. The user may enter "remove"
+when they need help with the correct formatting of the `remove` command. The helper class can then prompt users for the 
 necessary details needed for that command. 
 
 Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
@@ -1193,7 +1193,7 @@ Use case ends.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.  A user should be able to add contacts even if they are not IT-savvy.
-5.  Any operation executed on the app (list, delete, add, etc) should not take more than 10 minutes to process.
+5.  Any operation executed on the app (list, remove, add, etc) should not take more than 10 minutes to process.
 6.  The startup time for the application should not take more than 10 minutes.
 7.  Side pop-up windows should not interfere with the execution of commands in the main window.
 
@@ -1296,19 +1296,21 @@ Overwrites a person that has an **identical** name to a contact in your existing
 
    Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
 
-### Deleting a person
+### Safe Removal of a Person
 
-Deleting a person while all persons are being shown
+1. Removing a person while all persons are being shown
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: With a list of at least 2 contacts, enter `remove 2`<br>
+      Expected: Third contact is spotlighted from the list. Prompt to confirm removal with `yes`/`no`.
+      * If `yes`, the contact will be removed. A success message and details of the removed contact will be shown in the status message. Timestamp in the status bar is updated.
+      * If `no`, the contact will not be removed. Status message will show the removal is aborted. Status bar remains the same.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `remove 0`<br>
+      Expected: No person is removed. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Other incorrect remove commands to try: `remove`, `remove x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 ### Fuzzy Input
@@ -1351,6 +1353,34 @@ Below shows a list of possible commands:
 | `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
 
 For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
+
+### Undo / Redo 
+
+1. Enter `add n/Jia wei p/97743772 e/jw@gmail.com a/Block E 02-22 t/friend` in the command box.
+
+2. Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
+
+3. Enter `undo` in the command box.
+
+4. Expected output: The contact list will revert back to its state before the contact was added in Step 1.
+
+5. Enter `redo` in the command box.
+
+6. Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
+
+7. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
+**directly followed by** `undo`, and expect to be able to run `undo` **n consecutive times** as well. 
+Similarly, with **x** consecutive `undo` commands, you should be able to run `redo` consecutively **x** times as well.
+
+<box type="info" seamless>
+
+**Note:** Examples of commands that are NOT state-changing include: `filter`, `list` and hence if you try to `undo`, 
+there will be an error message that there is no command to undo. 
+
+Do also note that the `redo` command must be immediately preceded with `undo`, failing which (false example: 
+`add n/...` , `undo`, `remove 1`, then `redo`) there will be an error message that there is no command to redo. 
+
+</box>
 
 ### Saving data
 
