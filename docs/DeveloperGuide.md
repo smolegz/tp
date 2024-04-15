@@ -538,8 +538,8 @@ were compared to determine the optimal algorithm for our AddressBook.
   * Cons: Horrible run-time
 
 For our AddressBook implementation, the `BK-Tree with Levenshtein Distance Algorithm` proved to be the optimal choice.
-Its memory usage and complexity of implementation outweighs its potential to extend code and efficiently handle
-misspelled or similar commands. This algorithm guarantees fast runtime performance and robustness in command parsing.
+Its potential to extend code and efficiently handle misspelled or similar commands outweighs its memory usage and complexity of implementation. 
+This algorithm guarantees fast runtime performance and robustness in command parsing.
 
 ### Sort feature
 
