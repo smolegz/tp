@@ -57,6 +57,8 @@
         "sort-feature": "Sort feature",
         "add-by-step": "Add By Step",
         "duplicate-feature": "Duplicate feature",
+        "overwrite-feature": "Overwrite feature",
+        "filter-feature": "Filter feature",
         "copy-user-info": "Copy User Info",
         "exit-window": "Exit Window",
         "input-history-navigation": "Input History Navigation",
@@ -71,10 +73,15 @@
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
         "add-by-step-2": "Add By Step",
-        "deleting-a-person": "Deleting a person",
+        "edit-contact": "Edit contact",
+        "filter-contact-list": "Filter contact list",
+        "duplicate": "Duplicate",
+        "overwrite": "Overwrite",
+        "safe-removal-of-a-person": "Safe Removal of a Person",
         "fuzzy-input-2": "Fuzzy Input",
         "sorting-contact-list": "Sorting contact list",
         "copy-contact-information": "Copy Contact Information",
+        "undo-redo": "Undo / Redo",
         "saving-data": "Saving data",
         "planned-enhancements": "Planned Enhancements"
       },
@@ -145,8 +152,8 @@
         "known-issues": "Known Issues",
         "command-summary": "Command Summary",
         "glossary": "Glossary",
-        "bk-tree": "BK-Tree",
-        "lexicographical": "Lexicographical"
+        "lexicographical": "Lexicographical",
+        "operating-system-os-clipboard": "Operating System (OS) clipboard"
       },
       "headingKeywords": {}
     },
