@@ -784,7 +784,7 @@ Given below is an example usage scenario and how the feature mechanism behaves a
 <puml src="diagrams/DuplicateSequenceDiagram.puml" />
 
 #### Design consideration:
-`SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
+`DuplicateCommandParser` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility 
 Principle and Interface Segregation Principle.
 * Single Responsibility Principle
     * The class maintains single responsibility by defining methods for duplicating persons without burdening
@@ -856,7 +856,7 @@ leaving the rest of the arguments untouched.
 <puml src="diagrams/OverwriteSequenceDiagram.puml" />
 
 #### Design consideration:
-`SolidStrategy` interface was implemented to adhere to SOLID principles, particularly the Single Responsibility
+`OverwriteCommandParser` class was implemented to adhere to SOLID principles, particularly the Single Responsibility
 Principle and Interface Segregation Principle.
 * Single Responsibility Principle
   * The class maintains single responsibility by defining methods for overwriting persons without burdening
@@ -1390,6 +1390,7 @@ Use case ends.
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **IT-savvy**: The user is not familiar with the exact format of the add command.
 * **Side pop-up window**: Additional windows that can be opened by the user during usage of the software(e.g. the help window).
+* **SLAP**: The Single Level of Abstraction Principle states that all the code inside a method should be at the same level of abstraction.
 * **SOLID principle**: The SOLID principle is a set of five design principles used in object-oriented programming to make software designs more understandable, flexible, and maintainable. The acronym SOLID stands for:
     * Single Responsibility Principle
     * Open/Closed Principle
