@@ -25,7 +25,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
-1. Download the latest `LookMeUp.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases/tag/v1.3(final)).
+1. Download the latest `LookMeUp.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for the LookMeUp app.
 
@@ -42,6 +42,14 @@ So say goodbye to traditional address book applications and say hello to the fut
 1. For users who are familiar with our app, or simply wish to get a quick reference to our commands, feel free to refer
    to the [Command Summary](#command-summary) below! Else, you can refer to the [Features](#features) section for a
    detailed explanation of each command.
+
+<box type="tip" seamless>
+
+**TIP:**
+* If you’re unfamiliar with  using the command terminal, fret not! [Here](#https://www.git-tower.com/blog/command-line-cheat-sheet/) is a condensed cheat sheet for your reference. 
+
+</box>
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -194,7 +202,7 @@ Edits an existing person in the address book.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive number** 1, 2, 3, …​
 * The index provided must be within the range of available contacts in the address book.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
@@ -252,7 +260,7 @@ Format in 2 steps:
 
    * Removes the contact from the specified index.
    * The `INDEX` refers to the index number shown in the displayed person list.
-   * The index must be a `positive integer` 1, 2, 3, … and can only be as large as the index of the last contact in 
+   * The index must be a `positive number` 1, 2, 3, … and can only be as large as the index of the last contact in 
    the current list (be it the default or filtered).
      * LookMeUp then "spotlights" (only shows) this one contact, and prompts a confirmation message to confirm removal<br>
         <p align = "center">
@@ -465,7 +473,9 @@ Overwrites an existing contact in the address book, provided that a contact with
 
 Format: `overwrite INDEX n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 * `INDEX` refers to the index number shown in the displayed person list, that represents the target contact to be overwrite.
-* The index **must be positive integer** 1, 2, 3, …​
+* The index **must be positive number** 1, 2, 3, …​
+* The index provided must be within the range of available contacts in the address book.
+
 
 Example:
 Say you tried to add a contact with an **identical name** to the first entry `Taylor Sheesh`<br>
@@ -550,11 +560,11 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 | `filter TAGNAME(s)`                                | Shows a list of persons in the address book, filtered by specified tags.<br/>**Example:**<br/>`filter friends family`                                                                                                                    |
 | `find KEYWORD(s)`                                  | Finds persons whose names contain any of the given keywords.<br/>**Example:**<br/>`find John`                                                                                                                                            |
 | `sort KEYWORD`                                     | Sorts contacts based on the input condition.<br/>**KEYWORDS:**<br/>`NAME`,`TAG`                                                                                                                                                          |
-| `remove INDEX`<br/>`yes/no`                        | Safe removal of contact based on the index of the contact keyed in, followed by confirmation step before actual removal.                                                                                                                 |
+| `remove INDEX`<br/>`yes/no`                        | Safe removal of contact based on the index of the contact keyed in, followed by confirmation step before actual removal.<br/>**Example:**<br/>`remove 3 name`                                                                            |
 | `edit INDEX [n/…​] [p/…​] [e/…​] [a/…​] [t/TAG]…​` | Adds a contact into the Address Book.<br/>**Example:**<br/>`add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                                                                                              |
 | `duplicate n/…​ p/…​ e/…​ a/…​`                    | Adds the new contact to the address book, **assuming that a contact with identical identity already exists**.<br/>**Example:**<br/>`duplicate n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`                |
 | `overwrite INDEX n/…​ p/…​ e/…​ a/…​ [tTAG]…​`     | Overwrites an existing contact in the address book, **assuming that a contact with an identical identity already exists**.<br/>**Example:**<br/>`overwrite 2 n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` |
-| `copy INDEX FIELD(s)`                              | Copies a contact's information e.g. name, phone, email and address into OS clipboard.                                                                                                                                                    |
+| `copy INDEX FIELD(s)`                              | Copies a contact's information e.g. name, phone, email and address into OS clipboard.<br/>**Example:**<br/>`copy 4 name`                                                                                                                 |
 | `undo`                                             | Undo the previous command entered.                                                                                                                                                                                                       |
 | `redo`                                             | Reverses the previous `undo` command.                                                                                                                                                                                                    |
 | `clear`                                            | Deletes all contacts                                                                                                                                                                                                                     |
@@ -564,8 +574,8 @@ Furthermore, certain edits can cause the AddressBook to behave in unexpected way
 
 ## Glossary
 
-### BK-Tree
-* A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
-
 ### Lexicographical
 * Order of words based on the alphabetical order of their letters.
+
+### Operating System (OS) clipboard
+* Temporary storage area in your computer's memory that stores data that has been copied from LookMeUp.
