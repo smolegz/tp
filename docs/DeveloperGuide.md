@@ -1246,7 +1246,7 @@ Below shows a list of possible commands:
 | Sample Commands   | Details                               | Results                                   |
 |-------------------|---------------------------------------|-------------------------------------------|
 | `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
-| `copy 4 tag`      | Copies the name of contact indexed 4  | `N.A.` Tag is not a valid field.          |
+| `copy 4 tag`      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
 | `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
 | `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
 
