@@ -1358,12 +1358,14 @@ Use case ends.
    Use case ends.
 
 **Use case:** UC13 - Overwriting a contact in LookMeUp\
-**Person that can play this role:** Student who wishes to completely change the the details of an existing contact.
+**Person that can play this role:** Student who wishes to completely change the details of an existing contact.
 
 **MSS**
 
-1. User types the `overwrite` command.
-2. LookMeUp changes the contact and displays the new contact in the database.\
+1. User types the `add` command.
+2. User is prompted that their contact list, already contains the same name as the person they wish to add.
+3. User types the `overwrite` command with the respective input fields.
+4. LookMeUp changes the contact and displays the new contact in the database.\
     Use case ends.
 
 **Extensions**
