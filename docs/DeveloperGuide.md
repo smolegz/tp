@@ -1232,6 +1232,26 @@ Sort contact list based on the keywords input.
   2. Test case: `sort tag`
      Expected: Contact list will be sorted lexicographically based on person's tags.
 
+### Copy Contact Information
+
+Retrieve a contact's information into system clipboard.
+
+Given this example:<br>
+<p align = "center">
+    <img src="images/example.png" width="50%"/><br>
+</p>
+
+Below shows a list of possible commands:
+
+| Sample Commands   | Details                               | Results                                   |
+|-------------------|---------------------------------------|-------------------------------------------|
+| `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
+| `copy 4 tag`      | Copies the name of contact indexed 4  | `N.A.` Tag is not a valid field.          |
+| `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
+| `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
+
+For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files
