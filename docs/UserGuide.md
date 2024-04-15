@@ -46,7 +46,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 <box type="tip" seamless>
 
 **TIP:**
-* If you’re unfamiliar with  using the command terminal, fret not! [Here](#https://www.git-tower.com/blog/command-line-cheat-sheet/) is a condensed cheat sheet for your reference. 
+* If you’re unfamiliar with  using the command terminal, fret not! [Here](https://www.git-tower.com/blog/command-line-cheat-sheet/) is a condensed cheat sheet for your reference. 
 
 </box>
 
