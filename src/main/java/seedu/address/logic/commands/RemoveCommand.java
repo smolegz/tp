@@ -23,7 +23,7 @@ public class RemoveCommand extends Command {
             + "Parameters: INDEX\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    private static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
+    public static final String CONFIRMATION_MESSAGE_PROMPT = "Are you sure you want to remove this entry? (yes/no): ";
 
     private final Index targetIndex;
 
