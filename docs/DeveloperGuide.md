@@ -369,7 +369,7 @@ Given below is an example usage scenario and how the safe-removal mechanism beha
       will provide feedback on the abortion of the removal process.
 
 
-* **Step 2c**: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
+* Step 2c: The user enters an invalid command e.g. `abc` instead of `yes`/`no` after the `remove 4` command.
     * The user will be prompted with an error message:  
     > Unknown Command
     * Since the current GUI remains with the spotlighted contact "Paul Walker", users will need to type `remove 1`
