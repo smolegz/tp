@@ -125,6 +125,11 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+<puml src="diagrams/AddByStepClass.puml" width="400"/>
+
+How the AddCommandHelper works:
+* When the user enters an input into the CommandHelperWindow, AddCommandHelper will use the methods defined in `ParserUtil` to check whether the input by the user is valid. This will be explained in detail in the AddByStep Feature. 
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
