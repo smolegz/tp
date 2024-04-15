@@ -1,0 +1,71 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant "confirm:RemoveSuccess" as RemoveSuccess LOGIC_COLOR
+participant "result:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("yes")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("yes")
+activate AddressBookParser
+
+create RemoveSuccess
+AddressBookParser -> RemoveSuccess
+activate RemoveSuccess
+
+RemoveSuccess --> AddressBookParser : confirm
+deactivate RemoveSuccess
+
+AddressBookParser --> LogicManager : confirm
+deactivate AddressBookParser
+
+LogicManager -> RemoveSuccess : execute(model)
+activate RemoveSuccess
+
+RemoveSuccess -> Model : get person to remove based on singlePersonList
+activate Model
+
+Model --> RemoveSuccess : p
+deactivate Model
+
+RemoveSuccess -> Model : deletePerson(p)
+activate Model
+
+Model --> RemoveSuccess
+deactivate Model
+
+RemoveSuccess -> Model : update contacts list
+activate Model
+
+Model --> RemoveSuccess
+deactivate Model
+
+RemoveSuccess -> Model : commit address book
+activate Model
+
+Model --> RemoveSuccess
+deactivate Model
+
+create CommandResult
+RemoveSuccess -> CommandResult
+activate CommandResult
+
+CommandResult --> RemoveSuccess : result
+deactivate CommandResult
+
+RemoveSuccess --> LogicManager : result
+deactivate RemoveSuccess
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

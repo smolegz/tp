@@ -139,6 +139,7 @@ public class ParserUtil {
         if (fieldsList.isEmpty()) {
             throw new ParseException(MESSAGE_INVALID_FIELDS);
         }
+
         for (String field : fieldsList) {
             boolean inAcceptableFieldsList = acceptableFields.contains(field.toLowerCase());
             if (!inAcceptableFieldsList) {

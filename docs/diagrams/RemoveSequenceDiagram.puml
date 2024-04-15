@@ -7,7 +7,7 @@ participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":RemoveCommandParser" as RemoveCommandParser LOGIC_COLOR
 participant "rc:RemoveCommand" as RemoveCommand LOGIC_COLOR
-participant "rs:CommandResult" as CommandResult LOGIC_COLOR
+participant "result:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -49,11 +49,20 @@ deactivate AddressBookParser
 LogicManager -> RemoveCommand : execute(m)
 activate RemoveCommand
 
-RemoveCommand -> Model : deletePerson(1)
+RemoveCommand -> Model : m.getFilteredPersonList()
 activate Model
 
-Model --> RemoveCommand
+Model --> RemoveCommand : currentList
 deactivate Model
+
+RemoveCommand -> RemoveCommand : p:getPerson(1, currentList)
+
+RemoveCommand -> Model : updateSinglePersonList(p)
+activate Model
+
+Model --> RemoveCommand : singlePersonList
+deactivate Model
+
 
 create CommandResult
 RemoveCommand -> CommandResult
@@ -62,7 +71,7 @@ activate CommandResult
 CommandResult --> RemoveCommand
 deactivate CommandResult
 
-RemoveCommand --> LogicManager : rs
+RemoveCommand --> LogicManager : result
 deactivate RemoveCommand
 
 [<--LogicManager

@@ -1,0 +1,28 @@
+@startuml
+start
+    :User executes "remove INDEX" command;
+    :Parse index;
+    if () then ([else])
+        :Show invalid index error;
+    else ([Index parameter is valid])
+        :Prompt user for confirmation of contact removal via "yes" or "no";
+        if () then ([Invalid input])
+            :Show "Unknown Command" error;
+            repeat
+            :User executes next command;
+            repeat while () is ([Invalid/Unknown Command]) not ([Valid Command])
+            if () then ([User executes "remove 1"*])
+            else ([User executes other commands])
+                :Handle other commands;
+            endif
+        else ([Valid confirmation input])
+            if () then (["yes" confirmation input])
+                :Remove Contact Success;
+            else (["no" confirmation input])
+                :Abort Contact Removal;
+            endif
+        endif
+    endif
+
+stop
+@enduml
