@@ -25,11 +25,11 @@ So say goodbye to traditional address book applications and say hello to the fut
 
 1. Ensure you have Java `11` or above installed in your Computer.
 
-1. Download the latest `LookMeUp.jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases).
+1. Download the latest `[CS2103T-T12-2][LookMeUp].jar` from [here](https://github.com/AY2324S2-CS2103T-T12-2/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for the LookMeUp app.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar LookMeUp.jar` command 
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar [CS2103T-T12-2][LookMeUp].jar` command 
    to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
     <p align = "center">
@@ -46,7 +46,7 @@ So say goodbye to traditional address book applications and say hello to the fut
 <box type="tip" seamless>
 
 **TIP:**
-* If you’re unfamiliar with  using the command terminal, fret not! [Here](#https://www.git-tower.com/blog/command-line-cheat-sheet/) is a condensed cheat sheet for your reference. 
+* If you’re unfamiliar with  using the command terminal, fret not! [Here](https://www.git-tower.com/blog/command-line-cheat-sheet/) is a condensed cheat sheet for your reference. 
 
 </box>
 
@@ -270,9 +270,9 @@ Format in 2 steps:
      
       **Note:**
       
-     If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter
-   `remove 3` since the current list is shortlisted to only the single contact at index 2 to prepare for safe removal. 
-   You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 3` to remove.
+     If you'd like to remove a different contact, e.g. at index 2 of the original list, you **cannot** enter
+   `remove 2` since the current list is shortlisted to only the single contact at the original index 3 to prepare for safe removal. 
+   You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 2` to remove.
     </box>
 2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>

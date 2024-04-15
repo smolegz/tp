@@ -6,7 +6,7 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":FilterCommandParser" as FilterCommandParser LOGIC_COLOR
-participant "rc:FilterCommand" as FilterCommand LOGIC_COLOR
+participant "fc:FilterCommand" as FilterCommand LOGIC_COLOR
 participant "rs:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
@@ -37,12 +37,12 @@ activate FilterCommand
 FilterCommand --> FilterCommandParser :
 deactivate FilterCommand
 
-FilterCommandParser --> AddressBookParser : rc
+FilterCommandParser --> AddressBookParser : fc
 deactivate FilterCommandParser
 FilterCommandParser -[hidden]-> AddressBookParser
 destroy FilterCommandParser
 
-AddressBookParser --> LogicManager : rc
+AddressBookParser --> LogicManager : fc
 deactivate AddressBookParser
 
 LogicManager -> FilterCommand : execute(m)

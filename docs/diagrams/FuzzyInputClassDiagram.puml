@@ -32,13 +32,13 @@ class BkTreeNode {
   +getChildren()
 }
 
-CommandMatcher <|--- BkTreeCommandMatcher
+CommandMatcher <|... BkTreeCommandMatcher
 
 BkTreeNode "*" <--- BkTreeCommandMatcher
 
 BkTreeCommandMatcher <--- FuzzyCommandParser
 
-DistanceFunction <|--- LevenshteinDistance
+DistanceFunction <|... LevenshteinDistance
 
-LevenshteinDistance <|--- BkTreeCommandMatcher
+LevenshteinDistance <--- BkTreeCommandMatcher
 @enduml
