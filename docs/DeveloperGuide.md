@@ -776,9 +776,9 @@ Given below is an example usage scenario and how the feature mechanism behaves a
   `duplicate`, leaving the rest of the arguments untouched.
 
 * Step 6: The user executes `duplicate /n... /e...` command.
-    * The `duplicateCommand#` constructor will initialize with the `toAdd` variable based on the created `Person` 
+    * The `DuplicateCommand#` constructor will initialize with the `toAdd` variable based on the created `Person` 
         object in `DuplicateCommandParser`.
-    * `duplicateCommand#execute` will pass the `toAdd` to the `model#addDuplicatePerson`, where `UniquePersonsList`
+    * `DuplicateCommand#execute` will pass the `toAdd` to the `model#addDuplicatePerson`, where `UniquePersonsList`
         is updated with the duplicated person.
     * After duplicating, the model will be updated to reflect the newly sorted contacts list, 
         alongside a return statement to provide confirmation to the user.
