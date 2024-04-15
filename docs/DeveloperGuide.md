@@ -791,6 +791,61 @@ Alternative 1 is chosen for the following reasons:
 * Ease of implementation: No need to pass unnecessary parameters to the DuplicateCommandParser method.
     * Reduce complexity and potential dependencies.
 
+### Filter feature
+
+#### Implementation
+
+The sorting mechanism is facilitated by `FilterCommand`. It implements the following operations:
+* `FilterCommand#`: Constructor class which is instantiated and stores the necessary `Predicate` based on user input.
+* `FilterCommand#Executes`: Updates the model based on the generated `Predicate`.
+
+The filtering mechanism consists of several components:
+1. `Predicate`: An instance of the `TagContainsKeywordsPredicate` class that stores the list of tags that a user inputs.
+2. `FilterCommand`: Initiates the sorting by parsing user input to determine the filtering criteria and 
+then updates the list of persons in the model via `model#updateFilteredPersonList`.
+
+Given below is an example usage scenario and how the filter mechanism behaves at each step.
+
+* Step 1: The user launches the application for the first time, no contacts will be present in the `AddressBook`.
+  When user `add` contacts in the `AddressBook`, contacts are originally sorted based on their timestamp. Assume that 
+  after adding contacts, the user wants to filter by contacts that are tagged as friends.
+
+* Step 2: The user executes `filter friends` command.
+  * The `filterCommand#` constructor will initialise and store the argument into `predicate`.
+  * `filterCommand#execute` will pass the `predicate` to `model#updateFilteredPersonList`, where `UniquePersonsList`
+    will be obtained and filtered by the given `predicate`
+  * After filtering, the model will be updated to reflect the newly filtered contacts list, alongside a return statement
+    to provide confirmation to the user.
+
+    <puml src="diagrams/FilterSequenceDiagram.puml" alt="FilterSequenceDiagram"/>
+
+#### Design consideration:
+`TagContainsKeywordsPredicate` class was implemented for filtering functionality to adhere to SOLID principles, particularly the
+Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
+* Single Responsibility Principle
+  * The class maintains single responsibility by defining the list of all tags that the user input, as well as testing for tag matches
+    without burdening implementations with unrelated methods
+* Interface Segregation Principle
+  * Segregates behavior for filtering into the method `test`, thus, allowing different filtering strategies to implement only the methods they need.
+    <br/>
+* **Alternative 1 (current choice)** `FilterCommand` constructor to take in `predicate` as its parameter.
+  * Pros: Straightforward design and easy to implement.
+    * Filtering logic interacts directly with creation of new `TagContainsKeywordsPredicate`, before passing it directly to the `FilterCommand`
+    for execution.
+
+* **Alternative 2** `FilterCommand` constructor to take in user input string as its parameter.
+  * Pros: Filtering strategies can be applied to different data structures without modification
+    * Promoting code reuse and scalability.
+  * Cons: Unnecessary complexity burden on `FilterCommand` to parse the user input and then execute the command.
+
+Alternative 1 is chosen for the following reasons:
+* Simplicity: keeps filtering logic simple and focused by directly interacting with the data structure, list in this case.
+* Clear Responsibility: Filtering logic is closely tied to the data structure and class it operates on, adhering to the Single
+  Responsibility Principle.
+* Ease of implementation: No need to pass unnecessary parameters to the filter method.
+  * Reduce complexity and potential dependencies.
+
+
 ### Copy User Info
 #### Implementation
 
