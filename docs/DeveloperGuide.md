@@ -1555,12 +1555,12 @@ Given this example:<br>
 
 Below shows a list of possible commands:
 
-| Sample Commands   | Details                               | Results                                   |
-|-------------------|---------------------------------------|-------------------------------------------|
-| `copy -1 name`    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
-| `copy 4 tag`      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
-| `copy    4 name`  | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
-| `copy 4    name`  | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
+| Sample Commands                   | Details                               | Results                                   |
+|-----------------------------------|---------------------------------------|-------------------------------------------|
+| `copy -1 name`                    | Copies the name of contact indexed -1 | `N.A.` Error will be shown.               |
+| `copy 4 tag`                      | Copies the tag of contact indexed 4    | `N.A.` Tag is not a valid field.          |
+| <code> copy &nbsp; 4 name </code> | Extra spaces between `copy` and index | `Taylor Sheesh`                           |
+| <code> copy 4 &nbsp; name </code> | Extra spaces between index and `name` | `N.A` Error prompt fields not recognised. |
 
 For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t12-2.github.io/tp/UserGuide.html#copies-a-person-information-to-clipboard-copy).
 
