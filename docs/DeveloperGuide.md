@@ -455,7 +455,7 @@ experience to users.
 **Other considerations**:
 
 * **Separation of Concerns Principle**: Maintaining the separation of the shortlisting and contact removal confirmation 
-processes (as opposed ot overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
+processes (as opposed to overloading the `RemoveCommand` constructor) ensures that the command structure is clear 
 and intuitive for future developers. This design decision promotes better code maintainability and extensibility, 
 as the shortlisting process can be easily modified without affecting the confirmation process, especially since they
 are separate concerns to begin with. By adhering to the Separation of Concerns Principle, it has also ensured that 
@@ -1240,7 +1240,7 @@ Use case ends.
 2. LookMeUp prompts for details
 3. User enters the requested details
 4. LookMeUp will display the success message, and will prompt the user to type the copy command (`cp`)
-5. User types the copy Comand\
+5. User types the Copy command\
     Use case ends.
 
 **Extensions**
@@ -1255,7 +1255,7 @@ Use case ends.
     * 4a1. LookMeUp will prompt the user to type the copy command.
     * 4a2. User enters another input. 
 
-  Steps 4a1-4a2 are repeated until the copy command is entered.\
+  Steps 4a1-4a2 are repeated until the copy command is entered.
 
 **Use case:** UC6 - Editing a command\
 **Person that can play this role:** Student who wishes to update the contact details of a contact
