@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.LogicManager;
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.RemoveCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -17,7 +18,7 @@ import seedu.address.model.person.Person;
  * Parses input arguments and creates a new RemoveCommand object.
  * Determines if the user input argument is an index or a name.
  */
-public class RemoveCommandParser {
+public class RemoveCommandParser implements Parser<RemoveCommand> {
 
     private static Index index;
 
