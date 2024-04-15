@@ -98,9 +98,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("remove 1")` API call as an example.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<puml src="diagrams/RemoveSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `remove 1` Command" />
 
 <box type="info" seamless>
 
@@ -292,13 +292,34 @@ The safe-removal mechanism consists of several components:
    parses the `Index` input when users key in `remove INDEX`, to proceed with the confirmation process of the actual 
    contact to be removed.
 
-[//]: # add RemoveSequenceDiagram
+
+Below is the sequence diagram outlining the execution of `RemoveCommand`.
+
+<puml src="diagrams/RemoveSequenceDiagram.puml" alt="RemoveSequenceDiagram" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `RemoveCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the
+lifeline reaches the end of diagram.
+
+</box>
 
 3. `RemoveConfirmation`, `RemoveSuccess` and `RemoveAbortion`: Classes that prompt the user to confirm the removal of
    the target person, performing the actual deletion of the contact (or abortion of process), then providing feedback on
    the success or failure of the removal process.
 
-[//]: # add RemoveConfirmationSequenceDiagram
+
+Below is the sequence diagram outlining the execution of `RemoveSuccess`, where the user confirms the removal of a contact.
+
+<puml src="diagrams/RemoveConfirmationSequenceDiagram.puml" alt="RemoveConfirmationSequenceDiagram" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `RemoveSuccess` should end at the destroy marker (X) but due to a limitation of PlantUML, the
+lifeline reaches the end of diagram.
+
+</box>
+
 
 Our implementation follows Liskov's Substitution Principle closely. `RemoveConfirmation` was designed to be an abstract
 class to allow for extension of the 2 confirmation methods via the `RemoveSuccess` and `RemoveAbortion` classes. This
