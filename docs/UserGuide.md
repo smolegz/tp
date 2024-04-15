@@ -270,9 +270,9 @@ Format in 2 steps:
      
       **Note:**
       
-     If you'd like to remove a different contact, e.g. at index 3 of the original list, you **cannot** enter
-   `remove 3` since the current list is shortlisted to only the single contact at index 2 to prepare for safe removal. 
-   You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 3` to remove.
+     If you'd like to remove a different contact, e.g. at index 2 of the original list, you **cannot** enter
+   `remove 2` since the current list is shortlisted to only the single contact at index 3 to prepare for safe removal. 
+   You should abort the removal process directly with a `no` confirmation first, then proceed with `remove 2` to remove.
     </box>
 2. Confirmation: `yes/no`<br>
    1. If `yes`:<br>

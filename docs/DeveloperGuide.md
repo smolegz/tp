@@ -584,8 +584,6 @@ When user `add` contacts in the `AddressBook`, contacts will be sorted based on 
   * Since there is no condition stated, a `ParseException` will be thrown and a statement will be displayed to provide 
   the correct input and conditions to be stated.
 
-    <puml src="diagrams/SortCommandActivityDiagram.puml" alt="SortCommandActivityDiagram" />
-
 #### Design consideration:
 `SolidStrategy` interface was implemented for sorting functionality to adhere to SOLID principles, particularly the
 Single Responsibility Principle, Interface Segregation Principle and Open/Close Principle.
