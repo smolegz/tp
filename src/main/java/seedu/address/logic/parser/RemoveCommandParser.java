@@ -17,7 +17,7 @@ import seedu.address.model.person.Person;
  * Parses input arguments and creates a new RemoveCommand object.
  * Determines if the user input argument is an index or a name.
  */
-public class RemoveCommandParser {
+public class RemoveCommandParser implements Parser<RemoveCommand> {
 
     private static Index index;
 
