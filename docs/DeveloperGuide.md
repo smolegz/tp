@@ -724,22 +724,6 @@ Aspect: How to implement assistance functions to aid users in typing their comma
       * It is more difficult to implement as the users may try to autocomplete an invalid command, so there may be a need 
       to perform checking of the command first, before letting the user know that the entered command is invalid.
 
-#### \[Future Development\] Extension of Helper class to general commands
-
-Currently, the helper class only aids users by prompting them with the necessary fields for the `add` command. This 
-makes sense as the `add` command is the most complicated, involving the most number of fields and the most complex 
-format. To a new user who is unfamiliar with the other commands, we can add more types of assistance to the helper 
-class. The general helper class can prompt the user for the command they need help with. The user may enter "remove"
-when they need help with the correct formatting of the `remove` command. The helper class can then prompt users for the 
-necessary details needed for that command. 
-
-Aside from adding more functionalities to the helper class, we can also implement command checking once the all the 
-fields have been entered. As of now the `AddCommandHelper` does not check whether the details that are keyed in 
-by the user are duplicate details. In the future iterations, we can implement a check that directly checks the details 
-of the user once all of them have been entered.
-
-
-
 ### Duplicate feature
 
 #### Implementation
@@ -1016,6 +1000,10 @@ Several design considerations were taken into account when implementing the copy
     - Violates product requirement (not suitable for target audience).
     - Much harder to test, requires external API such as TextFX to test.
 
+<br>
+
+From the two alternatives, alternative 1 was ultimately conceived as it does not violate our product's requirements. 
+We believe that this design choice would benefit typists who wish to utilise input commands to retrieve contact information.
 
 ### Exit Window
 #### Implementation
@@ -1527,10 +1515,13 @@ Overwrites a person that has an **identical** name to a contact in your existing
 Handling a command with a single misspelled letter.
 
   1. Test case: `lort name`
+      <br>
      Expected: `sort name` command will still be executed and contact list will be sorted alphabetically based on person's name
   2. Test case: `lst`
+     <br>
      Expected: `list` command will still be executed and all the contacts will be listed in the contact list. 
   3. Other misspelled command to try: `fwlter TAG`, `adbystep`, `...`
+     <br>
      Expected: Correctly spelled commands will still be executed as intended.
 
 ### Sorting contact list
@@ -1538,9 +1529,11 @@ Handling a command with a single misspelled letter.
 Sort contact list based on the keywords input.
 
   1. Test case: `sort name`
+     <br>
      Expected: Contact list will be sorted lexicographically based on person's name.
 
   2. Test case: `sort tag`
+     <br>
      Expected: Contact list will be sorted lexicographically based on person's tags.
 
 ### Copy Contact Information
@@ -1567,17 +1560,17 @@ For more sample test cases, kindly refer to the [UG](https://ay2324s2-cs2103t-t1
 
 1. Enter `add n/Jia wei p/97743772 e/jw@gmail.com a/Block E 02-22 t/friend` in the command box.
 
-2. Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
+Expected output: A new contact named "Jia wei" will be added to your list, and will be found at the last index.  
 
-3. Enter `undo` in the command box.
+2. Enter `undo` in the command box.
 
-4. Expected output: The contact list will revert back to its state before the contact was added in Step 1.
+Expected output: The contact list will revert back to its state before the contact was added in Step 1.
 
-5. Enter `redo` in the command box.
+3. Enter `redo` in the command box.
 
-6. Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
+Expected output: The contact list will revert back to the state after the contact was added as it is in Step 2.
 
-7. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
+4. Within the same application launch, you may try to perform **n** consecutive **state-changing commands**, then 
 **directly followed by** `undo`, and expect to be able to run `undo` **n consecutive times** as well. 
 Similarly, with **x** consecutive `undo` commands, you should be able to run `redo` consecutively **x** times as well.
 
