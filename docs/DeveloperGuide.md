@@ -1200,7 +1200,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User type filter contacts command
+1. User type `filter` contacts command
 2. LookMeUp displays the contact in the database\
 Use case ends.
 
@@ -1218,7 +1218,7 @@ Use case ends.
 
 **MSS**
 
-1. User type sort contacts command
+1. User type `sort` contacts command
 2. LookMeUp displays the contact in the database\
 Use case ends.
 
@@ -1236,7 +1236,7 @@ Use case ends.
 
 **MSS**
 
-1. User type addbystep command
+1. User type `addbystep` command
 2. LookMeUp prompts for details
 3. User enters the requested details
 4. LookMeUp will display the success message, and will prompt the user to type the copy command (`cp`)
@@ -1410,7 +1410,7 @@ Use case ends.
     * Dependency Inversion Principle
 * **Levenshtein distance**: Measure of the difference between two strings, representing the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other.
 * **BK-Tree**: A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
-
+* **Monolithic Interface**: A single large interface encompasses all the functionality and operations of a system.
 
 
 --------------------------------------------------------------------------------------------------------------------
