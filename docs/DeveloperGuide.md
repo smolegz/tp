@@ -1256,6 +1256,21 @@ Loading up the AddByStep Window
 4. You may follow the prompts to enter the subsequent details, examples of invalid inputs are given in the example use
 case scenario in Add By Step.
 
+### Edit contact
+
+Edit contact based on the details provided. eg. Name, email, address etc.
+
+1. Prerequisites: Existing LookMeUp contacts list must not be empty.
+
+   (Details of name, address etc. are a placeholder for the following test cases)
+
+2. Test case: `edit 1 n/Alex Yeoh`
+
+   Expected: Contact at index 1's name has been edited to Alex Yeoh.
+
+3. Test case: `overwrite 2 n/Bernice Yu p/91725373`
+
+   Expected: Contact at index 2's name and number have been edited to Bernice Yu, 91725373 respectively.
 ### Filter contact list
 
 Filter contact list based on the tag(s) provided.
@@ -1293,6 +1308,10 @@ Overwrites a person that has an **identical** name to a contact in your existing
    Expected: Contact at index 1, and with above details (Name as Alex Yeoh, Phone as 91234567...) is overwritten
 
 3. Test case: `overwrite 2 n/Bernice Yu a/Serangoon Crescent Street e/berniceyu@example.com p/91234568`
+
+   Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
+
+4. Test case: `overwrite 1`
 
    Expected: Contact at index 2, and with above details (Name as Bernice Yu, Phone as 91234568...) is overwritten
 
