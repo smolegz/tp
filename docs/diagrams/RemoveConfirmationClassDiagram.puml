@@ -1,0 +1,19 @@
+@startuml
+
+abstract class RemoveConfirmation {
+    -RemoveCommandParser:removeParser
+    +isValidConfirmation(Model)
+}
+
+RemoveConfirmation <--- RemoveSuccess
+RemoveConfirmation <--- RemoveAbortion
+
+class RemoveSuccess {
+    +execute(Model)
+}
+
+class RemoveAbortion {
+    +execute(Model)
+}
+
+@enduml
