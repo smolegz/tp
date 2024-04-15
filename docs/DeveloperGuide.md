@@ -1385,7 +1385,7 @@ Use case ends.
     * Dependency Inversion Principle
 * **Levenshtein distance**: Measure of the difference between two strings, representing the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into the other.
 * **BK-Tree**: A tree data structure used to efficiently store and search for strings or other data based on their edit distance or similarity.
-
+* **Monolithic Interface**: A single large interface encompasses all the functionality and operations of a system.
 
 
 --------------------------------------------------------------------------------------------------------------------
