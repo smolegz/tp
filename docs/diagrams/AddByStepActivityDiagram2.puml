@@ -1,0 +1,76 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box UI UI_COLOR_T1
+participant ":MainWindow" as MainWindow UI_COLOR_T2
+participant ":CommandHelperWindow" as CommandHelperWindow UI_COLOR_T2
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":AddCommandHelper" as AddCommandHelper LOGIC_COLOR
+end box
+
+
+[-> MainWindow : execute("addbystep")]
+activate MainWindow
+MainWindow -> MainWindow : handleAddByStep()
+activate MainWindow
+create AddCommandHelper
+
+
+MainWindow -> AddCommandHelper
+MainWindow -> CommandHelperWindow : setCommandHelper(AddCommandHelper a)
+
+
+activate CommandHelperWindow
+CommandHelperWindow --> MainWindow
+deactivate CommandHelperWindow
+
+
+
+loop all fields have been accepted
+
+-> CommandHelperWindow : handleUserInput()
+activate CommandHelperWindow
+
+CommandHelperWindow -> AddCommandHelper : getResponse(text)
+
+activate AddCommandHelper
+AddCommandHelper -> CommandHelperWindow
+deactivate AddCommandHelper
+<- CommandHelperWindow
+deactivate CommandHelperWindow
+end
+
+loop Until user types the copy command
+
+-> CommandHelperWindow : handleUserInput()
+activate CommandHelperWindow
+
+CommandHelperWindow -> AddCommandHelper : getResponse(text)
+
+activate AddCommandHelper
+AddCommandHelper -> CommandHelperWindow
+deactivate AddCommandHelper
+<- CommandHelperWindow
+deactivate CommandHelperWindow
+end
+
+destroy AddCommandHelper
+deactivate MainWindow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
